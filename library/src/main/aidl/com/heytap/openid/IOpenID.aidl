@@ -5,6 +5,6 @@ package com.heytap.openid;
 
 interface IOpenID {
 
-     String getSerID(String str1, String str2, String str3);
+     String getSerID(String pkgName, String sign, String type);
 
 }
