@@ -5,6 +5,20 @@
 
 适用于国内各大Android手机厂商的开放匿名设备标识（OAID）、全局唯一标识（GUID）解决方案，本项目基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
 
+```groovy
+        DeviceID.with(this).doGet(new IGetter() {
+            @Override
+            public void onDeviceIdGetComplete(@NonNull String deviceId) {
+                
+            }
+
+            @Override
+            public void onDeviceIdGetError(@NonNull Exception exception) {
+
+            }
+        });
+```
+
 ![支持OAID的情况](/screenshot/oaid.jpg)
 ![不支持OAID的情况](/screenshot/guid.jpg)
 

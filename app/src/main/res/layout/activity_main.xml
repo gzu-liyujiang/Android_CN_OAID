@@ -33,7 +33,7 @@
             android:onClick="getOAID"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
-            android:text="获取 OAID"
+            android:text="获取 OAID 或 GUID"
             android:textColor="#fff" />
 
         <TextView

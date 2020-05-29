@@ -1,6 +1,7 @@
 package com.github.gzuliyujiang.demo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,14 +29,13 @@ public class MainActivity extends AppCompatActivity implements IGetter {
     };
     private TextView tvOAID;
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    tvOAID.setText(msg.obj.toString());
-                    break;
+            if (msg.what == 1) {
+                tvOAID.setText(msg.obj.toString());
             }
         }
     };
