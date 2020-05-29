@@ -3,7 +3,7 @@
 [![travis-ci](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID.svg?branch=master)](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
-适用于国内各大Android手机厂商的开放匿名设备标识（OAID）、全局唯一标识（GUID），本项目基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
+适用于国内各大Android手机厂商的开放匿名设备标识（OAID）、全局唯一标识（GUID）解决方案，本项目基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
 
 ![支持OAID的情况](/screenshot/oaid.jpg)
 ![不支持OAID的情况](/screenshot/guid.jpg)

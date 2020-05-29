@@ -1,0 +1,89 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        if (appResGuardEnable.toString().equalsIgnoreCase("true")) {
+            classpath "com.tencent.mm:AndResGuard-gradle-plugin:${appResGuardVersion}"
+        }
+        classpath 'com.novoda:bintray-release:0.9.2'
+    }
+}
+
+allprojects {
+
+    repositories {
+        //本地的Maven仓库：{USER_HOME}/.m2/repository，如C:/Users/Administrator/.m2/repository
+        mavenLocal()
+        //JitPack提供的Maven仓库
+        maven { url "https://jitpack.io" }
+        //JFrog公司提供的Maven仓库：https://jcenter.bintray.com
+        jcenter()
+        //谷歌公司提供的Maven仓库：https://maven.google.com
+        google()
+    }
+
+}
+
+subprojects {
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            //增加一些编译选项
+            //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+
+    afterEvaluate { def project ->
+        ext.pluginContainer = project.getPlugins()
+        def hasAppPlugin = ext.pluginContainer.hasPlugin("com.android.application")
+        def hasLibPlugin = ext.pluginContainer.hasPlugin("com.android.library")
+        configure(project) {
+            if (hasAppPlugin || hasLibPlugin) {
+                apply from: "${rootDir}/gradle/common.gradle"
+            }
+            if (hasAppPlugin && appResGuardEnable.toString().equalsIgnoreCase("true")) {
+                apply from: "${rootDir}/gradle/resguard.gradle"
+            }
+            if (hasLibPlugin) {
+                apply from: "${rootDir}/gradle/publish.gradle"
+            }
+        }
+    }
+
+    gradle.settingsEvaluated { settings ->
+        settings.pluginManagement {
+            plugins {
+                id "com.github.hierynomus.license" version "0.15.0"
+            }
+            if (file("$rootDir/LICENSE").exists()) {
+                license {
+                    header = file("$rootDir/LICENSE")
+                    excludes(["**/*.xml"])
+                }
+                preBuild.dependsOn licenseFormat
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    println("********** delete all compile **********")
+    println("delete project dir:" + rootProject.buildDir)
+    rootProject.buildDir.deleteDir()
+    def dir = new File(new File(".").getAbsolutePath())
+    println(" root dir:" + dir.getAbsolutePath())
+    dir.eachDirRecurse {
+        dir2 ->
+            dir2.eachDirMatch(~/build/) {
+                directory ->
+                    println("delete child dir:" + directory)
+                    directory.deleteDir()
+            }
+    }
+}

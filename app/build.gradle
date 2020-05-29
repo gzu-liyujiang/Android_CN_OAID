@@ -1,0 +1,138 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+    implementation project(":library")
+    implementation "androidx.appcompat:appcompat:$androidxCoreVersion"
+    implementation 'com.github.gzu-liyujiang:Logger:2020.05.17'
+    implementation 'com.yanzhenjie:permission:2.0.0-rc4'
+}
+
+android {
+
+    splits {
+        abi {
+            enable true
+            reset()
+            //支持的CPU架构：armeabi、armeabi-v7a、arm64-v8a、x86、x86_64、mips、mips64
+            //目前主流手机都支持armeabi-v7a，armeabi已过时，arm64-v8a是未来的主流，电脑上的模拟器支持x86，mips基本不用于手机
+            include 'armeabi-v7a', 'x86'
+            universalApk false
+        }
+    }
+
+    defaultConfig {
+        multiDexEnabled false
+        applicationId appPackageName
+        //按不同维度打包，必须添加，不添加编译不通过，后面的数值任何字符串都可以
+        flavorDimensions "channel"
+
+        signingConfigs {
+            //直接使用真实的密钥库文件，避免微信、高德地图等第三方SDK校验失败
+            releaseConfig {
+                def file = project.getParent().file(signingStorePath)
+                if (file.exists()) {
+                    storeFile file
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    v2SigningEnabled true
+                }
+            }
+        }
+        manifestPlaceholders = [
+                MY_CHANNEL: "developer-default",
+        ]
+    }
+
+    // 打包纬度，会按纬度名称字母顺序执行
+    productFlavors {
+        developer {
+            dimension "channel"
+        }
+    }
+
+    buildTypes {
+        //线上版本
+        release {
+            debuggable false
+            jniDebuggable false
+            //是否zip优化
+            zipAlignEnabled true
+            //是否移除无用的资源：工具栏->Refactor->Remove Unused Resources
+            shrinkResources false
+            //是否混淆
+            minifyEnabled true
+            //混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-common.pro', 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+        //调试版本
+        debug {
+            debuggable true
+            jniDebuggable true
+            zipAlignEnabled true
+            shrinkResources false
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+
+}
+
+// 批量处理渠道
+println "********** product flavors **********"
+android.productFlavors.all { flavor ->
+    String channelName = flavor.name
+    println "channel name is $channelName"
+    //替换AndroidManifest.xml中的默认值
+    flavor.manifestPlaceholders = [
+            MY_CHANNEL: channelName,
+    ]
+}
+
+//APK重命名
+android.applicationVariants.all { variant ->
+    println "\n********** ${variant.buildType.name} apk outputs **********"
+    variant.outputs.all {
+        if (variant.buildType.name == 'debug') {
+            //debug版本不重定义输出目录，也不重命名
+            println "outputFile=$outputFile"
+            return
+        }
+        if (outputFileName != null && outputFileName.endsWith(".apk")) {
+            def versionCode = android.defaultConfig.versionCode
+            def versionName = android.defaultConfig.versionName
+            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-built${versionCode}.apk"
+            //这里只能用相对路径，不然报错
+            outputFileName = new File(fileName)
+            println "outputFile=$outputFile"
+        }
+    }
+    //APK构建完成后，备份release版本到指定目录
+    tasks.all { it ->
+        def maybeNeedCopy
+        if (appResGuardEnable.toString().equalsIgnoreCase("true") && it.name.startsWith("resguard")) {
+            maybeNeedCopy = true
+        } else {
+            maybeNeedCopy = it.name.startsWith("assemble");
+        }
+        if (maybeNeedCopy) {
+            it.doLast {
+                variant.outputs.each { output ->
+                    File outputFile = output.outputFile;
+                    if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
+                        File targetDir = new File(rootDir, 'release')
+                        targetDir.mkdirs()
+                        copy {
+                            from outputFile
+                            into targetDir
+                        }
+                        File copyOutputFile = new File(targetDir, outputFile.name)
+                        println "copyOutputFile=$copyOutputFile"
+                    }
+                }
+            }
+        }
+    }
+}

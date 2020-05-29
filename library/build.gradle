@@ -1,0 +1,38 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.15.0"
+}
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    implementation 'com.github.gzu-liyujiang:Logger:2020.05.17'
+}
+
+android {
+
+    defaultConfig {
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+}
+
+// 在文件头添加版版权声明
+def file = rootProject.file("NOTICE")
+file = file.exists() ? file : rootProject.file("LICENSE")
+println("header file: $file")
+if (file.exists()) {
+    license {
+        header = file
+        includes(["**/*.java", "**/*.kt"])
+        exclude "**/*Test.java"
+        exclude "**/*R.java"
+        exclude "**/assets/**"
+        exclude "**/test/**"
+        exclude "**/androidTest/**"
+        excludes(["**/*.properties", "**/*.txt", "**/*.xml"])
+        mapping {
+            java = "SLASHSTAR_STYLE"
+        }
+    }
+    preBuild.dependsOn licenseFormat
+}

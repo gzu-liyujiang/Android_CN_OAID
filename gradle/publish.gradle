@@ -1,0 +1,48 @@
+// See https://github.com/novoda/bintray-release
+//
+// 步骤一：打包到{USER_HOME}/.m2/repository
+// ./gradlew build publishToMavenLocal --info
+// gradlew.bat build publishToMavenLocal --info
+//
+// 步骤二：上传到JFrog Bintray的Maven仓库，即jcenter
+// ./gradlew bintrayUpload --info
+// gradlew.bat bintrayUpload --info
+
+//用于将打包项目发布到Jfrog Bintray的Maven仓库
+apply plugin: 'com.novoda.bintray-release'
+
+def bintrayUserName = ''
+def bintrayApiKey = ''
+try {
+    // {PROJECT_ROOT}/local.properties
+    Properties localProp = new Properties()
+    localProp.load(project.rootProject.file('local.properties').newDataInputStream())
+    // {USER_HOME}/.gradle/gradle.properties
+    Map rootProp = project.getProperties()
+    //Bintray用户信息
+    bintrayUserName = localProp.getProperty('bintray.user', rootProp.get('bintray.user', ''))
+    bintrayApiKey = localProp.getProperty('bintray.apikey', rootProp.get('bintray.apikey', ''))
+    println("read bintray: user=$bintrayUserName apikey=$bintrayApiKey")
+} catch (ignore) {
+    System.err.println('read bintray user&apikey failed')
+}
+
+// 参阅 https://github.com/HailouWang/bintray-release/wiki/配置publish闭包
+publish {
+    repoName = "maven"
+    groupId = 'com.github.gzuliyujiang'
+    artifactId = rootProject.name
+    desc = 'TODO description'
+    website = "https://github.com/gzu-liyujiang/${rootProject.name}"
+    repository = "https://github.com/gzu-liyujiang/${rootProject.name}.git"
+    issueTracker = "https://github.com/gzu-liyujiang/${rootProject.name}/issues"
+    licences = ["MIT"]
+    publishVersion = new Date().format("yyyy.M.d")
+    bintrayUser = bintrayUserName
+    bintrayKey = bintrayApiKey
+    userOrg = 'gzu-liyujiang'
+    dryRun = false
+    autoPublish = true
+    override = true
+    sign = false
+}
