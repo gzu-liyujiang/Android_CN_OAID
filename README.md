@@ -3,7 +3,7 @@
 [![travis-ci](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID.svg?branch=master)](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
-适用于国内各大Android手机厂商的开放匿名设备标识（OAID）、全局唯一标识（GUID）解决方案，本项目基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
+本项目用于获取国内各大Android手机厂商的开放匿名设备标识（OAID）、遵循谷歌官方使用Android标识符的最佳做法生成全局唯一标识（GUID），基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
 
 ```groovy
         DeviceID.with(this).doGet(new IGetter() {
@@ -74,3 +74,35 @@ OAID 即 Open Anonymous Device Identifier，开放匿名设备标识符，根据
 | 一加   | Android 10 版本                         |
 | Freeme OS   | Android 10 版本                   |
 | Ssui OS | Android 10 版本                       |
+
+## 使用标识符的最佳做法
+
+参阅谷歌官方文档：https://developer.android.google.cn/training/articles/user-data-ids 。在使用 Android 标识符时，请遵循以下最佳做法：
+
+- **避免使用硬件标识符**。 在大多数用例中，您可以避免使用硬件标识符，例如 SSAID (Android ID) 和 IMEI，而不会限制所需的功能。
+- 自 Android 10（API 级别 29）起，您的应用必须是设备或个人资料所有者应用，具有特殊运营商许可，或具有 READ_PRIVILEGED_PHONE_STATE 特权，才能访问不可重置的设备标识符。
+- **只针对用户分析或广告用例使用广告 ID**。 在使用广告 ID 时，请始终遵循用户关于广告跟踪的选择。此外，请确保标识符无法关联到个人身份信息 (PII)，并避免桥接广告 ID 重置。
+- 尽一切可能针对防欺诈支付和电话以外的所有其他用例**使用实例 ID 或私密存储的 GUID**。 对于绝大多数非广告用例，使用实例 ID 或 GUID 应该足矣。
+- 使用适合您的用例的 API 以**尽量降低隐私权风险**。 使用 DRM API 保护重要内容，并使用 SafetyNet API 防止滥用行为。SafetyNet API 是能够确定设备真伪而不会招致隐私权风险的最简单方法。
+
+## MIT License
+
+Copyright (c) 2020 贵州穿青人@李裕江 <1032694760@qq.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
