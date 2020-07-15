@@ -1,15 +1,16 @@
 #################
 #项目自定义混淆配置
 #################
+# 正式发布包混淆去掉日志，叙保证没有配置`-dontoptimize`规则
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** i(...);
+    public static *** d(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+-assumenosideeffects class java.io.PrintStream {
+    public *** println(...);
+    public *** print(...);
+}
 
-# Android支持包
--dontwarn android.**
--keep class android.** { *; }
--keep interface androidx.** { *; }
--dontwarn androidx.**
--keep class androidx.** { *; }
--keep interface androidx.** { *; }
--keep public class * extends androidx.**
--dontwarn com.google.android.material.**
--dontnote com.google.android.material.**
--keep class com.google.android.material.** { *; }

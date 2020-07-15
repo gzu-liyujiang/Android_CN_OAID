@@ -18,6 +18,7 @@
 **/build
 **/local.properties
 !**/.idea/codeStyles
+!**/.idea/copyright
 **/.idea/caches
 **/.idea/libraries
 **/.idea/modules

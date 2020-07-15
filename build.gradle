@@ -5,75 +5,41 @@ buildscript {
         jcenter()
         google()
     }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
-        if (appResGuardEnable.toString().equalsIgnoreCase("true")) {
-            classpath "com.tencent.mm:AndResGuard-gradle-plugin:${appResGuardVersion}"
-        }
-        classpath 'com.novoda:bintray-release:0.9.2'
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        classpath "com.tencent.mm:AndResGuard-gradle-plugin:${andResGuardVersion}"
     }
 }
 
 allprojects {
-
     repositories {
         //本地的Maven仓库：{USER_HOME}/.m2/repository，如C:/Users/Administrator/.m2/repository
         mavenLocal()
+        //项目里的aar文件
+        flatDir { dirs "libs" }
         //JitPack提供的Maven仓库
         maven { url "https://jitpack.io" }
         //JFrog公司提供的Maven仓库：https://jcenter.bintray.com
         jcenter()
         //谷歌公司提供的Maven仓库：https://maven.google.com
         google()
+        //Sonatype公司提供的中央库：http://central.maven.org/maven2
+        mavenCentral()
     }
-
 }
 
 subprojects {
-
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             //增加一些编译选项
             //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-
-    afterEvaluate { def project ->
-        ext.pluginContainer = project.getPlugins()
-        def hasAppPlugin = ext.pluginContainer.hasPlugin("com.android.application")
-        def hasLibPlugin = ext.pluginContainer.hasPlugin("com.android.library")
-        configure(project) {
-            if (hasAppPlugin || hasLibPlugin) {
-                apply from: "${rootDir}/gradle/common.gradle"
-            }
-            if (hasAppPlugin && appResGuardEnable.toString().equalsIgnoreCase("true")) {
-                apply from: "${rootDir}/gradle/resguard.gradle"
-            }
-            if (hasLibPlugin) {
-                apply from: "${rootDir}/gradle/publish.gradle"
-            }
-        }
-    }
-
-    gradle.settingsEvaluated { settings ->
-        settings.pluginManagement {
-            plugins {
-                id "com.github.hierynomus.license" version "0.15.0"
-            }
-            if (file("$rootDir/LICENSE").exists()) {
-                license {
-                    header = file("$rootDir/LICENSE")
-                    excludes(["**/*.xml"])
-                }
-                preBuild.dependsOn licenseFormat
-            }
-        }
-    }
 }
 
 task clean(type: Delete) {
-    println("********** delete all compile **********")
+    println("********** clean build **********")
     println("delete project dir:" + rootProject.buildDir)
     rootProject.buildDir.deleteDir()
     def dir = new File(new File(".").getAbsolutePath())
@@ -85,5 +51,60 @@ task clean(type: Delete) {
                     println("delete child dir:" + directory)
                     directory.deleteDir()
             }
+    }
+}
+
+@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
+def gitGitCommitNumber() {
+    try {
+        // See https://www.jianshu.com/p/1f81af606e41
+        def cmd = 'git rev-list HEAD --first-parent --count'
+        return cmd.execute().text.trim().toInteger()
+    } catch (ignored) {
+        return 1
+    }
+}
+
+@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
+def getGitLatestTag() {
+    try {
+        // See https://www.jianshu.com/p/1f81af606e41
+        def cmd = 'git describe --tags'
+        return cmd.execute().text.trim()
+    } catch (ignored) {
+        return "1.0.0"
+    }
+}
+
+@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
+def getGitBranch() {
+    try {
+        // See https://www.jianshu.com/p/1f81af606e41
+        def cmd = 'git symbolic-ref --short -q HEAD'
+        return cmd.execute().text.trim()
+    } catch (ignored) {
+        return "unknown"
+    }
+}
+
+@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
+def getGitLatestCommitHash() {
+    try {
+        // See https://www.cnblogs.com/fuyaozhishang/p/7675551.html
+        def cmd = 'git rev-parse HEAD'
+        return cmd.execute().text.trim()
+    } catch (ignored) {
+        return "unknown"
+    }
+}
+
+@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
+def getGitLatestCommitHashShort() {
+    try {
+        // See https://www.jianshu.com/p/1f81af606e41
+        def cmd = 'git rev-parse --short HEAD'
+        return cmd.execute().text.trim()
+    } catch (ignored) {
+        return "unknown"
     }
 }

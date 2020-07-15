@@ -1,34 +1,26 @@
 /*
- * MIT License
+ * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
  *
- * Copyright (c) 2020 贵州穿青人@李裕江 <1032694760@qq.com>
+ * The software is licensed under the Mulan PSL v1.
+ * You can use this software according to the terms and conditions of the Mulan PSL v1.
+ * You may obtain a copy of Mulan PSL v1 at:
+ *     http://license.coscl.org.cn/MulanPSL
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v1 for more details.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 package com.github.gzuliyujiang.oaid.impl;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.logger.Logger;
@@ -45,8 +37,8 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 
 /**
- * 随机生成一个全局唯一标识，通过{@link SharedPreferences}及{@link Environment#getExternalStoragePublicDirectory(String)}进行永久化存储。
- * 注：APP无法获得{@link android.Manifest.permission#WRITE_SETTINGS}权限，故放弃使用{@link android.provider.Settings.System}进行存储。
+ * 随机生成一个全局唯一标识，通过`SharedPreferences`及`ExternalStorage`进行永久化存储。
+ * 注：非系统及预装APP无法获得`WRITE_SETTINGS`权限，故放弃使用`Settings`进行永久化存储。
  * Created by liyujiang on 2020/5/30
  *
  * @author 大定府羡民
@@ -65,22 +57,22 @@ public class DefaultDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull IGetter getter) {
-        String guid = readGuid();
-        if (TextUtils.isEmpty(guid)) {
-            guid = UUID.randomUUID().toString();
-            Logger.print("generate guid: " + guid);
-            getter.onDeviceIdGetComplete(guid);
+    public void doGet(@NonNull final IGetter getter) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String guid = readGuid();
+            if (guid == null) {
+                guid = UUID.randomUUID().toString();
+                Logger.print("generate guid: " + guid);
+                writeToSharedPreferences(guid);
+                writeToExternalStorage(guid);
+            }
             String finalGuid = guid;
-            Executors.newSingleThreadExecutor().execute(() -> {
-                writeToSharedPreferences(finalGuid);
-                writeToExternalStorage(finalGuid);
-            });
-        } else {
-            getter.onDeviceIdGetComplete(guid);
-        }
+            new Handler(Looper.getMainLooper()).post(() ->
+                    getter.onDeviceIdGetComplete(finalGuid));
+        });
     }
 
+    @Nullable
     private String readGuid() {
         String guid = readFromSharedPreferences();
         if (guid != null) {
@@ -96,6 +88,7 @@ public class DefaultDeviceIdImpl implements IDeviceId {
         return null;
     }
 
+    @Nullable
     private String readFromSharedPreferences() {
         SharedPreferences sp = context.getSharedPreferences(".OAID", Context.MODE_PRIVATE);
         return sp.getString("l__y__j", null);
@@ -107,6 +100,7 @@ public class DefaultDeviceIdImpl implements IDeviceId {
         sp.edit().putString("l__y__j", guid).apply();
     }
 
+    @Nullable
     @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
     private String readFromExternalStorage() {
         String result = null;
@@ -132,7 +126,7 @@ public class DefaultDeviceIdImpl implements IDeviceId {
         return result;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "deprecation"})
     private void writeToExternalStorage(String guid) {
         Logger.print("write guid to ExternalStoragePublicDirectory: " + guid);
         try {

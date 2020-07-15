@@ -1,9 +1,8 @@
 // 参见 https://github.com/shwenzhang/AndResGuard
-
 apply plugin: 'AndResGuard'
 
 andResGuard {
-    File file = new File(rootDir, "resource_mapping.txt")
+    File file = rootProject.file("resource_mapping.txt")
     mappingFile = file.exists() ? file : null
     use7zip = true
     useSign = true
@@ -14,12 +13,18 @@ andResGuard {
     // It will merge the duplicated resources, but don't rely on this feature too much.
     // it's always better to remove duplicated resource from repo
     mergeDuplicatedRes = true
-    // 不混淆的资源白名单，参阅 https://github.com/shwenzhang/AndResGuard/blob/master/doc/white_list.md
+    /**
+     * Optional: if finalApkBackupPath is null, AndResGuard will overwrite final apk
+     * to the path which assemble[Task] write to
+     **/
+    finalApkBackupPath = rootProject.file("release/app-release-resguard.apk")
+    // You need put all resource which access via getIdentifier into whiteList.
+    // See https://github.com/shwenzhang/AndResGuard/blob/master/doc/white_list.md
     whiteList = [
             // Your icon
             "R.mipmap.ic_launcher*",
             "R.drawable.ic_launcher*",
-            // Umeng sdk
+            // Umeng SDK
             "R.anim.umeng*",
             "R.string.umeng*",
             "R.string.UM*",
@@ -79,9 +84,9 @@ andResGuard {
             "R.drawable.hms_*",
             "R.layout.hms_*",
             "R.id.hms_*",
-            // for fabric
+            // fabric
             "R.string.com.crashlytics.*",
-            // for RongIM(融云)
+            // RongIM(融云)
             "R.dimen.rc_*",
             "R.id.rc_*",
             "R.style.rc_*",
@@ -89,6 +94,16 @@ andResGuard {
             "R.drawable.rc_*",
             "R.layout.rc_*",
             "R.string.rc_*",
+            // ShareSDK
+            "R.id.ssdk*",
+            "R.string.mobcommon*",
+            "R.string.ssdk*",
+            "R.string.mobdemo*",
+            "R.drawable.mobcommon*",
+            "R.drawable.ssdk*",
+            "R.layout.mob*",
+            "R.style.mobcommon*",
+
     ]
     compressFilePattern = [
             "*.png",
@@ -98,18 +113,13 @@ andResGuard {
             "resources.arsc"
     ]
     sevenzip {
-        artifact = "com.tencent.mm:SevenZip:${appResGuardVersion}"
+        artifact = "com.tencent.mm:SevenZip:${andResGuardVersion}"
     }
-    /**
-     * Optional: if finalApkBackupPath is null, AndResGuard will overwrite final apk
-     * to the path which assemble[Task] write to
-     **/
-    finalApkBackupPath = null
     /**
      * Optional: Specifies the name of the message digest algorithm to user when digesting the entries of JAR file
      * Only works in V1signing, default value is "SHA-1"
      **/
-    digestalg = "SHA-256"
+    digestalg = "SHA-1"
     sourceApk = null
     sourceBuildType = null
     sourceFlavor = null

@@ -1,6 +1,7 @@
 # Android_CN_OAID
 
-[![travis-ci](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID.svg?branch=master)](https://travis-ci.org/gzu-liyujiang/Android_CN_OAID)
+![Release APK](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Release%20APK/badge.svg)
+![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
 本项目用于获取国内各大Android手机厂商的开放匿名设备标识（OAID）、遵循谷歌官方使用Android标识符的最佳做法生成全局唯一标识（GUID），基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
@@ -85,24 +86,17 @@ OAID 即 Open Anonymous Device Identifier，开放匿名设备标识符，根据
 - 尽一切可能针对防欺诈支付和电话以外的所有其他用例**使用实例 ID 或私密存储的 GUID**。 对于绝大多数非广告用例，使用实例 ID 或 GUID 应该足矣。
 - 使用适合您的用例的 API 以**尽量降低隐私权风险**。 使用 DRM API 保护重要内容，并使用 SafetyNet API 防止滥用行为。SafetyNet API 是能够确定设备真伪而不会招致隐私权风险的最简单方法。
 
-## MIT License
+## License
 
-Copyright (c) 2020 贵州穿青人@李裕江 <1032694760@qq.com>
+```text
+Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The software is licensed under the Mulan PSL v1.
+You can use this software according to the terms and conditions of the Mulan PSL v1.
+You may obtain a copy of Mulan PSL v1 at:
+    http://license.coscl.org.cn/MulanPSL
+THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+PURPOSE.
+See the Mulan PSL v1 for more details.
+```

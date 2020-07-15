@@ -1,25 +1,15 @@
 /*
- * MIT License
+ * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
  *
- * Copyright (c) 2020 贵州穿青人@李裕江 <1032694760@qq.com>
+ * The software is licensed under the Mulan PSL v1.
+ * You can use this software according to the terms and conditions of the Mulan PSL v1.
+ * You may obtain a copy of Mulan PSL v1 at:
+ *     http://license.coscl.org.cn/MulanPSL
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v1 for more details.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 package com.github.gzuliyujiang.oaid;
 
@@ -44,7 +34,7 @@ import com.github.gzuliyujiang.oaid.impl.XiaomiDeviceIdImpl;
  *
  * @author 大定府羡民
  */
-public class DeviceID {
+public final class DeviceID {
 
     private DeviceID() {
         super();
@@ -53,25 +43,25 @@ public class DeviceID {
     public static IDeviceId with(Context context) {
         Logger.print("manufacturer====>" + Build.MANUFACTURER.toUpperCase());
         IDeviceId deviceId;
-        if (Utils.isLenovo() || Utils.isMotolora()) {
+        if (SystemUtils.isLenovo() || SystemUtils.isMotolora()) {
             deviceId = new LenovoDeviceIdImpl(context);
-        } else if (Utils.isMeizu()) {
+        } else if (SystemUtils.isMeizu()) {
             deviceId = new MeizuDeviceIdImpl(context);
-        } else if (Utils.isNubia()) {
+        } else if (SystemUtils.isNubia()) {
             deviceId = new NubiaDeviceIdImpl(context);
-        } else if (Utils.isXiaomi() || Utils.isBlackShark()) {
+        } else if (SystemUtils.isXiaomi() || SystemUtils.isBlackShark()) {
             deviceId = new XiaomiDeviceIdImpl(context);
-        } else if (Utils.isSamsung()) {
+        } else if (SystemUtils.isSamsung()) {
             deviceId = new SamsungDeviceIdImpl(context);
-        } else if (Utils.isVivo()) {
+        } else if (SystemUtils.isVivo()) {
             deviceId = new VivoDeviceIdImpl(context);
-        } else if (Utils.isASUS()) {
+        } else if (SystemUtils.isASUS()) {
             deviceId = new AsusDeviceIdImpl(context);
-        } else if (Utils.isHuawei()) {
+        } else if (SystemUtils.isHuawei()) {
             deviceId = new HuaweiDeviceIdImpl(context);
-        } else if (Utils.isOppo() || Utils.isOnePlus()) {
+        } else if (SystemUtils.isOppo() || SystemUtils.isOnePlus()) {
             deviceId = new OppoDeviceIdImpl(context);
-        } else if (Utils.isZTE() || Utils.isFreeme() || Utils.isSSUI()) {
+        } else if (SystemUtils.isZTE() || SystemUtils.isFreeme() || SystemUtils.isSSUI()) {
             deviceId = new MsaDeviceIdImpl(context);
         } else {
             deviceId = new DefaultDeviceIdImpl(context);

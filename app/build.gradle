@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply from: "${rootDir}/gradle/common.gradle"
+apply from: "${rootDir}/gradle/resguard.gradle"
 
 dependencies {
     implementation project(":library")
     implementation "androidx.appcompat:appcompat:$androidxCoreVersion"
-    implementation 'com.github.gzu-liyujiang:Logger:2020.05.17'
-    implementation 'com.yanzhenjie:permission:2.0.0-rc4'
+    implementation 'com.github.gzu-liyujiang:Logger:1.1.0'
+    implementation 'com.yanzhenjie:permission:2.0.3'
 }
 
 android {
@@ -22,33 +24,85 @@ android {
 
     defaultConfig {
         multiDexEnabled false
-        applicationId appPackageName
         //按不同维度打包，必须添加，不添加编译不通过，后面的数值任何字符串都可以
-        flavorDimensions "channel"
-
+        flavorDimensions "MODE", "CHANNEL"
         signingConfigs {
             //直接使用真实的密钥库文件，避免微信、高德地图等第三方SDK校验失败
             releaseConfig {
-                def file = project.getParent().file(signingStorePath)
-                if (file.exists()) {
-                    storeFile file
+                try {
+                    // {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
+                    Map rootProp = project.getProperties()
+                    def signingStorePath = rootProp.get('signingStorePath', '')
+                    if (signingStorePath == '') {
+                        throw new Exception('signing store path is empty from global gradle.properties')
+                    }
+                    println("[signing] store file: $signingStorePath")
+                    def signingStorePassword = rootProp.get('signingStorePassword', '')
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = rootProp.get('signingKeyAlias', '')
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = rootProp.get('signingKeyPassword', '')
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile new File(signingStorePath)
                     storePassword signingStorePassword
                     keyAlias signingKeyAlias
                     keyPassword signingKeyPassword
                     v1SigningEnabled true
                     v2SigningEnabled true
+                } catch (e) {
+                    System.err.println('[signing] read failed from properties: ' + e.getMessage())
+                    def signingStorePath = project.rootProject.file('app/debug.keystore').getAbsolutePath()
+                    println("[signing] store file: $signingStorePath")
+                    def signingStorePassword = 'android'
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = 'androiddebugkey'
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = 'android'
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile new File(signingStorePath)
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    // 注：直接在IDE里运行APP，启用V2签名的话生成的APK里可能不会有签名信息的？
+                    v2SigningEnabled true
                 }
             }
         }
+        // 修改 AndroidManifest.xml 里的变量，占位值无法覆盖的坑可参阅 https://www.jianshu.com/p/1d5271c2c366
         manifestPlaceholders = [
-                MY_CHANNEL: "developer-default",
+                MY_CHANNEL: "unknown",
         ]
     }
 
-    // 打包纬度，会按纬度名称字母顺序执行
+    // 打包维度列表，会按维度名字母顺序执行，最终发布的具体渠道包的生成可以借助360加固等工具修改
     productFlavors {
+        // 开发模式/测试环境
         developer {
-            dimension "channel"
+            dimension "MODE"
+            // 环境信息
+            buildConfigField "String", "ENVIRONMENT", '"dev"'
+            // 修改 AndroidManifest.xml 里的变量
+            manifestPlaceholders = [
+                    MY_CHANNEL: "developer",
+            ]
+        }
+        // 发布模式/正式环境
+        publisher {
+            dimension "MODE"
+            // 环境信息
+            buildConfigField "String", "ENVIRONMENT", '"prod"'
+            // 修改 AndroidManifest.xml 里的变量
+            manifestPlaceholders = [
+                    MY_CHANNEL: "publisher",
+            ]
+        }
+        // 官方发布渠道
+        official {
+            dimension "CHANNEL"
+            manifestPlaceholders = [
+                    MY_CHANNEL: "official",
+            ]
         }
     }
 
@@ -64,7 +118,7 @@ android {
             //是否混淆
             minifyEnabled true
             //混淆配置文件
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-common.pro', 'proguard-rules.pro'
+            proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
         //调试版本
@@ -84,7 +138,7 @@ android {
 println "********** product flavors **********"
 android.productFlavors.all { flavor ->
     String channelName = flavor.name
-    println "channel name is $channelName"
+    println "flavor name is $channelName"
     //替换AndroidManifest.xml中的默认值
     flavor.manifestPlaceholders = [
             MY_CHANNEL: channelName,
@@ -92,18 +146,17 @@ android.productFlavors.all { flavor ->
 }
 
 //APK重命名
+println "********** apk outputs **********"
 android.applicationVariants.all { variant ->
-    println "\n********** ${variant.buildType.name} apk outputs **********"
     variant.outputs.all {
         if (variant.buildType.name == 'debug') {
             //debug版本不重定义输出目录，也不重命名
-            println "outputFile=$outputFile"
             return
         }
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
-            def versionCode = android.defaultConfig.versionCode
-            def versionName = android.defaultConfig.versionName
-            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-built${versionCode}.apk"
+            def versionName = rootProject.getGitLatestTag();
+            def date = new Date().format("yyyyMMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-${date}.apk"
             //这里只能用相对路径，不然报错
             outputFileName = new File(fileName)
             println "outputFile=$outputFile"
@@ -112,7 +165,7 @@ android.applicationVariants.all { variant ->
     //APK构建完成后，备份release版本到指定目录
     tasks.all { it ->
         def maybeNeedCopy
-        if (appResGuardEnable.toString().equalsIgnoreCase("true") && it.name.startsWith("resguard")) {
+        if (it.name.startsWith("resguard")) {
             maybeNeedCopy = true
         } else {
             maybeNeedCopy = it.name.startsWith("assemble");
@@ -122,7 +175,7 @@ android.applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     File outputFile = output.outputFile;
                     if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
-                        File targetDir = new File(rootDir, 'release')
+                        File targetDir = rootProject.file("release")
                         targetDir.mkdirs()
                         copy {
                             from outputFile
