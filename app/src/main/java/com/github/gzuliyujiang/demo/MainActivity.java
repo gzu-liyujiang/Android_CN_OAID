@@ -15,10 +15,10 @@
 package com.github.gzuliyujiang.demo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.DeviceID;
+import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.yanzhenjie.permission.AndPermission;
 
@@ -52,21 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkAllPermissions(this);
         setContentView(R.layout.activity_main);
         TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
-        tvDeviceInfo.setText("品牌型号：");
-        tvDeviceInfo.append(Build.BRAND);
-        tvDeviceInfo.append(" ");
-        tvDeviceInfo.append(Build.MODEL);
-        tvDeviceInfo.append("\n");
-        tvDeviceInfo.append("生产厂商：");
-        tvDeviceInfo.append(Build.MANUFACTURER);
-        tvDeviceInfo.append("\n");
-        tvDeviceInfo.append("系统版本：");
-        tvDeviceInfo.append(Build.VERSION.RELEASE);
-        tvDeviceInfo.append(" (API ");
-        tvDeviceInfo.append(String.valueOf(Build.VERSION.SDK_INT));
-        tvDeviceInfo.append(")");
-        findViewById(R.id.btn_get_oaid).setOnClickListener(this);
-        tvOAID = findViewById(R.id.tv_oaid);
+        tvDeviceInfo.setText(DeviceID.deviceInfo());
+        findViewById(R.id.btn_oaid_get).setOnClickListener(this);
+        tvOAID = findViewById(R.id.tv_oaid_result);
     }
 
     @Override
@@ -88,23 +77,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }).start();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_get_oaid) {
+        if (v.getId() == R.id.btn_oaid_get) {
             Logger.print("DeviceID doGet");
-            DeviceID.with(this).doGet(new IGetter() {
+            IDeviceId deviceId = DeviceID.with(this);
+            if (!deviceId.supportOAID()) {
+                tvOAID.setText("不支持OAID，须自行生成GUID");
+                return;
+            }
+            deviceId.doGet(new IGetter() {
                 @Override
                 public void onDeviceIdGetComplete(@NonNull String deviceId) {
+                    Logger.print("onDeviceIdGetComplete====>" + deviceId);
                     Message msg = Message.obtain();
                     msg.what = 1;
                     msg.obj = deviceId;
                     handler.sendMessage(msg);
-                    Logger.print("onDeviceIdGetComplete====>" + deviceId);
                 }
 
                 @Override
                 public void onDeviceIdGetError(@NonNull Exception exception) {
                     Logger.print("onDeviceIdGetError====>" + exception);
+                    Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = exception;
+                    handler.sendMessage(msg);
                 }
             });
         }
@@ -144,7 +143,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (mainActivity == null) {
                 return;
             }
-            if (msg.what == 1) {
+            if (msg.what == -1) {
+                mainActivity.tvOAID.setText(String.format("出错了：%s", msg.obj.toString()));
+            } else {
                 mainActivity.tvOAID.setText(msg.obj.toString());
             }
         }

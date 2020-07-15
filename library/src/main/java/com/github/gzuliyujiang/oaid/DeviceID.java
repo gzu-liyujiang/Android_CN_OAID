@@ -41,7 +41,6 @@ public final class DeviceID {
     }
 
     public static IDeviceId with(Context context) {
-        Logger.print("manufacturer====>" + Build.MANUFACTURER.toUpperCase());
         IDeviceId deviceId;
         if (SystemUtils.isLenovo() || SystemUtils.isMotolora()) {
             deviceId = new LenovoDeviceIdImpl(context);
@@ -64,9 +63,29 @@ public final class DeviceID {
         } else if (SystemUtils.isZTE() || SystemUtils.isFreeme() || SystemUtils.isSSUI()) {
             deviceId = new MsaDeviceIdImpl(context);
         } else {
-            deviceId = new DefaultDeviceIdImpl(context);
+            deviceId = new DefaultDeviceIdImpl();
         }
+        Logger.print(deviceInfo() + "\nsupportOAID: " + deviceId.supportOAID());
         return deviceId;
+    }
+
+    public static String deviceInfo() {
+        //noinspection StringBufferReplaceableByString
+        StringBuilder sb = new StringBuilder();
+        sb.append("BrandModel：");
+        sb.append(Build.BRAND);
+        sb.append(" ");
+        sb.append(Build.MODEL);
+        sb.append("\n");
+        sb.append("Manufacturer：");
+        sb.append(Build.MANUFACTURER);
+        sb.append("\n");
+        sb.append("SystemVersion：");
+        sb.append(Build.VERSION.RELEASE);
+        sb.append(" (API ");
+        sb.append(Build.VERSION.SDK_INT);
+        sb.append(")");
+        return sb.toString();
     }
 
 }

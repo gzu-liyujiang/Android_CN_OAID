@@ -39,17 +39,17 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/btn_get_oaid"
+            android:id="@+id/btn_oaid_get"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
             android:layout_marginRight="10dp"
-            android:text="获取 OAID 或 GUID"
+            android:text="获取 OAID"
             android:textAllCaps="false" />
 
         <TextView
-            android:id="@+id/tv_oaid"
+            android:id="@+id/tv_oaid_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
