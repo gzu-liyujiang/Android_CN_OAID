@@ -9,20 +9,37 @@
 ```groovy
         IDeviceId deviceId = DeviceID.with(this);
         if (!deviceId.supportOAID()) {
-            // 不支持OAID，须自行生成GUID
+            // 不支持OAID，须自行生成全局唯一标识（GUID）。
+            // 本库不提供GUID的生成方式，可以使用`UUID.randomUUID().toString()`生成，
+            // 然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
             return;
         }
-        deviceId.doGet(new IGetter() {
+        deviceId.doGet(new IOAIDGetter() {
             @Override
-            public void onDeviceIdGetComplete(@NonNull String deviceId) {
+            public void onOAIDGetComplete(@NonNull String oaid) {
                 
             }
 
             @Override
-            public void onDeviceIdGetError(@NonNull Exception exception) {
+            public void onOAIDGetError(@NonNull Exception exception) {
 
             }
         });
+```
+本库自带`consumer-rules.pro`混淆规则，若通过远程依赖的方式应用，则无需进行额外配置：
+```proguard
+-keep class com.asus.msa.SupplementaryDID.** { *; }
+-keep interface com.asus.msa.SupplementaryDID.** { *; }
+-keep class com.bun.lib.** { *; }
+-keep interface com.bun.lib.** { *; }
+-keep class com.heytap.openid.** { *; }
+-keep interface com.heytap.openid.** { *; }
+-keep class com.samsung.android.deviceidservice.** { *; }
+-keep interface com.samsung.android.deviceidservice.** { *; }
+-keep class com.uodis.opendevice.aidl.** { *; }
+-keep interface com.uodis.opendevice.aidl.** { *; }
+-keep class com.zui.deviceidservice.** { *; }
+-keep interface com.zui.deviceidservice.** { *; }
 ```
 
 ![支持OAID的情况](/screenshot/oaid.jpg)

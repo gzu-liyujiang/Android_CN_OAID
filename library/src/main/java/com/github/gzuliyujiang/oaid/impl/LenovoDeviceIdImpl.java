@@ -26,6 +26,7 @@ import androidx.annotation.RestrictTo;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 import com.zui.deviceidservice.IDeviceidInterface;
 
 import java.lang.reflect.Method;
@@ -55,39 +56,61 @@ public class LenovoDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(@NonNull final IOAIDGetter getter) {
         Intent intent = new Intent();
         intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
-        boolean isBinded = context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Logger.print("Lenovo DeviceidService connected");
-                try {
-                    //IDeviceidInterface anInterface = new IDeviceidInterface.Stub.asInterface(service);
-                    Method asInterface = IDeviceidInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                    IDeviceidInterface anInterface = (IDeviceidInterface) asInterface.invoke(null, service);
-                    String deviceId = anInterface.a();
-                    if (deviceId == null || deviceId.length() == 0) {
-                        getter.onDeviceIdGetError(new RuntimeException("Lenovo deviceId get failed"));
-                    } else {
-                        getter.onDeviceIdGetComplete(deviceId);
+        try {
+            boolean isBinded = context.bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Logger.print("Lenovo DeviceidService connected");
+                    try {
+                        //IDeviceidInterface anInterface = new IDeviceidInterface.Stub.asInterface(service);
+                        Method asInterface = IDeviceidInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+                        IDeviceidInterface anInterface = (IDeviceidInterface) asInterface.invoke(null, service);
+                        if (anInterface == null) {
+                            throw new RuntimeException("IDeviceidInterface is null");
+                        }
+                        String deviceId = anInterface.a();
+                        if (deviceId == null || deviceId.length() == 0) {
+                            throw new RuntimeException("Lenovo deviceId get failed");
+                        }
+                        getter.onOAIDGetComplete(deviceId);
+                    } catch (Exception e) {
+                        Logger.print(e);
+                        getter.onOAIDGetError(e);
+                    } finally {
+                        context.unbindService(this);
                     }
-                } catch (Exception e) {
-                    Logger.print(e);
-                    getter.onDeviceIdGetError(e);
-                } finally {
-                    context.unbindService(this);
                 }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    Logger.print("Lenovo DeviceidService disconnected");
+                }
+            }, Context.BIND_AUTO_CREATE);
+            if (!isBinded) {
+                getter.onOAIDGetError(new RuntimeException("Lenovo DeviceidService bind failed"));
+            }
+        } catch (Exception e) {
+            getter.onOAIDGetError(e);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Logger.print("Lenovo DeviceidService disconnected");
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
             }
-        }, Context.BIND_AUTO_CREATE);
-        if (!isBinded) {
-            getter.onDeviceIdGetError(new RuntimeException("Lenovo DeviceidService bind failed"));
-        }
+        });
     }
 
 }

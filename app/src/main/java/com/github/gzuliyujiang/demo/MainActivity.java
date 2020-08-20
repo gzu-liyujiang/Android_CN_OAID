@@ -14,35 +14,24 @@
 
 package com.github.gzuliyujiang.demo;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.IDeviceId;
-import com.github.gzuliyujiang.oaid.IGetter;
-import com.yanzhenjie.permission.AndPermission;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
 import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String[] PERMISSIONS_All_NEED = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
     private MyHandler handler;
     private TextView tvOAID;
 
@@ -50,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new MyHandler(this);
-        checkAllPermissions(this);
         setContentView(R.layout.activity_main);
         TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
         tvDeviceInfo.setText(DeviceID.deviceInfo());
@@ -64,19 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    public void checkAllPermissions(final Context context) {
-        AndPermission.with(context)
-                .runtime()
-                .permission(PERMISSIONS_All_NEED)
-                .onDenied(list -> {
-                    if (AndPermission.hasAlwaysDeniedPermission(context, PERMISSIONS_All_NEED)) {
-                        Toast.makeText(context, "部分功能被禁止，被禁止的功能将无法使用", Toast.LENGTH_SHORT).show();
-                        Logger.print("部分功能被禁止");
-                        showNormalDialog(MainActivity.this);
-                    }
-                }).start();
-    }
-
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v) {
@@ -87,10 +62,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvOAID.setText("不支持OAID，须自行生成GUID");
                 return;
             }
-            deviceId.doGet(new IGetter() {
+            deviceId.doGet(new IOAIDGetter() {
                 @Override
-                public void onDeviceIdGetComplete(@NonNull String deviceId) {
-                    Logger.print("onDeviceIdGetComplete====>" + deviceId);
+                public void onOAIDGetComplete(@NonNull String oaid) {
+                    Logger.print("onOAIDGetComplete====>" + deviceId);
                     Message msg = Message.obtain();
                     msg.what = 1;
                     msg.obj = deviceId;
@@ -98,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void onDeviceIdGetError(@NonNull Exception exception) {
-                    Logger.print("onDeviceIdGetError====>" + exception);
+                public void onOAIDGetError(@NonNull Exception exception) {
+                    Logger.print("onOAIDGetError====>" + exception);
                     Message msg = Message.obtain();
                     msg.what = 1;
                     msg.obj = exception;
@@ -107,26 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
-    }
-
-    private void showNormalDialog(final Context context) {
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(context);
-        normalDialog.setTitle("去申请权限");
-        normalDialog.setMessage("部分权限被你禁止了，可能误操作，可能会影响部分功能，是否去要去重新设置？");
-        normalDialog.setPositiveButton("是",
-                (dialog, which) -> getAppDetailSettingIntent(context));
-        normalDialog.setNegativeButton("否",
-                (dialog, which) -> dialog.dismiss());
-        normalDialog.show();
-    }
-
-    static private void getAppDetailSettingIntent(Context context) {
-        Intent localIntent = new Intent();
-        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-        localIntent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        context.startActivity(localIntent);
     }
 
     private static class MyHandler extends Handler {

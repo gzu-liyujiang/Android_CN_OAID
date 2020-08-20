@@ -24,6 +24,12 @@ public interface IDeviceId {
 
     boolean supportOAID();
 
-    void doGet(@NonNull IGetter getter);
+    void doGet(@NonNull final IOAIDGetter getter);
+
+    /**
+     * @deprecated Use {@link #doGet(IOAIDGetter)} instead
+     */
+    @Deprecated
+    void doGet(@NonNull final IGetter getter);
 
 }

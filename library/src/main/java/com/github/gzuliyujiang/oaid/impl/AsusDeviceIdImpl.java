@@ -27,6 +27,7 @@ import com.asus.msa.SupplementaryDID.IDidAidlInterface;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
 import java.lang.reflect.Method;
 
@@ -55,40 +56,63 @@ public class AsusDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull IGetter getter) {
+    public void doGet(@NonNull final IOAIDGetter getter) {
         Intent intent = new Intent("com.asus.msa.action.ACCESS_DID");
         ComponentName componentName = new ComponentName("com.asus.msa.SupplementaryDID", "com.asus.msa.SupplementaryDID.SupplementaryDIDService");
         intent.setComponent(componentName);
-        boolean isBinded = context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Logger.print("ASUS SupplementaryDIDService connected");
-                try {
-                    //IDidAidlInterface anInterface = new IDidAidlInterface.Stub.asInterface(service);
-                    Method asInterface = IDidAidlInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                    IDidAidlInterface anInterface = (IDidAidlInterface) asInterface.invoke(null, service);
-                    String ID = anInterface.getID();
-                    if (ID == null || ID.length() == 0) {
-                        getter.onDeviceIdGetError(new RuntimeException("ASUS ID get failed"));
-                    } else {
-                        getter.onDeviceIdGetComplete(ID);
+        try {
+            boolean isBinded = context.bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Logger.print("ASUS SupplementaryDIDService connected");
+                    try {
+                        //IDidAidlInterface anInterface = new IDidAidlInterface.Stub.asInterface(service);
+                        Method asInterface = IDidAidlInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+                        IDidAidlInterface anInterface = (IDidAidlInterface) asInterface.invoke(null, service);
+                        if (anInterface == null) {
+                            throw new RuntimeException("IDidAidlInterface is null");
+                        }
+                        String ID = anInterface.getID();
+                        if (ID == null || ID.length() == 0) {
+                            throw new RuntimeException("ASUS ID get failed");
+                        }
+                        getter.onOAIDGetComplete(ID);
+                    } catch (Exception e) {
+                        Logger.print(e);
+                        getter.onOAIDGetError(e);
+                    } finally {
+                        context.unbindService(this);
                     }
-                } catch (Exception e) {
-                    Logger.print(e);
-                    getter.onDeviceIdGetError(e);
-                } finally {
-                    context.unbindService(this);
                 }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    Logger.print("ASUS SupplementaryDIDService disconnected");
+                }
+            }, Context.BIND_AUTO_CREATE);
+            if (!isBinded) {
+                throw new RuntimeException("ASUS SupplementaryDIDService bind failed");
+            }
+        } catch (Exception e) {
+            // SecurityException: Not allowed to bind to service Intent
+            getter.onOAIDGetError(e);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Logger.print("ASUS SupplementaryDIDService disconnected");
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
             }
-        }, Context.BIND_AUTO_CREATE);
-        if (!isBinded) {
-            getter.onDeviceIdGetError(new RuntimeException("ASUS SupplementaryDIDService bind failed"));
-        }
+        });
     }
 
 }

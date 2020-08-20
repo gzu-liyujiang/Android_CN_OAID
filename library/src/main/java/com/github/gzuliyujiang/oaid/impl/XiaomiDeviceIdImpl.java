@@ -22,6 +22,7 @@ import androidx.annotation.RestrictTo;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
 import java.lang.reflect.Method;
 
@@ -33,7 +34,7 @@ import java.lang.reflect.Method;
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class XiaomiDeviceIdImpl implements IDeviceId {
     private Context context;
-    private Class idProvider;
+    private Class<?> idProvider;
 
     public XiaomiDeviceIdImpl(Context context) {
         this.context = context;
@@ -52,9 +53,8 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
     }
 
     @SuppressLint("PrivateApi")
-    @SuppressWarnings("unchecked")
     @Override
-    public void doGet(@NonNull IGetter getter) {
+    public void doGet(@NonNull final IOAIDGetter getter) {
         if (idProvider == null) {
             try {
                 idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
@@ -70,20 +70,20 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
             Logger.print(e);
         }
         if (did != null && did.length() > 0) {
-            getter.onDeviceIdGetComplete(did);
+            getter.onOAIDGetComplete(did);
             return;
         }
         try {
             Method oaidMethod = idProvider.getMethod("getOAID", Context.class);
             did = invokeMethod(oaidMethod);
             if (did != null && did.length() > 0) {
-                getter.onDeviceIdGetComplete(did);
+                getter.onOAIDGetComplete(did);
             } else {
-                getter.onDeviceIdGetError(new RuntimeException("Xiaomi OAID get failed"));
+                throw new RuntimeException("Xiaomi OAID get failed");
             }
         } catch (Exception e) {
             Logger.print(e);
-            getter.onDeviceIdGetError(e);
+            getter.onOAIDGetError(e);
         }
     }
 
@@ -97,6 +97,22 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
             }
         }
         return result;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
+            }
+
+            @Override
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
+            }
+        });
     }
 
 }

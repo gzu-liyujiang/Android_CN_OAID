@@ -18,6 +18,7 @@ import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
 /**
  * 随机生成一个全局唯一标识，通过`SharedPreferences`及`ExternalStorage`进行永久化存储。
@@ -35,8 +36,24 @@ public class DefaultDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull IGetter getter) {
-        getter.onDeviceIdGetError(new RuntimeException("OAID unsupported"));
+    public void doGet(@NonNull final IOAIDGetter getter) {
+        getter.onOAIDGetError(new RuntimeException("OAID unsupported"));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
+            }
+
+            @Override
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
+            }
+        });
     }
 
 }

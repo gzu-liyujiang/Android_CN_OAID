@@ -26,6 +26,7 @@ import androidx.annotation.RestrictTo;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
 
 /**
@@ -53,37 +54,56 @@ public class HuaweiDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(@NonNull final IOAIDGetter getter) {
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
         intent.setPackage("com.huawei.hwid");
-        boolean isBinded = context.bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Logger.print("Huawei OPENIDS_SERVICE connected");
-                try {
-                    OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                    String IDs = anInterface.getIDs();
-                    if (IDs == null || IDs.length() == 0) {
-                        getter.onDeviceIdGetError(new RuntimeException("Huawei IDs get failed"));
-                    } else {
-                        getter.onDeviceIdGetComplete(IDs);
+        try {
+            boolean isBinded = context.bindService(intent, new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Logger.print("Huawei OPENIDS_SERVICE connected");
+                    try {
+                        OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
+                        String IDs = anInterface.getIDs();
+                        if (IDs == null || IDs.length() == 0) {
+                            throw new RuntimeException("Huawei IDs get failed");
+                        }
+                        getter.onOAIDGetComplete(IDs);
+                    } catch (Exception e) {
+                        Logger.print(e);
+                        getter.onOAIDGetError(e);
+                    } finally {
+                        context.unbindService(this);
                     }
-                } catch (Exception e) {
-                    Logger.print(e);
-                    getter.onDeviceIdGetError(e);
-                } finally {
-                    context.unbindService(this);
                 }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    Logger.print("Huawei OPENIDS_SERVICE disconnected");
+                }
+            }, Context.BIND_AUTO_CREATE);
+            if (!isBinded) {
+                throw new RuntimeException("Huawei OPENIDS_SERVICE bind failed");
+            }
+        } catch (Exception e) {
+            getter.onOAIDGetError(e);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
             }
 
             @Override
-            public void onServiceDisconnected(ComponentName name) {
-                Logger.print("Huawei OPENIDS_SERVICE disconnected");
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
             }
-        }, Context.BIND_AUTO_CREATE);
-        if (!isBinded) {
-            getter.onDeviceIdGetError(new RuntimeException("Huawei OPENIDS_SERVICE bind failed"));
-        }
+        });
     }
 
 }

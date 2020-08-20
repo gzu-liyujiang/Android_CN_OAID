@@ -25,6 +25,7 @@ import androidx.annotation.RestrictTo;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
 /**
  * Created by liyujiang on 2020/5/30
@@ -45,7 +46,7 @@ public class NubiaDeviceIdImpl implements IDeviceId {
     }
 
     @Override
-    public void doGet(@NonNull IGetter getter) {
+    public void doGet(@NonNull final IOAIDGetter getter) {
         String oaid = null;
         Bundle bundle = null;
         try {
@@ -64,22 +65,37 @@ public class NubiaDeviceIdImpl implements IDeviceId {
                 bundle = context.getContentResolver().call(uri, "getOAID", null, null);
             }
             if (bundle == null) {
-                getter.onDeviceIdGetError(new RuntimeException("getOAID call failed"));
-                return;
+                throw new RuntimeException("getOAID call failed");
             }
             if (bundle.getInt("code", -1) == 0) {
                 oaid = bundle.getString("id");
             }
             String failedMsg = bundle.getString("message");
             if (oaid != null && oaid.length() > 0) {
-                getter.onDeviceIdGetComplete(oaid);
+                getter.onOAIDGetComplete(oaid);
             } else {
-                getter.onDeviceIdGetError(new RuntimeException(failedMsg));
+                throw new RuntimeException(failedMsg);
             }
         } catch (Exception e) {
             Logger.print(e);
-            getter.onDeviceIdGetError(e);
+            getter.onOAIDGetError(e);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                getter.onDeviceIdGetComplete(oaid);
+            }
+
+            @Override
+            public void onOAIDGetError(@NonNull Exception exception) {
+                getter.onDeviceIdGetError(exception);
+            }
+        });
     }
 
 }

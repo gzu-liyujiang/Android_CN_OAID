@@ -16,16 +16,14 @@ package com.github.gzuliyujiang.oaid;
 import androidx.annotation.NonNull;
 
 /**
- * Created by liyujiang on 2020/5/30
+ * Created by liyujiang on 2020/8/20
  *
  * @author 大定府羡民
- * @deprecated Use {@link IOAIDGetter} instead
  */
-@Deprecated
-public interface IGetter {
+public interface IOAIDGetter {
 
-    void onDeviceIdGetComplete(@NonNull String oaid);
+    void onOAIDGetComplete(@NonNull String oaid);
 
-    void onDeviceIdGetError(@NonNull Exception exception);
+    void onOAIDGetError(@NonNull Exception exception);
 
 }
