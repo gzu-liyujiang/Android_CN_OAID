@@ -6,6 +6,17 @@
 
 本项目用于获取国内各大Android手机厂商的开放匿名设备标识（OAID）、遵循谷歌官方使用Android标识符的最佳做法生成全局唯一标识（GUID），基于[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)作了重构，使用AIDL，增强易用性及健壮性。
 
+```gradle
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:${latest.version}'
+}
+```
 ```groovy
         IDeviceId deviceId = DeviceID.with(this);
         if (!deviceId.supportOAID()) {
