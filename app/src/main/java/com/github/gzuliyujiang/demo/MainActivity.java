@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             deviceId.doGet(new IOAIDGetter() {
                 @Override
                 public void onOAIDGetComplete(@NonNull String oaid) {
-                    Logger.print("onOAIDGetComplete====>" + deviceId);
+                    Logger.print("onOAIDGetComplete====>" + oaid);
                     Message msg = Message.obtain();
                     msg.what = 1;
-                    msg.obj = deviceId;
+                    msg.obj = oaid;
                     handler.sendMessage(msg);
                 }
 
