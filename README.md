@@ -14,7 +14,7 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:${latest.version}'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:版本号'
 }
 ```
 ```groovy
