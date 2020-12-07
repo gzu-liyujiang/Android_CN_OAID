@@ -28,12 +28,12 @@ dependencies {
         deviceId.doGet(new IOAIDGetter() {
             @Override
             public void onOAIDGetComplete(@NonNull String oaid) {
-                
+                // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算进行统一
             }
 
             @Override
             public void onOAIDGetError(@NonNull Exception exception) {
-
+                // 获取OAID失败
             }
         });
 ```
