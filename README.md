@@ -4,7 +4,7 @@
 ![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
 [![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
-本项目用于获取国内各大Android手机厂商的开放匿名设备标识（OAID），类似于移动安全联盟官网提供的统一SDK闭源方案（miit_mdid_xxx.aar），参考[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)源码进行重写，还原AIDL，增强易用性及健壮性。获取或生成设备唯一标识后，推荐参考“[一种Android移动设备构造UDID的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。
+本项目用于获取国内各大Android手机厂商的开放匿名设备标识（OAID），类似于移动安全联盟官网提供的统一SDK闭源方案（miit_mdid_xxx.aar），参考[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)源码进行重写，还原AIDL，增强易用性及健壮性。获取或生成设备唯一标识后，推荐参考“[一种Android移动设备构造UDID的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。华为手机可参阅[华为官方文档《获取OAID信息（SDK方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5)
 
 ```gradle
 allprojects {
