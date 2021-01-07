@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class LenovoDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public LenovoDeviceIdImpl(Context context) {
         this.context = context;

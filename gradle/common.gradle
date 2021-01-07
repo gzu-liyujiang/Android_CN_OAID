@@ -1,42 +1,36 @@
+/*
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
+ */
+
 configurations {
     all {
         //此处可用于解决依赖冲突问题，参阅https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
         resolutionStrategy {
-            force "androidx.core:core:${androidxCoreVersion}"
-            force "androidx.lifecycle:lifecycle-runtime:${androidxLifecycleVersion}"
-            force "androidx.annotation:annotation:$androidxCoreVersion"
-            force "androidx.collection:collection:$androidxCoreVersion"
-            force "androidx.appcompat:appcompat:$androidxCoreVersion"
-            force "androidx.recyclerview:recyclerview:1.0.0"
+            force androidxLibrary.core
+            force androidxLibrary.lifecycle
+            force androidxLibrary.fragment
+            force androidxLibrary.recyclerview
+            force androidxLibrary.documentfile
         }
     }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
-    implementation "androidx.core:core:$androidxCoreVersion"
-    implementation "androidx.annotation:annotation:$androidxCoreVersion"
-    implementation "androidx.collection:collection:$androidxCoreVersion"
-    annotationProcessor "androidx.annotation:annotation:$androidxCoreVersion"
-}
-
 android {
 
-    compileSdkVersion androidCompileSdkVersion as int
-    buildToolsVersion androidBuildToolsVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion as int
+    buildToolsVersion rootProject.ext.buildToolsVersion
     // 配置资源名前缀提示，避免资源名重复
     //resourcePrefix project.name == 'app' ? '' : project.name.toLowerCase() + '_'
 
     defaultConfig {
-        minSdkVersion androidMinSdkVersion as int
-        targetSdkVersion androidTargetSdkVersion as int
-        versionCode rootProject.gitGitCommitNumber()
-        versionName rootProject.getGitLatestTag()
+        minSdkVersion rootProject.ext.minSdkVersion as int
+        targetSdkVersion rootProject.ext.targetSdkVersion as int
+        versionCode gitGitCommitNumber() as int
+        versionName getGitLatestTag()
         println("versionCode: $versionCode\nversionName: $versionName")
-        buildConfigField "String", "GIT_BRANCH", '"' + rootProject.getGitBranch() + '"'
-        buildConfigField "String", "GIT_LATEST_COMMIT_HASH", '"' + rootProject.getGitLatestCommitHash() + '"'
-        buildConfigField "String", "GIT_LATEST_COMMIT_HASH_SHORT", '"' + rootProject.getGitLatestCommitHashShort() + '"'
+        buildConfigField "String", "BUILD_TIME", '"' + new Date().format("yyyy-MM-dd HH:mm") + '"'
+        buildConfigField "String", "GIT_BRANCH", '"' + getGitBranch() + '"'
+        buildConfigField "String", "GIT_LATEST_COMMIT_HASH", '"' + getGitLatestCommitHashShort() + '"'
     }
 
     sourceSets {
@@ -45,8 +39,9 @@ android {
             res.srcDirs = ['src/main/res']
             java.srcDirs = ['src/main/java']
             assets.srcDirs = ['src/main/assets']
-            jniLibs.srcDirs = ['libs', 'src/main/jniLibs']
+            aidl.srcDirs = ['src/main/aidl']
             jni.srcDirs = ['cpp', 'jni', 'src/main/cpp', 'src/main/jni']
+            jniLibs.srcDirs = ['libs', 'src/main/jniLibs']
         }
     }
 

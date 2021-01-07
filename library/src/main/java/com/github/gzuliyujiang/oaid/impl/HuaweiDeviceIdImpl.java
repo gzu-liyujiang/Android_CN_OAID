@@ -36,7 +36,7 @@ import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class HuaweiDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public HuaweiDeviceIdImpl(Context context) {
         this.context = context;

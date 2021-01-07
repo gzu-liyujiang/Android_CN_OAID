@@ -1,17 +1,8 @@
-apply plugin: 'com.android.library'
-apply from: "${rootDir}/gradle/common.gradle"
-apply from: "${rootDir}/gradle/publish.gradle"
+apply from: "${rootDir}/gradle/library.gradle"
 
 dependencies {
-    implementation "androidx.documentfile:documentfile:1.0.1"
-    implementation 'com.github.gzu-liyujiang:Logger:1.1.0'
-    debugRuntimeOnly 'com.orhanobut:logger:2.2.0'
-}
-
-android {
-
-    defaultConfig {
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-
+    implementation androidxLibrary.annotation
+    implementation androidxLibrary.documentfile
+    implementation liyujiangLibrary.Logger
+    //implementation 'com.huawei.hms:ads-identifier:3.4.37.300'
 }

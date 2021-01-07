@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class SamsungDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public SamsungDeviceIdImpl(Context context) {
         this.context = context;

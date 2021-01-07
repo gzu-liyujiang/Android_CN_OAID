@@ -1,7 +1,7 @@
 #################
 #项目自定义混淆配置
 #################
-# 正式发布包混淆去掉日志，叙保证没有配置`-dontoptimize`规则
+# 正式发布包混淆去掉日志，需保证没有配置`-dontoptimize`规则
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** i(...);
@@ -13,4 +13,3 @@
     public *** println(...);
     public *** print(...);
 }
-

@@ -1,7 +1,13 @@
+/*
+ * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ */
+
 // 参见 https://github.com/shwenzhang/AndResGuard
 apply plugin: 'AndResGuard'
 
 andResGuard {
+    def versionName = rootProject.getGitLatestTag()
+    def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00"))
     File file = rootProject.file("resource_mapping.txt")
     mappingFile = file.exists() ? file : null
     use7zip = true
@@ -17,7 +23,7 @@ andResGuard {
      * Optional: if finalApkBackupPath is null, AndResGuard will overwrite final apk
      * to the path which assemble[Task] write to
      **/
-    finalApkBackupPath = rootProject.file("release/app-release-resguard.apk")
+    finalApkBackupPath = rootProject.file("归档/app-release-resguard-" + versionName + "-" + date + ".apk")
     // You need put all resource which access via getIdentifier into whiteList.
     // See https://github.com/shwenzhang/AndResGuard/blob/master/doc/white_list.md
     whiteList = [
@@ -110,17 +116,14 @@ andResGuard {
             "*.jpg",
             "*.jpeg",
             "*.gif",
-            "resources.arsc"
     ]
     sevenzip {
         artifact = "com.tencent.mm:SevenZip:${andResGuardVersion}"
+        //path = "/usr/local/bin/7za"
     }
     /**
      * Optional: Specifies the name of the message digest algorithm to user when digesting the entries of JAR file
      * Only works in V1signing, default value is "SHA-1"
      **/
     digestalg = "SHA-1"
-    sourceApk = null
-    sourceBuildType = null
-    sourceFlavor = null
 }

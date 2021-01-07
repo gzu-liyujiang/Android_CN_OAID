@@ -17,17 +17,6 @@ import android.content.Context;
 import android.os.Build;
 
 import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.impl.AsusDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.DefaultDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.HuaweiDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.LenovoDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.MeizuDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.MsaDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.NubiaDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.OppoDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.SamsungDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.VivoDeviceIdImpl;
-import com.github.gzuliyujiang.oaid.impl.XiaomiDeviceIdImpl;
 
 /**
  * Created by liyujiang on 2020/5/30
@@ -43,27 +32,28 @@ public final class DeviceID {
     public static IDeviceId with(Context context) {
         IDeviceId deviceId;
         if (SystemUtils.isLenovo() || SystemUtils.isMotolora()) {
-            deviceId = new LenovoDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.LenovoDeviceIdImpl(context);
         } else if (SystemUtils.isMeizu()) {
-            deviceId = new MeizuDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.MeizuDeviceIdImpl(context);
         } else if (SystemUtils.isNubia()) {
-            deviceId = new NubiaDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.NubiaDeviceIdImpl(context);
         } else if (SystemUtils.isXiaomi() || SystemUtils.isBlackShark()) {
-            deviceId = new XiaomiDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.XiaomiDeviceIdImpl(context);
         } else if (SystemUtils.isSamsung()) {
-            deviceId = new SamsungDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.SamsungDeviceIdImpl(context);
         } else if (SystemUtils.isVivo()) {
-            deviceId = new VivoDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.VivoDeviceIdImpl(context);
         } else if (SystemUtils.isASUS()) {
-            deviceId = new AsusDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.AsusDeviceIdImpl(context);
         } else if (SystemUtils.isHuawei()) {
-            deviceId = new HuaweiDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.HuaweiDeviceIdImpl(context);
+            //deviceId = new com.github.gzuliyujiang.oaid.impl.HuaweiAdvertisingIdImpl(context);
         } else if (SystemUtils.isOppo() || SystemUtils.isOnePlus()) {
-            deviceId = new OppoDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.OppoDeviceIdImpl(context);
         } else if (SystemUtils.isZTE() || SystemUtils.isFreeme() || SystemUtils.isSSUI()) {
-            deviceId = new MsaDeviceIdImpl(context);
+            deviceId = new com.github.gzuliyujiang.oaid.impl.MsaDeviceIdImpl(context);
         } else {
-            deviceId = new DefaultDeviceIdImpl();
+            deviceId = new com.github.gzuliyujiang.oaid.impl.DefaultDeviceIdImpl();
         }
         Logger.print(deviceInfo() + "\nsupportOAID: " + deviceId.supportOAID());
         return deviceId;

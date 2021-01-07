@@ -38,7 +38,7 @@ import java.lang.reflect.Method;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class MsaDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public MsaDeviceIdImpl(Context context) {
         this.context = context;

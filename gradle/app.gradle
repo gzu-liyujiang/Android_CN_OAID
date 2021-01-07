@@ -1,0 +1,147 @@
+/*
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
+ */
+
+apply plugin: 'com.android.application'
+apply from: "${rootDir}/gradle/common.gradle"
+apply from: "${rootDir}/gradle/resguard.gradle"
+
+android {
+
+    defaultConfig {
+        multiDexEnabled false
+        signingConfigs {
+            //直接使用真实的密钥库文件，避免微信、高德地图等第三方SDK校验失败
+            releaseConfig {
+                try {
+                    // {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
+                    Map rootProp = project.getProperties()
+                    def signingStoreFile = project.rootProject.file('app/release.jks')
+                    if (!signingStoreFile.exists()) {
+                        throw new Exception('app/release.jks can not found')
+                    }
+                    println("[signing] store file: $signingStoreFile")
+                    def signingStorePassword = rootProp.get('signingStorePassword', '')
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = rootProp.get('signingKeyAlias', '')
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = rootProp.get('signingKeyPassword', '')
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile signingStoreFile
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    v2SigningEnabled true
+                } catch (e) {
+                    System.err.println('[signing] read failed from properties: ' + e.getMessage())
+                    def signingStorePath = project.rootProject.file('app/debug.keystore').getAbsolutePath()
+                    println("[signing] store file: $signingStorePath")
+                    def signingStorePassword = 'android'
+                    println("[signing] store password: $signingStorePassword")
+                    def signingKeyAlias = 'androiddebugkey'
+                    println("[signing] key alias: $signingKeyAlias")
+                    def signingKeyPassword = 'android'
+                    println("[signing] key password: $signingKeyPassword")
+                    storeFile new File(signingStorePath)
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                    v1SigningEnabled true
+                    // 注：直接在IDE里运行APP，启用V2签名的话生成的APK里可能不会有签名信息的？
+                    v2SigningEnabled true
+                }
+            }
+        }
+        // 修改 AndroidManifest.xml 里的变量，占位值无法覆盖的坑可参阅 https://www.jianshu.com/p/1d5271c2c366
+        manifestPlaceholders = [
+                MY_CHANNEL: "unknown",
+        ]
+    }
+
+    buildTypes {
+        //线上版本
+        release {
+            debuggable false
+            jniDebuggable false
+            //是否zip优化
+            zipAlignEnabled true
+            //是否移除无用的资源：工具栏->Refactor->Remove Unused Resources
+            shrinkResources false
+            //是否混淆
+            minifyEnabled true
+            //混淆配置文件
+            proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseConfig
+        }
+        //调试版本
+        debug {
+            debuggable true
+            jniDebuggable true
+            zipAlignEnabled true
+            shrinkResources false
+            minifyEnabled false
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+
+    splits {
+        abi {
+            reset()
+            enable true
+            //支持的CPU架构：armeabi、armeabi-v7a、arm64-v8a、x86、x86_64、mips、mips64
+            //目前主流手机都支持armeabi-v7a，armeabi已过时，arm64-v8a是未来的主流，电脑上的模拟器支持x86，mips基本不用于手机
+            include 'armeabi-v7a'
+            universalApk x86Support as boolean
+        }
+    }
+
+}
+
+/*
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
+ */
+
+//APK重命名
+println "********** apk outputs **********"
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        if (variant.buildType.name == 'debug') {
+            //debug版本不重定义输出目录，也不重命名
+            return
+        }
+        if (outputFileName != null && outputFileName.endsWith(".apk")) {
+            def versionName = getGitLatestTag();
+            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}.apk"
+            //这里只能用相对路径，不然报错
+            outputFileName = new File(fileName)
+            println "outputFile=$outputFile"
+        }
+    }
+    //APK构建完成后，备份release版本到指定目录
+    tasks.all { it ->
+        def maybeNeedCopy
+        if (it.name.startsWith("resguard")) {
+            maybeNeedCopy = true
+        } else {
+            maybeNeedCopy = it.name.startsWith("assemble");
+        }
+        if (maybeNeedCopy) {
+            it.doLast {
+                variant.outputs.each { output ->
+                    File outputFile = output.outputFile;
+                    if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
+                        File targetDir = rootProject.file("归档")
+                        targetDir.mkdirs()
+                        copy {
+                            from outputFile
+                            into targetDir
+                        }
+                        File copyOutputFile = new File(targetDir, outputFile.name)
+                        println "copyOutputFile=$copyOutputFile"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -34,7 +34,7 @@ import com.github.gzuliyujiang.oaid.IOAIDGetter;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class NubiaDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public NubiaDeviceIdImpl(Context context) {
         this.context = context;

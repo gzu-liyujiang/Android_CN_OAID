@@ -95,6 +95,10 @@
 -keepclassmembers class **.R$* {
     public static <fields>;
 }
+# 不混淆构建配置类，以便通过反射字段获取值
+-keepclassmembers class **.BuildConfig {
+    public static <fields>;
+}
 
 # 保持指定规则的方法不被混淆（Android layout 布局文件中为控件配置的onClick方法不能混淆）
 -keepclassmembers class * extends android.app.Activity {
@@ -120,6 +124,7 @@
 -keepclassmembers class * extends android.webkit.WebChromeClient {
      public void *(android.webkit.WebView,java.lang.String);
 }
+-keep public class * extends android.webkit.WebView
 
 # 保持枚举类不被混淆
 -keepclassmembers enum * {

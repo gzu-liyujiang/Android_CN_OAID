@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class VivoDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public VivoDeviceIdImpl(Context context) {
         this.context = context;

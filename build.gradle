@@ -1,14 +1,21 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    apply from: "${rootDir}/gradle/git.gradle"
+    apply from: "${rootDir}/gradle/config.gradle"
     repositories {
         jcenter()
         google()
+        maven {
+            url 'https://developer.huawei.com/repo/'
+            name '华为云调试'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath "com.tencent.mm:AndResGuard-gradle-plugin:${andResGuardVersion}"
+        classpath 'com.huawei.agconnect:agcp:1.4.1.300'
     }
 }
 
@@ -26,6 +33,8 @@ allprojects {
         google()
         //Sonatype公司提供的中央库：http://central.maven.org/maven2
         mavenCentral()
+        //华为设备广告标识
+        //maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -51,60 +60,5 @@ task clean(type: Delete) {
                     println("delete child dir:" + directory)
                     directory.deleteDir()
             }
-    }
-}
-
-@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
-def gitGitCommitNumber() {
-    try {
-        // See https://www.jianshu.com/p/1f81af606e41
-        def cmd = 'git rev-list HEAD --first-parent --count'
-        return cmd.execute().text.trim().toInteger()
-    } catch (ignored) {
-        return 1
-    }
-}
-
-@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
-def getGitLatestTag() {
-    try {
-        // See https://www.jianshu.com/p/1f81af606e41
-        def cmd = 'git describe --tags'
-        return cmd.execute().text.trim()
-    } catch (ignored) {
-        return "1.0.0"
-    }
-}
-
-@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
-def getGitBranch() {
-    try {
-        // See https://www.jianshu.com/p/1f81af606e41
-        def cmd = 'git symbolic-ref --short -q HEAD'
-        return cmd.execute().text.trim()
-    } catch (ignored) {
-        return "unknown"
-    }
-}
-
-@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
-def getGitLatestCommitHash() {
-    try {
-        // See https://www.cnblogs.com/fuyaozhishang/p/7675551.html
-        def cmd = 'git rev-parse HEAD'
-        return cmd.execute().text.trim()
-    } catch (ignored) {
-        return "unknown"
-    }
-}
-
-@SuppressWarnings(["GrMethodMayBeStatic", "unused"])
-def getGitLatestCommitHashShort() {
-    try {
-        // See https://www.jianshu.com/p/1f81af606e41
-        def cmd = 'git rev-parse --short HEAD'
-        return cmd.execute().text.trim()
-    } catch (ignored) {
-        return "unknown"
     }
 }

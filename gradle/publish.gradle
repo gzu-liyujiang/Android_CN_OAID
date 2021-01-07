@@ -16,13 +16,13 @@ apply plugin: 'com.jfrog.bintray'
 def includeJar = false
 def pomLibGroupName = 'com.github.gzuliyujiang'
 def pomLibArtifactId = rootProject.name
-def pomLibVersion = rootProject.getGitLatestTag()
+def pomLibVersion = getGitLatestTag()
 def pomLibDescription = "TODO description: ${rootProject.name} for Android"
 def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"
 def pomGitUrl = "https://github.com/gzu-liyujiang/${rootProject.name}.git"
 def pomIssueUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/issues"
 def pomReleaseNotesUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/README.md"
-def pomLicenses = ["Apache License 2.0", "Mulan PSL v1"]
+def pomLicenses = ["Apache License 2.0", "Mulan PSL v2"]
 //开发者信息
 def pomDeveloperId = 'liyujiang-gzu'
 def pomDeveloperOrg = 'gzu-liyujiang'
@@ -31,12 +31,13 @@ def pomDeveloperEmail = '1032694760@qq.com'
 //GitHub仓库信息
 def githubRepositoryOwner = pomDeveloperOrg
 def githubRepositoryName = pomLibArtifactId
-def githubUsername = project.findProperty("githubUserName") ?: pomDeveloperId
+def githubUserName = project.findProperty("githubUserName") ?: pomDeveloperId
 //1、在`https://github.com/settings/tokens`创建个人token，勾选包读写权限。
 //2、在`https://github.com/gzu-liyujiang/${rootProject.name}/settings/secrets`将token添加为secrets。
 //3、在GithubActions文件里添加`env:TOKEN: ${{ secrets.TOKEN }}`。
+//或者直接使用`${{ secrets.GITHUB_TOKEN }}`，参阅 https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token
 def githubToken = project.findProperty("githubToken") ?: System.getenv("TOKEN")
-println("github credentials: user=$githubUsername token=$githubToken")
+println("github credentials: user=$githubUserName token=$githubToken")
 
 // {USER_HOME}/.gradle/gradle.properties
 def bintrayUserName = project.findProperty('bintrayUserName') ?: ''
@@ -52,14 +53,21 @@ afterEvaluate {
     publishing {
         repositories {
             maven {
+                // 执行命令`gradlew publishReleasePublicationToGitHubRepository`
                 // See https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages
                 // See https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
-                name = 'GitHub Packages'
-                url = uri("https://maven.pkg.github.com/${githubRepositoryOwner}/${githubRepositoryName}")
+                name = 'GitHub'
+                url = "https://maven.pkg.github.com/${githubRepositoryOwner}/${githubRepositoryName}"
                 credentials {
-                    username = githubUsername
+                    username = githubUserName
                     password = githubToken
                 }
+            }
+            maven {
+                // 执行命令`gradlew publishReleasePublicationToLocalRepository`
+                name = 'Local'
+                // 可同步到`https://github.com/gzu-liyujiang/maven-repo`，通过`https://raw.githubusercontent.com/gzu-liyujiang/maven-repo/master`访问
+                url = rootProject.file("归档")
             }
         }
         publications {

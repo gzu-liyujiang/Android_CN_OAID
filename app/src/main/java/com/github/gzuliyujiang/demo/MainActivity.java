@@ -16,8 +16,6 @@ package com.github.gzuliyujiang.demo;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,27 +27,17 @@ import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
-import java.lang.ref.WeakReference;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private MyHandler handler;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, IOAIDGetter {
     private TextView tvOAID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handler = new MyHandler(this);
         setContentView(R.layout.activity_main);
         TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
         tvDeviceInfo.setText(DeviceID.deviceInfo());
         findViewById(R.id.btn_oaid_get).setOnClickListener(this);
         tvOAID = findViewById(R.id.tv_oaid_result);
-    }
-
-    @Override
-    protected void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
-        super.onDestroy();
     }
 
     @SuppressLint("SetTextI18n")
@@ -62,49 +50,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvOAID.setText("不支持OAID，须自行生成GUID");
                 return;
             }
-            deviceId.doGet(new IOAIDGetter() {
-                @Override
-                public void onOAIDGetComplete(@NonNull String oaid) {
-                    Logger.print("onOAIDGetComplete====>" + oaid);
-                    Message msg = Message.obtain();
-                    msg.what = 1;
-                    msg.obj = oaid;
-                    handler.sendMessage(msg);
-                }
-
-                @Override
-                public void onOAIDGetError(@NonNull Exception exception) {
-                    Logger.print("onOAIDGetError====>" + exception);
-                    Message msg = Message.obtain();
-                    msg.what = 1;
-                    msg.obj = exception;
-                    handler.sendMessage(msg);
-                }
-            });
+            deviceId.doGet(this);
         }
     }
 
-    private static class MyHandler extends Handler {
-        private WeakReference<MainActivity> activity;
+    @Override
+    public void onOAIDGetComplete(@NonNull String oaid) {
+        Logger.print("onOAIDGetComplete====>" + oaid);
+        tvOAID.setText(oaid);
+    }
 
-        private MyHandler(MainActivity activity) {
-            this.activity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            MainActivity mainActivity = activity.get();
-            if (mainActivity == null) {
-                return;
-            }
-            if (msg.what == -1) {
-                mainActivity.tvOAID.setText(String.format("出错了：%s", msg.obj.toString()));
-            } else {
-                mainActivity.tvOAID.setText(msg.obj.toString());
-            }
-        }
-
+    @Override
+    public void onOAIDGetError(@NonNull Exception exception) {
+        Logger.print("onOAIDGetError====>" + exception);
+        tvOAID.setText(exception.toString());
     }
 
 }

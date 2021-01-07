@@ -35,7 +35,7 @@ import java.util.Objects;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class MeizuDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
 
     public MeizuDeviceIdImpl(Context context) {
         this.context = context;

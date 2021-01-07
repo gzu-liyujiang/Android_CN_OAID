@@ -42,7 +42,7 @@ import java.security.MessageDigest;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class OppoDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
     private String sign;
 
     public OppoDeviceIdImpl(Context context) {

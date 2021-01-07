@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class XiaomiDeviceIdImpl implements IDeviceId {
-    private Context context;
+    private final Context context;
     private Class<?> idProvider;
 
     public XiaomiDeviceIdImpl(Context context) {
