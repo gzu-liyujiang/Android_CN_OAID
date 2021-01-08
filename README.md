@@ -6,10 +6,13 @@
 
 本项目抹平了各大Android手机厂商获取开放匿名设备标识（OAID）的差异性，轻松通过几句代码即可获取不同手机的OAID，类似于移动安全联盟官网提供的统一SDK闭源方案（miit_mdid_xxx.aar）。   
 
-参考资料：
+## 参考资料
+
 - 数字联盟公开的各厂商OAID获取代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种Android移动设备构造UDID的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。
 - [华为官方文档《获取OAID信息（SDK方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
+
+## 接入指引
 
 ```gradle
 allprojects {
@@ -42,6 +45,9 @@ dependencies {
             }
         });
 ```
+
+## 混淆规则
+
 本库自带`consumer-rules.pro`混淆规则，若通过远程依赖的方式应用，则无需进行额外配置：
 ```proguard
 -keep class com.asus.msa.SupplementaryDID.** { *; }
@@ -57,6 +63,8 @@ dependencies {
 -keep class com.zui.deviceidservice.** { *; }
 -keep interface com.zui.deviceidservice.** { *; }
 ```
+
+## 效果图
 
 ![支持OAID的情况](/screenshot/oaid_vivo.png)
 ![支持OAID的情况](/screenshot/oaid_huawei.png)
