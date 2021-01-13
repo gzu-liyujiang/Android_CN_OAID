@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -13,11 +13,14 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
@@ -27,9 +30,10 @@ import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
-import com.zui.deviceidservice.IDeviceidInterface;
+import com.heytap.openid.IOpenID;
 
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 
 /**
  * Created by liyujiang on 2020/5/30
@@ -37,17 +41,18 @@ import java.lang.reflect.Method;
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class LenovoDeviceIdImpl implements IDeviceId {
+public class OppoDeviceIdImpl implements IDeviceId {
     private final Context context;
+    private String sign;
 
-    public LenovoDeviceIdImpl(Context context) {
+    public OppoDeviceIdImpl(Context context) {
         this.context = context;
     }
 
     @Override
     public boolean supportOAID() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.zui.deviceidservice", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.heytap.openid", 0);
             return pi != null;
         } catch (Exception e) {
             Logger.print(e);
@@ -57,25 +62,20 @@ public class LenovoDeviceIdImpl implements IDeviceId {
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        Intent intent = new Intent();
-        intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
+        Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
+        intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("Lenovo DeviceidService connected");
+                    Logger.print("HeyTap IdentifyService connected");
                     try {
-                        //IDeviceidInterface anInterface = new IDeviceidInterface.Stub.asInterface(service);
-                        Method asInterface = IDeviceidInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        IDeviceidInterface anInterface = (IDeviceidInterface) asInterface.invoke(null, service);
-                        if (anInterface == null) {
-                            throw new RuntimeException("IDeviceidInterface is null");
+                        String ouid = realGetOUID(service);
+                        if (ouid == null || ouid.length() == 0) {
+                            throw new RuntimeException("HeyTap OUID get failed");
+                        } else {
+                            getter.onOAIDGetComplete(ouid);
                         }
-                        String deviceId = anInterface.a();
-                        if (deviceId == null || deviceId.length() == 0) {
-                            throw new RuntimeException("Lenovo deviceId get failed");
-                        }
-                        getter.onOAIDGetComplete(deviceId);
                     } catch (Exception e) {
                         Logger.print(e);
                         getter.onOAIDGetError(e);
@@ -86,15 +86,39 @@ public class LenovoDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("Lenovo DeviceidService disconnected");
+                    Logger.print("HeyTap IdentifyService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
-                getter.onOAIDGetError(new RuntimeException("Lenovo DeviceidService bind failed"));
+                throw new RuntimeException("HeyTap IdentifyService bind failed");
             }
         } catch (Exception e) {
             getter.onOAIDGetError(e);
         }
+    }
+
+    @SuppressLint("PackageManagerGetSignatures")
+    private String realGetOUID(IBinder service) throws Exception {
+        String pkgName = context.getPackageName();
+        if (sign == null) {
+            Signature[] signatures = context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures;
+            byte[] byteArray = signatures[0].toByteArray();
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
+            byte[] digest = messageDigest.digest(byteArray);
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(Integer.toHexString((b & 255) | 256).substring(1, 3));
+            }
+            sign = sb.toString();
+            //IOpenID anInterface = new IOpenID.Stub.asInterface(service);
+            Method asInterface = IOpenID.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+            IOpenID anInterface = (IOpenID) asInterface.invoke(null, service);
+            if (anInterface == null) {
+                throw new RuntimeException("IOpenID is null");
+            }
+            return anInterface.getSerID(pkgName, sign, "OUID");
+        }
+        return null;
     }
 
     @SuppressWarnings("deprecation")

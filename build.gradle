@@ -33,8 +33,6 @@ allprojects {
         google()
         //Sonatype公司提供的中央库：http://central.maven.org/maven2
         mavenCentral()
-        //华为设备广告标识
-        //maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 

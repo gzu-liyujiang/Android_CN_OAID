@@ -22,33 +22,61 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:版本号'
+   // 如果项目中已经使用了移动安全联盟的mdid的aar包，则无需再依赖OAID_AIDL，否则会有冲突
+   implementation 'com.github.gzu-liyujiang:OAID_AIDL:版本号'
+   implementation 'com.github.gzu-liyujiang:OAID_IMPL:版本号'
 }
 ```
-```groovy
-        IDeviceId deviceId = DeviceID.with(context);
-        if (!deviceId.supportOAID()) {
-            // 不支持OAID，须自行生成全局唯一标识（GUID）。
-            // 本库不提供GUID的生成方式，可以使用`UUID.randomUUID().toString()`生成，
-            // 然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
-            return;
-        }
-        deviceId.doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算进行统一
-            }
+```java
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, IOAIDGetter {
+    private TextView tvOAID;
 
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                // 获取OAID失败
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
+        tvDeviceInfo.setText(DeviceID.deviceInfo());
+        findViewById(R.id.btn_oaid_get).setOnClickListener(this);
+        tvOAID = findViewById(R.id.tv_oaid_result);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_oaid_get) {
+            Logger.print("DeviceID doGet");
+            IDeviceId deviceId = DeviceID.with(this);
+            if (!deviceId.supportOAID()) {
+                // 不支持OAID，须自行生成全局唯一标识（GUID）。
+                // 本库不提供GUID的生成方式，可以使用`UUID.randomUUID().toString()`生成，
+                // 然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
+                tvOAID.setText("不支持OAID，须自行生成GUID");
+                return;
             }
-        });
+            deviceId.doGet(this);
+        }
+    }
+
+    @Override
+    public void onOAIDGetComplete(@NonNull String oaid) {
+        Logger.print("onOAIDGetComplete====>" + oaid);
+        // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
+        tvOAID.setText(oaid);
+    }
+
+    @Override
+    public void onOAIDGetError(@NonNull Exception exception) {
+        Logger.print("onOAIDGetError====>" + exception);
+        // 获取OAID失败
+        tvOAID.setText(exception.toString());
+    }
+
+}
 ```
 
 ## 混淆规则
 
-本库自带`consumer-rules.pro`混淆规则，若通过远程依赖的方式应用，则无需进行额外配置：
+本库自带`consumer-rules.pro`混淆规则，不混淆厂商的相关接口及类。若通过远程依赖的方式应用，则无需进行额外配置：
 ```proguard
 -keep class com.asus.msa.SupplementaryDID.** { *; }
 -keep interface com.asus.msa.SupplementaryDID.** { *; }

@@ -1,0 +1,8 @@
+apply from: "${rootDir}/gradle/library.gradle"
+
+dependencies {
+    implementation project(":OAID_AIDL")
+    implementation androidxLibrary.annotation
+    implementation androidxLibrary.documentfile
+    implementation liyujiangLibrary.Logger
+}

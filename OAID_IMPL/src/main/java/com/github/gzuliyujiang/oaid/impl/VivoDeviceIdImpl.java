@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -14,7 +14,6 @@
 package com.github.gzuliyujiang.oaid.impl;
 
 import android.content.Context;
-import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -25,6 +24,7 @@ import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.SystemUtils;
 
 import java.util.Objects;
 
@@ -34,40 +34,30 @@ import java.util.Objects;
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class MeizuDeviceIdImpl implements IDeviceId {
+public class VivoDeviceIdImpl implements IDeviceId {
     private final Context context;
 
-    public MeizuDeviceIdImpl(Context context) {
+    public VivoDeviceIdImpl(Context context) {
         this.context = context;
     }
 
     @Override
     public boolean supportOAID() {
-        try {
-            ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
-            if (pi != null) {
-                return true;
-            }
-        } catch (Exception e) {
-            Logger.print(e);
-        }
-        return false;
+        return SystemUtils.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
     }
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
-        try (Cursor cursor = context.getContentResolver().query(uri, null, null, new String[]{"oaid"}, null)) {
+        Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
+        try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
-            String ret = null;
-            int valueIdx = cursor.getColumnIndex("value");
-            if (valueIdx > 0) {
-                ret = cursor.getString(valueIdx);
-            }
-            if (ret == null || ret.length() == 0) {
+            String ret = cursor.getString(cursor.getColumnIndex("value"));
+            if (ret != null && ret.length() > 0) {
+                Logger.print("oaid from provider: " + uri);
+                getter.onOAIDGetComplete(ret);
+            } else {
                 throw new RuntimeException("OAID query failed");
             }
-            getter.onOAIDGetComplete(ret);
         } catch (Exception e) {
             Logger.print(e);
             getter.onOAIDGetError(e);

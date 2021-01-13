@@ -2,7 +2,7 @@ apply from: "${rootDir}/gradle/app.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 dependencies {
-    implementation project(":library")
+    implementation project(":OAID_IMPL")
     implementation androidxLibrary.appcompat
     implementation liyujiangLibrary.Logger
     debugRuntimeOnly library.logger

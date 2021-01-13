@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -23,11 +23,13 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
+import com.bun.lib.MsaIdInterface;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
-import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by liyujiang on 2020/5/30
@@ -35,17 +37,17 @@ import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class HuaweiDeviceIdImpl implements IDeviceId {
+public class MsaDeviceIdImpl implements IDeviceId {
     private final Context context;
 
-    public HuaweiDeviceIdImpl(Context context) {
+    public MsaDeviceIdImpl(Context context) {
         this.context = context;
     }
 
     @Override
     public boolean supportOAID() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.huawei.hwid", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.mdid.msa", 0);
             return pi != null;
         } catch (Exception e) {
             Logger.print(e);
@@ -55,20 +57,35 @@ public class HuaweiDeviceIdImpl implements IDeviceId {
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
-        intent.setPackage("com.huawei.hwid");
+        try {
+            Intent intent = new Intent("com.bun.msa.action.start.service");
+            intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaKlService");
+            intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
+            intent.putExtra("com.bun.msa.param.runinset", true);
+            context.startService(intent);
+        } catch (Exception e) {
+            Logger.print(e);
+        }
+        Intent intent = new Intent("com.bun.msa.action.bindto.service");
+        intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
+        intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("Huawei OPENIDS_SERVICE connected");
+                    Logger.print("MsaIdService connected");
                     try {
-                        OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                        String IDs = anInterface.getIDs();
-                        if (IDs == null || IDs.length() == 0) {
-                            throw new RuntimeException("Huawei IDs get failed");
+                        //MsaIdInterface anInterface = new MsaIdInterface.Stub.asInterface(service);
+                        Method asInterface = MsaIdInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+                        MsaIdInterface anInterface = (MsaIdInterface) asInterface.invoke(null, service);
+                        if (anInterface == null) {
+                            throw new RuntimeException("MsaIdInterface is null");
                         }
-                        getter.onOAIDGetComplete(IDs);
+                        String oaid = anInterface.getOAID();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("Msa oaid get failed");
+                        }
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Exception e) {
                         Logger.print(e);
                         getter.onOAIDGetError(e);
@@ -79,11 +96,11 @@ public class HuaweiDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("Huawei OPENIDS_SERVICE disconnected");
+                    Logger.print("MsaIdService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
-                throw new RuntimeException("Huawei OPENIDS_SERVICE bind failed");
+                throw new RuntimeException("MsaIdService bind failed");
             }
         } catch (Exception e) {
             getter.onOAIDGetError(e);

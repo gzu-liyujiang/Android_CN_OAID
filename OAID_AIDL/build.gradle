@@ -4,5 +4,4 @@ dependencies {
     implementation androidxLibrary.annotation
     implementation androidxLibrary.documentfile
     implementation liyujiangLibrary.Logger
-    //implementation 'com.huawei.hms:ads-identifier:3.4.37.300'
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Logger.print("DeviceID doGet");
             IDeviceId deviceId = DeviceID.with(this);
             if (!deviceId.supportOAID()) {
+                // 不支持OAID，须自行生成全局唯一标识（GUID）。
+                // 本库不提供GUID的生成方式，可以使用`UUID.randomUUID().toString()`生成，
+                // 然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
                 tvOAID.setText("不支持OAID，须自行生成GUID");
                 return;
             }
@@ -57,12 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onOAIDGetComplete(@NonNull String oaid) {
         Logger.print("onOAIDGetComplete====>" + oaid);
+        // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
         tvOAID.setText(oaid);
     }
 
     @Override
     public void onOAIDGetError(@NonNull Exception exception) {
         Logger.print("onOAIDGetError====>" + exception);
+        // 获取OAID失败
         tvOAID.setText(exception.toString());
     }
 

@@ -1,2 +1,3 @@
-include ':library'
+include ':OAID_AIDL'
+include ':OAID_IMPL'
 include ':app'

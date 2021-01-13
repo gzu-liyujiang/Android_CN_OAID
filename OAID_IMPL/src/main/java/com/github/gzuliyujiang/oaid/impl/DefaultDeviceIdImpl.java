@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -13,55 +13,31 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
-import com.github.gzuliyujiang.oaid.SystemUtils;
-
-import java.util.Objects;
 
 /**
+ * 随机生成一个全局唯一标识，通过`SharedPreferences`及`ExternalStorage`进行永久化存储。
+ * 注：非系统及预装APP无法获得`WRITE_SETTINGS`权限，故放弃使用`Settings`进行永久化存储。
  * Created by liyujiang on 2020/5/30
  *
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class VivoDeviceIdImpl implements IDeviceId {
-    private final Context context;
-
-    public VivoDeviceIdImpl(Context context) {
-        this.context = context;
-    }
+public class DefaultDeviceIdImpl implements IDeviceId {
 
     @Override
     public boolean supportOAID() {
-        return SystemUtils.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
+        return false;
     }
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
-        try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
-            Objects.requireNonNull(cursor).moveToFirst();
-            String ret = cursor.getString(cursor.getColumnIndex("value"));
-            if (ret != null && ret.length() > 0) {
-                Logger.print("oaid from provider: " + uri);
-                getter.onOAIDGetComplete(ret);
-            } else {
-                throw new RuntimeException("OAID query failed");
-            }
-        } catch (Exception e) {
-            Logger.print(e);
-            getter.onOAIDGetError(e);
-        }
+        getter.onOAIDGetError(new RuntimeException("OAID unsupported"));
     }
 
     @SuppressWarnings("deprecation")

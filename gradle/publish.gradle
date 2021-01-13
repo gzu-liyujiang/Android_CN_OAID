@@ -13,9 +13,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 //项目相关信息
-def includeJar = false
+def includeJar = true
 def pomLibGroupName = 'com.github.gzuliyujiang'
-def pomLibArtifactId = rootProject.name
+def pomLibArtifactId = project.name
 def pomLibVersion = getGitLatestTag()
 def pomLibDescription = "TODO description: ${rootProject.name} for Android"
 def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"

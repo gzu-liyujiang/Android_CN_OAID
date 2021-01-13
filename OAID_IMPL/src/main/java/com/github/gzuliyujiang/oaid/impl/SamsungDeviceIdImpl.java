@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -23,11 +23,11 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.asus.msa.SupplementaryDID.IDidAidlInterface;
 import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.samsung.android.deviceidservice.IDeviceIdService;
 
 import java.lang.reflect.Method;
 
@@ -37,17 +37,17 @@ import java.lang.reflect.Method;
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class AsusDeviceIdImpl implements IDeviceId {
+public class SamsungDeviceIdImpl implements IDeviceId {
     private final Context context;
 
-    public AsusDeviceIdImpl(Context context) {
+    public SamsungDeviceIdImpl(Context context) {
         this.context = context;
     }
 
     @Override
     public boolean supportOAID() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.asus.msa.SupplementaryDID", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
             return pi != null;
         } catch (Exception e) {
             Logger.print(e);
@@ -57,26 +57,25 @@ public class AsusDeviceIdImpl implements IDeviceId {
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        Intent intent = new Intent("com.asus.msa.action.ACCESS_DID");
-        ComponentName componentName = new ComponentName("com.asus.msa.SupplementaryDID", "com.asus.msa.SupplementaryDID.SupplementaryDIDService");
-        intent.setComponent(componentName);
+        Intent intent = new Intent();
+        intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("ASUS SupplementaryDIDService connected");
+                    Logger.print("Samsung DeviceIdService connected");
                     try {
-                        //IDidAidlInterface anInterface = new IDidAidlInterface.Stub.asInterface(service);
-                        Method asInterface = IDidAidlInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        IDidAidlInterface anInterface = (IDidAidlInterface) asInterface.invoke(null, service);
+                        //IDeviceIdService anInterface = new IDeviceIdService.Stub.asInterface(service);
+                        Method asInterface = IDeviceIdService.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+                        IDeviceIdService anInterface = (IDeviceIdService) asInterface.invoke(null, service);
                         if (anInterface == null) {
-                            throw new RuntimeException("IDidAidlInterface is null");
+                            throw new RuntimeException("IDeviceIdService is null");
                         }
-                        String ID = anInterface.getID();
-                        if (ID == null || ID.length() == 0) {
-                            throw new RuntimeException("ASUS ID get failed");
+                        String deviceId = anInterface.getID();
+                        if (deviceId == null || deviceId.length() == 0) {
+                            throw new RuntimeException("Samsung DeviceId get failed");
                         }
-                        getter.onOAIDGetComplete(ID);
+                        getter.onOAIDGetComplete(deviceId);
                     } catch (Exception e) {
                         Logger.print(e);
                         getter.onOAIDGetError(e);
@@ -87,14 +86,13 @@ public class AsusDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("ASUS SupplementaryDIDService disconnected");
+                    Logger.print("Samsung DeviceIdService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
-                throw new RuntimeException("ASUS SupplementaryDIDService bind failed");
+                throw new RuntimeException("Samsung DeviceIdService bind failed");
             }
         } catch (Exception e) {
-            // SecurityException: Not allowed to bind to service Intent
             getter.onOAIDGetError(e);
         }
     }

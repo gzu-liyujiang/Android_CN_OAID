@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -13,31 +13,65 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.content.Context;
+import android.content.pm.ProviderInfo;
+import android.database.Cursor;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
+import com.github.gzuliyujiang.logger.Logger;
 import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAIDGetter;
 
+import java.util.Objects;
+
 /**
- * 随机生成一个全局唯一标识，通过`SharedPreferences`及`ExternalStorage`进行永久化存储。
- * 注：非系统及预装APP无法获得`WRITE_SETTINGS`权限，故放弃使用`Settings`进行永久化存储。
  * Created by liyujiang on 2020/5/30
  *
  * @author 大定府羡民
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class DefaultDeviceIdImpl implements IDeviceId {
+public class MeizuDeviceIdImpl implements IDeviceId {
+    private final Context context;
+
+    public MeizuDeviceIdImpl(Context context) {
+        this.context = context;
+    }
 
     @Override
     public boolean supportOAID() {
+        try {
+            ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
+            if (pi != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            Logger.print(e);
+        }
         return false;
     }
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        getter.onOAIDGetError(new RuntimeException("OAID unsupported"));
+        Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
+        try (Cursor cursor = context.getContentResolver().query(uri, null, null, new String[]{"oaid"}, null)) {
+            Objects.requireNonNull(cursor).moveToFirst();
+            String ret = null;
+            int valueIdx = cursor.getColumnIndex("value");
+            if (valueIdx > 0) {
+                ret = cursor.getString(valueIdx);
+            }
+            if (ret == null || ret.length() == 0) {
+                throw new RuntimeException("OAID query failed");
+            }
+            getter.onOAIDGetComplete(ret);
+        } catch (Exception e) {
+            Logger.print(e);
+            getter.onOAIDGetError(e);
+        }
     }
 
     @SuppressWarnings("deprecation")

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -16,20 +16,14 @@ package com.github.gzuliyujiang.oaid;
 import androidx.annotation.NonNull;
 
 /**
- * Created by liyujiang on 2020/5/30
+ * Created by liyujiang on 2020/8/20
  *
  * @author 大定府羡民
  */
-public interface IDeviceId {
+public interface IOAIDGetter {
 
-    boolean supportOAID();
+    void onOAIDGetComplete(@NonNull String oaid);
 
-    void doGet(@NonNull final IOAIDGetter getter);
-
-    /**
-     * @deprecated Use {@link #doGet(IOAIDGetter)} instead
-     */
-    @Deprecated
-    void doGet(@NonNull final IGetter getter);
+    void onOAIDGetError(@NonNull Exception exception);
 
 }
