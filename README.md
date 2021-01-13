@@ -23,8 +23,8 @@ allprojects {
 
 dependencies {
    // 如果项目中已经使用了移动安全联盟的mdid的aar包，则无需再依赖OAID_AIDL，否则会有冲突
-   implementation 'com.github.gzu-liyujiang:OAID_AIDL:版本号'
-   implementation 'com.github.gzu-liyujiang:OAID_IMPL:版本号'
+   implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_AIDL:版本号'
+   implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号'
 }
 ```
 ```java
