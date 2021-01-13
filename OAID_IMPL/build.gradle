@@ -1,8 +1,8 @@
 apply from: "${rootDir}/gradle/library.gradle"
 
 dependencies {
-    implementation project(":OAID_AIDL")
+    // 分离出 AIDL 只参与编译，不作为发布包依赖，已解决和移动安全联盟的aar冲突问题
+    compileOnly project(":OAID_AIDL")
     implementation androidxLibrary.annotation
-    implementation androidxLibrary.documentfile
     implementation liyujiangLibrary.Logger
 }

@@ -1,7 +1,5 @@
 apply from: "${rootDir}/gradle/library.gradle"
 
 dependencies {
-    implementation androidxLibrary.annotation
-    implementation androidxLibrary.documentfile
-    implementation liyujiangLibrary.Logger
+
 }
