@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.github.gzuliyujiang.demo">
 
-    <uses-sdk
-        android:minSdkVersion="17"
-        tools:overrideLibrary="com.github.gzuliyujiang.logger" />
+    <uses-sdk tools:overrideLibrary="com.github.gzuliyujiang.logger" />
 
     <application
         android:name=".DemoApp"
