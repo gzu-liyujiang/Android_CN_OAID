@@ -28,4 +28,4 @@ jobs:
     - name: Publish to GitHub Packages
       env:
         TOKEN: ${{ secrets.TOKEN }}
-      run: ./gradlew publishReleasePublicationToGitHub --warning-mode all
+      run: ./gradlew publishReleasePublicationToLocalRepository --warning-mode all

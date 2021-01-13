@@ -30,7 +30,7 @@ def pomDeveloperName = '李玉江'
 def pomDeveloperEmail = '1032694760@qq.com'
 //GitHub仓库信息
 def githubRepositoryOwner = pomDeveloperOrg
-def githubRepositoryName = pomLibArtifactId
+def githubRepositoryName = rootProject.name
 def githubUserName = project.findProperty("githubUserName") ?: pomDeveloperId
 //1、在`https://github.com/settings/tokens`创建个人token，勾选包读写权限。
 //2、在`https://github.com/gzu-liyujiang/${rootProject.name}/settings/secrets`将token添加为secrets。
