@@ -23,9 +23,14 @@ allprojects {
 }
 
 dependencies {
-   // 如果项目中已经使用了移动安全联盟的mdid的aar包，则无需再依赖OAID_AIDL，否则会有冲突
-   //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_AIDL:版本号'
-   implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号'
+    // 如果项目中已经使用了移动安全联盟的包 mdid_xxx.aar ，则可能需要取消相关有冲突的依赖项
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号'
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:版本号'
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_HEYTAP:版本号'
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:版本号'
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:版本号'
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:版本号'
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号'
 }
 ```
 ```groovy

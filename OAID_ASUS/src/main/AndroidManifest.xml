@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.gzuliyujiang.oaid.aidl">
+    package="com.github.gzuliyujiang.oaid.asus">
 
     <uses-permission android:name="com.asus.msa.SupplementaryDID.ACCESS" />
 

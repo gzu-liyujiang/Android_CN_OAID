@@ -2,7 +2,12 @@ apply from: "${rootDir}/gradle/app.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 dependencies {
-    implementation project(":OAID_AIDL")
+    implementation project(":OAID_ASUS")
+    implementation project(":OAID_BUN")
+    implementation project(":OAID_HEYTAP")
+    implementation project(":OAID_SAMSUNG")
+    implementation project(":OAID_UODIS")
+    implementation project(":OAID_ZUI")
     implementation project(":OAID_IMPL")
     implementation androidxLibrary.appcompat
     implementation liyujiangLibrary.Logger
