@@ -2,7 +2,6 @@
 
 ![Release APK](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Release%20APK/badge.svg)
 ![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
-[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
 本项目抹平了各大Android手机厂商获取OAID（开放匿名设备标识）的差异性，轻松通过几句代码即可获取不同手机的OAID，类似于移动安全联盟官网提供的统一SDK闭源方案（miit_mdid_xxx.aar）。   
 
@@ -14,6 +13,8 @@
 - [华为官方文档《获取OAID信息（SDK方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
 
 ## 接入指引
+
+最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
 ```gradle
 allprojects {
@@ -78,7 +79,7 @@ deviceId.doGet(new IOAIDGetter() {
 ![支持OAID的情况](/screenshot/oaid_huawei.png)
 ![不支持OAID的情况](/screenshot/oaid_nonsupport.png)
 
-### OAID 支持情况
+## OAID 支持情况
 
 | 厂商   | 版本                                    |
 | ------ |  ------------------------------------- |
