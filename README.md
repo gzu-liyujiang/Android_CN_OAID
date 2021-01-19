@@ -29,53 +29,30 @@ dependencies {
 ```
 
 ```groovy
-        final StringBuilder builder = new StringBuilder();
-        builder.append("UniqueID: ");
         // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
-        String uniqueID = DeviceID.getUniqueID(this);
-        if (TextUtils.isEmpty(uniqueID)) {
-            builder.append("DID/IMEI/MEID获取失败");
-        } else {
-            builder.append(uniqueID);
-        }
-        builder.append("\n");
-        builder.append("AndroidID: ");
+        DeviceID.getUniqueID(context);
         // 获取安卓ID，可能为空
-        String androidID = DeviceID.getAndroidID(this);
-        if (TextUtils.isEmpty(androidID)) {
-            builder.append("AndroidID获取失败");
-        } else {
-            builder.append(androidID);
-        }
-        builder.append("\n");
-        builder.append("PseudoID: ");
+        DeviceID.getAndroidID(context);
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
-        builder.append(DeviceID.getPseudoID());
-        builder.append("\n");
-        builder.append("GUID: ");
+        DeviceID.getPseudoID();
         // 获取GUID，随机生成，不会为空
-        builder.append(DeviceID.getGUID(this));
-        builder.append("\n");
-        IDeviceId deviceId = DeviceID.with(this);
+        DeviceID.getGUID(context);
+```
+```groovy
+        IDeviceId deviceId = DeviceID.with(context);
         if (!deviceId.supportOAID()) {
             // 不支持OAID，须自行生成GUID，然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
-            builder.append("OAID: 不支持");
-            tvDeviceIdResult.setText(builder);
             return;
         }
         deviceId.doGet(new IOAIDGetter() {
             @Override
             public void onOAIDGetComplete(@NonNull String oaid) {
                 // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-                builder.append("OAID: ").append(oaid);
-                tvDeviceIdResult.setText(builder);
             }
 
             @Override
             public void onOAIDGetError(@NonNull Exception exception) {
                 // 获取OAID失败
-                builder.append("OAID: exception=").append(exception);
-                tvDeviceIdResult.setText(builder);
             }
         });
 ```
@@ -101,12 +78,12 @@ dependencies {
 
 ## 效果预览
 
-![支持OAID的情况](/screenshot/oaid_vivo.png)
-![支持OAID的情况](/screenshot/oaid_huawei.png)
-![支持OAID的情况](/screenshot/oaid_xiaomi.png)
-![不支持OAID的情况](/screenshot/oaid_360.png)
-![不支持OAID的情况](/screenshot/oaid_samsung.png)
-![不支持OAID的情况](/screenshot/oaid_simulator.png)
+![支持OAID的情况](/screenshot/oaid_vivo.png)   
+![支持OAID的情况](/screenshot/oaid_huawei.png)   
+![支持OAID的情况](/screenshot/oaid_xiaomi.png)   
+![不支持OAID的情况](/screenshot/oaid_360.png)   
+![不支持OAID的情况](/screenshot/oaid_samsung.png)   
+![不支持OAID的情况](/screenshot/oaid_simulator.png)   
 
 ## 厂商支持
 
@@ -119,25 +96,25 @@ dependencies {
 | 欧珀（OPPO）         | Color OS 7.0 及以上  |
 | 联想（Lenovo）       | ZUI 11.4 及以上      |
 | 摩托罗拉（Motorola） | ZUI 11.4 及以上      |
-| 华硕（ASUS）         | Android 10 版本      |
-| 魅族（Meizu）        | Android 10 版本      |
-| 三星（Samsung）      | Android 10 版本      |
-| 努比亚（Nubia）      | Android 10 版本      |
-| 一加（OnePlus）      | Android 10 版本      |
-| 中兴（ZTE）          | Android 10 版本      |
-| 卓易（Freeme OS）    | Android 10 版本      |
+| 华硕（ASUS）         | Android 10 及以上    |
+| 魅族（Meizu）        | Android 10 及以上    |
+| 三星（Samsung）      | Android 10 及以上    |
+| 努比亚（Nubia）      | Android 10 及以上    |
+| 一加（OnePlus）      | Android 10 及以上    |
+| 中兴（ZTE）          | Android 10 及以上    |
+| 卓易（Freeme OS）    | Android 10 及以上    |
 
 ## 参考资料
 
 OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终端补充设备标识体系中的一员。
 
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
-- [《团体标准-移动智能终端补充设备标识规范-v20190516.pdf》](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
-- [华为官方文档《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
-- [Flyme SDK 《移动智能终端补充设备标识》](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
+- [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
+- 华为官方文档 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
+- Flyme SDK [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
 - 数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。
-- [Is there a unique Android device ID?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
+- StackOverFlow [Is there a unique Android device ID ?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
 
 ## 许可协议
 
