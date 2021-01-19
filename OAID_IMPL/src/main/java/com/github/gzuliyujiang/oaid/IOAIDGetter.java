@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 /**
  * Created by liyujiang on 2020/8/20
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 public interface IOAIDGetter {
 

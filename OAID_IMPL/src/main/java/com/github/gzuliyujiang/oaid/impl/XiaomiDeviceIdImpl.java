@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 /**
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class XiaomiDeviceIdImpl implements IDeviceId {

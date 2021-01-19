@@ -34,7 +34,7 @@ import java.lang.reflect.Method;
 /**
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class MsaDeviceIdImpl implements IDeviceId {
@@ -57,15 +57,7 @@ public class MsaDeviceIdImpl implements IDeviceId {
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        try {
-            Intent intent = new Intent("com.bun.msa.action.start.service");
-            intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaKlService");
-            intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
-            intent.putExtra("com.bun.msa.param.runinset", true);
-            context.startService(intent);
-        } catch (Exception e) {
-            Logger.print(e);
-        }
+        startMsaKlService();
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
         intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
@@ -104,6 +96,18 @@ public class MsaDeviceIdImpl implements IDeviceId {
             }
         } catch (Exception e) {
             getter.onOAIDGetError(e);
+        }
+    }
+
+    private void startMsaKlService() {
+        try {
+            Intent intent = new Intent("com.bun.msa.action.start.service");
+            intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaKlService");
+            intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
+            intent.putExtra("com.bun.msa.param.runinset", true);
+            context.startService(intent);
+        } catch (Exception e) {
+            Logger.print(e);
         }
     }
 

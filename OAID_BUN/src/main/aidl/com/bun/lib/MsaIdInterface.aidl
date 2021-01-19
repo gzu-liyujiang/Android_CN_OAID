@@ -5,8 +5,6 @@ package com.bun.lib;
 
 interface MsaIdInterface {
 
-  boolean c();
-
   String getOAID();
 
   boolean isSupported();

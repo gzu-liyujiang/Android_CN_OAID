@@ -17,11 +17,12 @@ import android.content.Context;
 import android.os.Build;
 
 import com.github.gzuliyujiang.logger.Logger;
+import com.github.gzuliyujiang.oaid.impl.UnsupportedDeviceIdImpl;
 
 /**
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 public final class DeviceID {
 
@@ -47,13 +48,12 @@ public final class DeviceID {
             deviceId = new com.github.gzuliyujiang.oaid.impl.AsusDeviceIdImpl(context);
         } else if (SystemUtils.isHuawei()) {
             deviceId = new com.github.gzuliyujiang.oaid.impl.HuaweiDeviceIdImpl(context);
-            //deviceId = new com.github.gzuliyujiang.oaid.impl.HuaweiAdvertisingIdImpl(context);
         } else if (SystemUtils.isOppo() || SystemUtils.isOnePlus()) {
             deviceId = new com.github.gzuliyujiang.oaid.impl.OppoDeviceIdImpl(context);
         } else if (SystemUtils.isZTE() || SystemUtils.isFreeme() || SystemUtils.isSSUI()) {
             deviceId = new com.github.gzuliyujiang.oaid.impl.MsaDeviceIdImpl(context);
         } else {
-            deviceId = new com.github.gzuliyujiang.oaid.impl.DefaultDeviceIdImpl();
+            deviceId = new UnsupportedDeviceIdImpl();
         }
         Logger.print(deviceInfo() + "\nsupportOAID: " + deviceId.supportOAID());
         return deviceId;

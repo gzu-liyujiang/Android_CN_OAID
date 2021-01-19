@@ -30,7 +30,7 @@ import com.github.gzuliyujiang.oaid.IOAIDGetter;
 import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
 
 /**
- * //public class HuaweiAdvertisingIdImpl implements IDeviceId {
+ * //public class HuaweiDeviceIdImpl implements IDeviceId {
  * //    private final Context context;
  * //
  * //    public HuaweiAdvertisingIdImpl(Context context) {
@@ -97,7 +97,7 @@ import com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
  * //}
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class HuaweiDeviceIdImpl implements IDeviceId {

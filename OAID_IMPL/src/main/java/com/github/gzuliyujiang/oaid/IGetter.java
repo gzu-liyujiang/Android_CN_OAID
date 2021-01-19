@@ -18,13 +18,13 @@ import androidx.annotation.NonNull;
 /**
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  * @deprecated Use {@link IOAIDGetter} instead
  */
 @Deprecated
 public interface IGetter {
 
-    void onDeviceIdGetComplete(@NonNull String oaid);
+    void onDeviceIdGetComplete(@NonNull String deviceId);
 
     void onDeviceIdGetError(@NonNull Exception exception);
 

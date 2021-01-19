@@ -18,18 +18,18 @@ import androidx.annotation.NonNull;
 /**
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 public interface IDeviceId {
 
     boolean supportOAID();
 
-    void doGet(@NonNull final IOAIDGetter getter);
+    void doGet(@NonNull IOAIDGetter getter);
 
     /**
      * @deprecated Use {@link #doGet(IOAIDGetter)} instead
      */
     @Deprecated
-    void doGet(@NonNull final IGetter getter);
+    void doGet(@NonNull IGetter getter);
 
 }

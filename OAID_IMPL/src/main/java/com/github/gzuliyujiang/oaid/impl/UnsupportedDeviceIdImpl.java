@@ -25,10 +25,10 @@ import com.github.gzuliyujiang.oaid.IOAIDGetter;
  * 注：非系统及预装APP无法获得`WRITE_SETTINGS`权限，故放弃使用`Settings`进行永久化存储。
  * Created by liyujiang on 2020/5/30
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class DefaultDeviceIdImpl implements IDeviceId {
+public class UnsupportedDeviceIdImpl implements IDeviceId {
 
     @Override
     public boolean supportOAID() {

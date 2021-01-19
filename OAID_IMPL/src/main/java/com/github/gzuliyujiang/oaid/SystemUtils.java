@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 /**
  * Created by liyujiang on 2020/5/29
  *
- * @author 大定府羡民
+ * @author 大定府羡民（1032694760@qq.com）
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class SystemUtils {
@@ -121,7 +121,7 @@ public final class SystemUtils {
     }
 
     public static boolean isSSUI() {
-        // 这是啥玩意的手机？
+        // 这是啥玩意的手机？百度及谷歌都搜不到相关资料
         if (Build.MANUFACTURER.toUpperCase().equals("SSUI")) {
             return true;
         }
