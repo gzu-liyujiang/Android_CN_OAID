@@ -12,6 +12,7 @@ dependencies {
     implementation androidxLibrary.appcompat
     implementation liyujiangLibrary.Logger
     debugRuntimeOnly library.logger
+    implementation library.xxpermissions
 }
 
 android {

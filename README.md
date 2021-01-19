@@ -3,7 +3,7 @@
 ![Release APK](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Release%20APK/badge.svg)
 ![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
 
-本项目抹平了各大Android手机厂商获取OAID（开放匿名设备标识）的差异性，轻松通过几句代码即可获取不同手机的OAID，类似于移动安全联盟官网提供的统一SDK闭源方案（miit_mdid_xxx.aar），用来代替IMEI/IMSI。   
+本项目抹平了各大 Android 手机厂商获取 OAID（开放匿名标识）的差异性，轻松通过几句代码即可获取不同手机的 OAID，类似于移动安全联盟官网提供的统一 SDK 闭源方案（miit_mdid_xxx.aar），用来代替 IMEI/IMSI。
 
 ## 接入指引
 
@@ -27,30 +27,63 @@ dependencies {
     implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号'
 }
 ```
-```groovy
-IDeviceId deviceId = DeviceID.with(context);
-if (!deviceId.supportOAID()) {
-    // 不支持OAID，须自行生成全局唯一标识（GUID）。
-    // 本库不提供GUID的生成方式，可以使用`UUID.randomUUID().toString()`生成，
-    // 然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
-    return;
-}
-deviceId.doGet(new IOAIDGetter() {
-    @Override
-    public void onOAIDGetComplete(@NonNull String oaid) {
-        // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-    }
 
-    @Override
-    public void onOAIDGetError(@NonNull Exception exception) {
-        // 获取OAID失败
-    }
-});
+```groovy
+        final StringBuilder builder = new StringBuilder();
+        builder.append("UniqueID: ");
+        // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
+        String uniqueID = DeviceID.getUniqueID(this);
+        if (TextUtils.isEmpty(uniqueID)) {
+            builder.append("DID/IMEI/MEID获取失败");
+        } else {
+            builder.append(uniqueID);
+        }
+        builder.append("\n");
+        builder.append("AndroidID: ");
+        // 获取安卓ID，可能为空
+        String androidID = DeviceID.getAndroidID(this);
+        if (TextUtils.isEmpty(androidID)) {
+            builder.append("AndroidID获取失败");
+        } else {
+            builder.append(androidID);
+        }
+        builder.append("\n");
+        builder.append("PseudoID: ");
+        // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
+        builder.append(DeviceID.getPseudoID());
+        builder.append("\n");
+        builder.append("GUID: ");
+        // 获取GUID，随机生成，不会为空
+        builder.append(DeviceID.getGUID(this));
+        builder.append("\n");
+        IDeviceId deviceId = DeviceID.with(this);
+        if (!deviceId.supportOAID()) {
+            // 不支持OAID，须自行生成GUID，然后存到`SharedPreferences`及`ExternalStorage`甚至`CloudStorage`。
+            builder.append("OAID: 不支持");
+            tvDeviceIdResult.setText(builder);
+            return;
+        }
+        deviceId.doGet(new IOAIDGetter() {
+            @Override
+            public void onOAIDGetComplete(@NonNull String oaid) {
+                // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
+                builder.append("OAID: ").append(oaid);
+                tvDeviceIdResult.setText(builder);
+            }
+
+            @Override
+            public void onOAIDGetError(@NonNull Exception exception) {
+                // 获取OAID失败
+                builder.append("OAID: exception=").append(exception);
+                tvDeviceIdResult.setText(builder);
+            }
+        });
 ```
 
 ## 混淆规则
 
 本库自带`consumer-rules.pro`混淆规则，不混淆厂商的相关接口及类。若通过远程依赖的方式应用，则无需进行额外配置：
+
 ```proguard
 -keep class com.asus.msa.SupplementaryDID.** { *; }
 -keep interface com.asus.msa.SupplementaryDID.** { *; }
@@ -70,46 +103,41 @@ deviceId.doGet(new IOAIDGetter() {
 
 ![支持OAID的情况](/screenshot/oaid_vivo.png)
 ![支持OAID的情况](/screenshot/oaid_huawei.png)
-![不支持OAID的情况](/screenshot/oaid_nonsupport.png)
+![支持OAID的情况](/screenshot/oaid_xiaomi.png)
+![不支持OAID的情况](/screenshot/oaid_360.png)
+![不支持OAID的情况](/screenshot/oaid_samsung.png)
+![不支持OAID的情况](/screenshot/oaid_simulator.png)
 
 ## 厂商支持
 
-| 厂商   | 版本                                    |
-| ------ |  ------------------------------------- |
-| 小米（Xiaomi）   | MIUI10.2 及以上                         |
-| 黑鲨（BlackShark）   | MIUI10.2 及以上                         |
-| 维沃（VIVO）   | FuntouchOS 9 及以上                     |
-| 华为（Huawei）   | 全版本                                  |
-| 欧珀（OPPO）   | Color OS 7.0 及以上                     |
-| 联想（Lenovo） | ZUI 11.4 及以上                         |
-| 摩托罗拉（Motorola） | ZUI 11.4 及以上                         |
-| 华硕（ASUS）   | Android 10 版本                         |
-| 魅族（Meizu）   | Android 10 版本                         |
-| 三星（Samsung）   | Android 10 版本                         |
-| 努比亚（Nubia） | Android 10 版本                         |
-| 一加（OnePlus）   | Android 10 版本                         |
-| 中兴（ZTE）   | Android 10 版本                         |
-| 卓易（Freeme OS）   | Android 10 版本                   |
+| 厂商                 | 版本                 |
+| -------------------- | -------------------- |
+| 小米（Xiaomi）       | MIUI 10.2 及以上     |
+| 黑鲨（BlackShark）   | MIUI 10.2 及以上     |
+| 维沃（VIVO）         | Funtouch OS 9 及以上 |
+| 华为（Huawei）       | HMS 2.6.2 及以上     |
+| 欧珀（OPPO）         | Color OS 7.0 及以上  |
+| 联想（Lenovo）       | ZUI 11.4 及以上      |
+| 摩托罗拉（Motorola） | ZUI 11.4 及以上      |
+| 华硕（ASUS）         | Android 10 版本      |
+| 魅族（Meizu）        | Android 10 版本      |
+| 三星（Samsung）      | Android 10 版本      |
+| 努比亚（Nubia）      | Android 10 版本      |
+| 一加（OnePlus）      | Android 10 版本      |
+| 中兴（ZTE）          | Android 10 版本      |
+| 卓易（Freeme OS）    | Android 10 版本      |
 
 ## 参考资料
 
-OAID 即 Open Anonymous Identifier，开放匿名标识符，根据移动安全联盟公布在网上的《移动智能终端补充设备标识规范》“旨在规范移动智能终端补充设备标识体系的体系架构、功能要求、接口要求以及安全要求。 **规范设备生产企业遵循标准要求开发统一接口调用方式，方便移动应用接入、减小维护成本”**。因此该联盟及联盟单位必须将统一的 OAID 调用方式公布出来，这也是“中华人民共和国标准化法”的法律要求。事实上，**除非是企业内部标准，其他标准都必须公开**。
+OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终端补充设备标识体系中的一员。
 
-**根据“标准法”的第二十二条：** 制定标准应当有利于科学合理利用资源，推广科学技术成果，增强产品的安全性、通用性、可替换性，提高经济效益、社会效益、生态效益，做到技术上先进、经济上合理。 **禁止利用标准实施妨碍商品、服务自由流通等排除、限制市场竞争的行为。**
-
-使用标识符的最佳做法，参阅谷歌官方文档：https://developer.android.google.cn/training/articles/user-data-ids 。在使用 Android 标识符时，请遵循以下最佳做法：
-
-- **避免使用硬件标识符**。 在大多数用例中，您可以避免使用硬件标识符，例如 SSAID (Android ID) 和 IMEI，而不会限制所需的功能。
-- 自 Android 10（API 级别 29）起，您的应用必须是设备或个人资料所有者应用，具有特殊运营商许可，或具有 READ_PRIVILEGED_PHONE_STATE 特权，才能访问不可重置的设备标识符。
-- **只针对用户分析或广告用例使用广告 ID**。 在使用广告 ID 时，请始终遵循用户关于广告跟踪的选择。此外，请确保标识符无法关联到个人身份信息 (PII)，并避免桥接广告 ID 重置。
-- 尽一切可能针对防欺诈支付和电话以外的所有其他用例**使用实例 ID 或私密存储的 GUID**。 对于绝大多数非广告用例，使用实例 ID 或 GUID 应该足矣。
-- 使用适合您的用例的 API 以**尽量降低隐私权风险**。 使用 DRM API 保护重要内容，并使用 SafetyNet API 防止滥用行为。SafetyNet API 是能够确定设备真伪而不会招致隐私权风险的最简单方法。
-
+- 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [《团体标准-移动智能终端补充设备标识规范-v20190516.pdf》](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
-- [华为官方文档《获取OAID信息（SDK方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
+- [华为官方文档《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
 - [Flyme SDK 《移动智能终端补充设备标识》](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
-- 数字联盟公开的获取各厂商OAID的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
-- 获取或生成设备唯一标识后，推荐参考“[一种Android移动设备构造UDID的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。
+- 数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
+- 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”，客户端结合服务端进行设备唯一标识处理以提升唯一性和稳定性。
+- [Is there a unique Android device ID?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
 
 ## 许可协议
 

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
   ~
   ~ The software is licensed under the Mulan PSL v1.
   ~ You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -14,6 +13,7 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -22,9 +22,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="30dp"
         android:orientation="vertical">
 
@@ -32,29 +32,23 @@
             android:id="@+id/tv_device_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:text=""
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/btn_oaid_get"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginRight="10dp"
-            android:text="获取 OAID"
-            android:textAllCaps="false" />
-
-        <TextView
-            android:id="@+id/tv_oaid_result"
+            android:id="@+id/btn_get_device_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="10dp"
+            android:text="获取设备标识符"
+            android:textAllCaps="false"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tv_device_id_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp" />
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v1.
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
@@ -20,6 +20,8 @@ import com.github.gzuliyujiang.logger.Logger;
 
 /**
  * Created by liyujiang on 2020/5/20.
+ *
+ * @author 大定府羡民（1032694760@qq.com）
  */
 public class DemoApp extends Application {
 
