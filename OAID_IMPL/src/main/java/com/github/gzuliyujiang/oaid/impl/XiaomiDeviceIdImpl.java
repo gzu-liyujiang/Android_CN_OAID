@@ -36,44 +36,34 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
     private final Context context;
     private Class<?> idProvider;
 
+    @SuppressLint("PrivateApi")
     public XiaomiDeviceIdImpl(Context context) {
         this.context = context;
-    }
-
-    @SuppressLint("PrivateApi")
-    @Override
-    public boolean supportOAID() {
         try {
             idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
-            return true;
         } catch (Exception e) {
             Logger.print(e);
-            return false;
         }
     }
 
-    @SuppressLint("PrivateApi")
+    @Override
+    public boolean supportOAID() {
+        return idProvider != null;
+    }
+
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
         if (idProvider == null) {
-            try {
-                idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
-            } catch (Exception e) {
-                Logger.print(e);
-            }
-        }
-        String did = null;
-        try {
-            Method udidMethod = idProvider.getMethod("getDefaultUDID", Context.class);
-            did = invokeMethod(udidMethod);
-        } catch (Exception e) {
-            Logger.print(e);
-        }
-        if (did != null && did.length() > 0) {
-            getter.onOAIDGetComplete(did);
+            getter.onOAIDGetError(new NullPointerException("Xiaomi IdProvider not exists"));
             return;
         }
         try {
+            Method udidMethod = idProvider.getMethod("getDefaultUDID", Context.class);
+            String did = invokeMethod(udidMethod);
+            if (did != null && did.length() > 0) {
+                getter.onOAIDGetComplete(did);
+                return;
+            }
             Method oaidMethod = idProvider.getMethod("getOAID", Context.class);
             did = invokeMethod(oaidMethod);
             if (did != null && did.length() > 0) {
