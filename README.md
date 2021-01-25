@@ -29,7 +29,7 @@ dependencies {
     implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号' //具体实现
 }
 ```
-如果项目中已经使用了移动安全联盟的包 mdid_xxx.aar ，则可能需要取消相关有冲突的依赖项，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
+若项目中直接或间接地使用了移动安全联盟的SDK，则可能需要取消相关有冲突的依赖项，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
 ```groovy
 dependencies {
     //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号'  //华硕
@@ -44,7 +44,7 @@ dependencies {
 
 ### 代码示例
 
-获取设备唯一标识，客户端可结合服务端通过拜占庭容错机制得到可靠的稳定的设备唯一标识：
+获取多个可能的设备标识，结合服务端通过拜占庭容错机制得到可靠的稳定的设备唯一标识：
 ```groovy
         // 获取DID/IMEI/MEID，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
         DeviceID.getUniqueID(context);
@@ -55,7 +55,7 @@ dependencies {
         // 获取GUID，随机生成，存到SharedPreferences，不会为空
         DeviceID.getGUID(context);
 ```
-//获取OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
+获取OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
 ```groovy
         IDeviceId deviceId = DeviceID.with(context);
         if (!deviceId.supportOAID()) {
