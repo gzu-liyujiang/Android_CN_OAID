@@ -122,7 +122,7 @@ dependencies {
 | 中兴（ZTE）          | Android 10 及以上    |
 | 卓易（Freeme OS）    | Android 10 及以上    |
 
->注：本项目的OAID获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的SDK，酷派、乐视、真我、锤子等厂商截止目前（2021.01.19）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，，需自行生成GUID。
+>注：本项目的OAID获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的SDK，酷派、乐视、真我、锤子等厂商截止目前（2021.01.19）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，需自行生成GUID。
 
 ## 参考资料
 
@@ -135,6 +135,7 @@ OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终�
 - 北京数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”。
 - StackOverFlow [Is there a unique Android device ID ?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
+- 「使用心得」[极光推送的设备唯一性标识 RegistrationID](https://community.jiguang.cn/article/38100) 。
 
 ## 许可协议
 
