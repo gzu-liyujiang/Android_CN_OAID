@@ -52,7 +52,7 @@ dependencies {
         DeviceID.getAndroidID(context);
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
         DeviceID.getPseudoID();
-        // 获取GUID，随机生成，存到SharedPreferences，不会为空
+        // 获取GUID，随机生成，存到SharedPreferences，不会为空，但APP卸载后将丢失
         DeviceID.getGUID(context);
 ```
 获取OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
