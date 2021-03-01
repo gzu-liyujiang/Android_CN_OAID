@@ -1,3 +1,5 @@
 <manifest package="com.github.gzuliyujiang.oaid.impl">
+  
+    <uses-permission android:name="freemme.permission.msa" />
 
 </manifest>
