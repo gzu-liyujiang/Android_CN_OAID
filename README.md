@@ -128,6 +128,7 @@ dependencies {
 
 OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终端补充设备标识体系中的一员。
 
+- [移动安全联盟统一SDK下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
 - 华为官方文档 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
