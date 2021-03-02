@@ -72,7 +72,7 @@ public class MeizuDeviceIdImpl implements IDeviceId {
             public void onReceive(Context context, Intent intent) {
                 Logger.print("OPEN_ID_CHANGE: " + intent);
                 received = true;
-                // TODO: 2021/3/1 待实现待验证
+                // TODO: 2021/3/1 待验证
                 queryID(getter);
             }
         };
@@ -104,6 +104,7 @@ public class MeizuDeviceIdImpl implements IDeviceId {
             getter.onOAIDGetComplete(ret);
         } catch (Exception e) {
             Logger.print(e);
+            getter.onOAIDGetError(e);
         } finally {
             if (receiver != null) {
                 context.unregisterReceiver(receiver);
