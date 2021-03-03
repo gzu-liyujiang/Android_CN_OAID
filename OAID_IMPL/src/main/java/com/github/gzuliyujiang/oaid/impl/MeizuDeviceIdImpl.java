@@ -13,15 +13,10 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
@@ -41,8 +36,6 @@ import java.util.Objects;
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class MeizuDeviceIdImpl implements IDeviceId {
     private final Context context;
-    private BroadcastReceiver receiver;
-    private boolean received;
 
     public MeizuDeviceIdImpl(Context context) {
         this.context = context;
@@ -63,41 +56,10 @@ public class MeizuDeviceIdImpl implements IDeviceId {
 
     @Override
     public void doGet(@NonNull final IOAIDGetter getter) {
-        received = false;
-        if (receiver != null) {
-            context.unregisterReceiver(receiver);
-        }
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Logger.print("OPEN_ID_CHANGE: " + intent);
-                received = true;
-                // TODO: 2021/3/1 待验证
-                queryID(getter);
-            }
-        };
-        IntentFilter filter = new IntentFilter("com.meizu.flyme.openid.ACTION_OPEN_ID_CHANGE");
-        context.registerReceiver(receiver, filter, "com.meizu.flyme.openid.permission.OPEN_ID_CHANGE", null);
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (received) {
-                    return;
-                }
-                queryID(getter);
-            }
-        }, 1000);
-    }
-
-    private void queryID(@NonNull IOAIDGetter getter) {
         Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null, new String[]{"oaid"}, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
-            String ret = null;
-            int valueIdx = cursor.getColumnIndex("value");
-            if (valueIdx > 0) {
-                ret = cursor.getString(valueIdx);
-            }
+            String ret = cursor.getString(cursor.getColumnIndex("value"));
             if (ret == null || ret.length() == 0) {
                 throw new RuntimeException("OAID query failed");
             }
@@ -105,11 +67,6 @@ public class MeizuDeviceIdImpl implements IDeviceId {
         } catch (Exception e) {
             Logger.print(e);
             getter.onOAIDGetError(e);
-        } finally {
-            if (receiver != null) {
-                context.unregisterReceiver(receiver);
-                receiver = null;
-            }
         }
     }
 
