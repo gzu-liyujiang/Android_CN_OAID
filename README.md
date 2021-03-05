@@ -10,6 +10,7 @@
 最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
 ### 依赖配置
+
 ```groovy
 allprojects {
     repositories {
@@ -17,7 +18,9 @@ allprojects {
     }
 }
 ```
-在没有用到移动安全联盟SDK的情况下，依赖如下：
+
+在没有用到移动安全联盟 SDK 的情况下，依赖如下：
+
 ```groovy
 dependencies {
     implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号' //华硕
@@ -29,7 +32,9 @@ dependencies {
     implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号' //具体实现
 }
 ```
-若项目中直接或间接地使用了移动安全联盟的SDK，则可能需要取消相关有冲突的依赖项，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
+
+若项目中直接或间接地使用了移动安全联盟的 SDK，则可能需要取消相关有冲突的依赖项，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
+
 ```groovy
 dependencies {
     //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号'  //华硕
@@ -45,6 +50,7 @@ dependencies {
 ### 代码示例
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
+
 ```groovy
         // 获取DID/IMEI/MEID，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
         DeviceID.getUniqueID(context);
@@ -55,7 +61,9 @@ dependencies {
         // 获取GUID，随机生成，存到SharedPreferences，不会为空，但APP卸载后将丢失
         DeviceID.getGUID(context);
 ```
-获取OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
+
+获取 OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
+
 ```groovy
         IDeviceId deviceId = DeviceID.with(context);
         if (!deviceId.supportOAID()) {
@@ -94,15 +102,6 @@ dependencies {
 -keep interface com.zui.deviceidservice.** { *; }
 ```
 
-## 效果预览
-
-![支持OAID的情况](/screenshot/oaid_vivo.png)
-![支持OAID的情况](/screenshot/oaid_huawei.png)   
-![支持OAID的情况](/screenshot/oaid_xiaomi.png)
-![不支持OAID的情况](/screenshot/oaid_360.png)   
-![不支持OAID的情况](/screenshot/oaid_samsung.png)
-![不支持OAID的情况](/screenshot/oaid_simulator.png)   
-
 ## 厂商支持
 
 | 厂商                 | 版本                 |
@@ -122,13 +121,23 @@ dependencies {
 | 中兴（ZTE）          | Android 10 及以上    |
 | 卓易（Freeme OS）    | Android 10 及以上    |
 
->注：本项目的OAID获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的SDK，酷派、乐视、真我、锤子等厂商截止目前（2021.01.19）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，需自行生成GUID。
+> 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的 SDK，酷派、乐视、真我、锤子等厂商截止目前（2021.01.19）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，需自行生成 GUID。
+
+## 效果预览
+
+- ![支持OAID的情况](/screenshot/oaid_vivo.png)
+- ![支持OAID的情况](/screenshot/oaid_huawei.png)
+- ![支持OAID的情况](/screenshot/oaid_xiaomi.png)
+- ![支持OAID的情况](/screenshot/oaid_meizu.png)
+- ![不支持OAID的情况](/screenshot/oaid_360.png)
+- ![不支持OAID的情况](/screenshot/oaid_samsung.png)
+- ![不支持OAID的情况](/screenshot/oaid_simulator.png)
 
 ## 参考资料
 
 OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终端补充设备标识体系中的一员。
 
-- [移动安全联盟统一SDK下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn）。
+- [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
 - 华为官方文档 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
