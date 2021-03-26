@@ -7,7 +7,7 @@
 
 ## 接入指引
 
-最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md)）
+最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md) | [JavaDoc](https://gzu-liyujiang.github.io/Android_CN_OAID/)）
 
 ### 依赖配置
 
@@ -102,10 +102,10 @@ dependencies {
 - 用法二：预先获取设备标识符
 
 ```text 
-     // 在 Application#onCreate 里调用预取
-     DeviceID.register(this);
-     // 在需要用到设备标识的地方获取
-     DeviceID.getClientId();
+    // 在 Application#onCreate 里调用预取
+    DeviceID.register(this);
+    // 在需要用到设备标识的地方获取
+    tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientId()));
 ```
 
 ## 混淆规则
