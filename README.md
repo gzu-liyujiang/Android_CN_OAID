@@ -7,7 +7,7 @@
 
 ## 接入指引
 
-最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md) | [JavaDoc](/javadoc/index.html)）
+最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md)）
 
 ### 依赖配置
 
@@ -53,7 +53,7 @@ dependencies {
 
 - 用法一：实时获取设备标识符
 
-```groovy
+```text
         final StringBuilder builder = new StringBuilder();
         builder.append("UniqueID: ");
         // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
@@ -101,7 +101,7 @@ dependencies {
 
 - 用法二：预先获取设备标识符
 
-```groovy 
+```text 
      // 在 Application#onCreate 里调用预取
      DeviceID.register(this);
      // 在需要用到设备标识的地方获取
