@@ -5,6 +5,7 @@
 - 移除之前版本已废弃的方法，重构部分API
 - 支持在应用启动时预先获取设备的客户端标识
 - 增加[JavaDoc](/javadoc/index.html)，更新说明文档
+- 移除Github Actions的CodeQL
 
 ## 2.1.1 - 2021/03/03
 
