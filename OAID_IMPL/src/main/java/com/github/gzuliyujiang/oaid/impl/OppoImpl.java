@@ -26,49 +26,47 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 import com.heytap.openid.IOpenID;
 
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class OppoDeviceIdImpl implements IDeviceId {
+public class OppoImpl implements IOAID {
     private final Context context;
     private String sign;
 
-    public OppoDeviceIdImpl(Context context) {
+    public OppoImpl(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean supportOAID() {
+    public boolean supported() {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.heytap.openid", 0);
             return pi != null;
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
         intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("HeyTap IdentifyService connected");
+                    OAIDLog.print("HeyTap IdentifyService connected");
                     try {
                         String ouid = realGetOUID(service);
                         if (ouid == null || ouid.length() == 0) {
@@ -76,8 +74,8 @@ public class OppoDeviceIdImpl implements IDeviceId {
                         } else {
                             getter.onOAIDGetComplete(ouid);
                         }
-                    } catch (Exception e) {
-                        Logger.print(e);
+                    } catch (Throwable e) {
+                        OAIDLog.print(e);
                         getter.onOAIDGetError(e);
                     } finally {
                         context.unbindService(this);
@@ -86,13 +84,13 @@ public class OppoDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("HeyTap IdentifyService disconnected");
+                    OAIDLog.print("HeyTap IdentifyService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
                 throw new RuntimeException("HeyTap IdentifyService bind failed");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getter.onOAIDGetError(e);
         }
     }
@@ -119,22 +117,6 @@ public class OppoDeviceIdImpl implements IDeviceId {
             return anInterface.getSerID(pkgName, sign, "OUID");
         }
         return null;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }

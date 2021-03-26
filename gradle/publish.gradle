@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ *
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ *
+ */
+
 // See https://github.com/bintray/gradle-bintray-plugin
 //
 // 步骤一：打包到{USER_HOME}/.m2/repository
@@ -13,9 +27,10 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 //项目相关信息
-def includeJar = true
+def includeJar = false
+def includeDoc = false
 def pomLibGroupName = 'com.github.gzuliyujiang'
-def pomLibArtifactId = project.name
+def pomLibArtifactId = rootProject.name
 def pomLibVersion = getGitLatestTag()
 def pomLibDescription = "TODO description: ${rootProject.name} for Android"
 def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"
@@ -30,7 +45,7 @@ def pomDeveloperName = '李玉江'
 def pomDeveloperEmail = '1032694760@qq.com'
 //GitHub仓库信息
 def githubRepositoryOwner = pomDeveloperOrg
-def githubRepositoryName = rootProject.name
+def githubRepositoryName = pomLibArtifactId
 def githubUserName = project.findProperty("githubUserName") ?: pomDeveloperId
 //1、在`https://github.com/settings/tokens`创建个人token，勾选包读写权限。
 //2、在`https://github.com/gzu-liyujiang/${rootProject.name}/settings/secrets`将token添加为secrets。
@@ -44,9 +59,43 @@ def bintrayUserName = project.findProperty('bintrayUserName') ?: ''
 def bintrayApiKey = project.findProperty('bintrayApiKey') ?: ''
 println("bintray credentials: user=$bintrayUserName apikey=$bintrayApiKey")
 
+/**
+ * generate xxx-sources.jar
+ */
 task sourcesJar(type: Jar) {
     getArchiveClassifier().set('sources')
     from android.sourceSets.main.java.srcDirs
+}
+
+/**
+ * generate javadoc
+ */
+task javadoc(type: Javadoc) {
+    source android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+    failOnError false
+}
+
+/**
+ * generate xxx-javadoc.jar
+ */
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    getArchiveClassifier().set('javadoc')
+    from javadoc.destinationDir
+}
+
+/**
+ * javadoc configure
+ */
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+    }
 }
 
 afterEvaluate {
@@ -82,6 +131,9 @@ afterEvaluate {
                     artifact "${buildDir}/intermediates/aar_main_jar/release/classes.jar"
                 }
                 artifact sourcesJar
+                if (includeDoc) {
+                    artifact javadocJar
+                }
                 pom.withXml {
                     def root = asNode()
                     root.appendNode('name', pomLibArtifactId)

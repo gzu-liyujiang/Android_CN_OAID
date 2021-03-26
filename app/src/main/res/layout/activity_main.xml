@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
   ~
-  ~ The software is licensed under the Mulan PSL v1.
-  ~ You can use this software according to the terms and conditions of the Mulan PSL v1.
-  ~ You may obtain a copy of Mulan PSL v1 at:
-  ~     http://license.coscl.org.cn/MulanPSL
+  ~ The software is licensed under the Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~     http://license.coscl.org.cn/MulanPSL2
   ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
   ~ IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
   ~ PURPOSE.
-  ~ See the Mulan PSL v1 for more details.
+  ~ See the Mulan PSL v2 for more details.
   ~
   -->
 
@@ -38,10 +38,18 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/btn_get_device_id"
+            android:id="@+id/btn_get_device_id_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="获取设备标识符"
+            android:text="用法一：实时获取设备标识符"
+            android:textAllCaps="false"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_get_device_id_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用法二：预先获取设备标识符"
             android:textAllCaps="false"
             tools:ignore="HardcodedText" />
 

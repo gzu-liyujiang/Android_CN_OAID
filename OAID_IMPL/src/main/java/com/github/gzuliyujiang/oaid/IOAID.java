@@ -16,20 +16,25 @@ package com.github.gzuliyujiang.oaid;
 import androidx.annotation.NonNull;
 
 /**
- * Created by liyujiang on 2020/5/30
+ * OAID接口
  *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
-public interface IDeviceId {
-
-    boolean supportOAID();
-
-    void doGet(@NonNull IOAIDGetter getter);
+public interface IOAID {
 
     /**
-     * @deprecated Use {@link #doGet(IOAIDGetter)} instead
+     * 是否支持OAID
+     *
+     * @return 支持则返回true，不支持则返回false
      */
-    @Deprecated
+    boolean supported();
+
+    /**
+     * 异步获取OAID
+     *
+     * @param getter 回调
+     */
     void doGet(@NonNull IGetter getter);
 
 }

@@ -19,40 +19,38 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.lang.reflect.Method;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class XiaomiDeviceIdImpl implements IDeviceId {
+public class XiaomiImpl implements IOAID {
     private final Context context;
     private Class<?> idProvider;
 
     @SuppressLint("PrivateApi")
-    public XiaomiDeviceIdImpl(Context context) {
+    public XiaomiImpl(Context context) {
         this.context = context;
         try {
             idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
         }
     }
 
     @Override
-    public boolean supportOAID() {
+    public boolean supported() {
         return idProvider != null;
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         if (idProvider == null) {
             getter.onOAIDGetError(new NullPointerException("Xiaomi IdProvider not exists"));
             return;
@@ -71,8 +69,8 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
             } else {
                 throw new RuntimeException("Xiaomi OAID get failed");
             }
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }
     }
@@ -82,27 +80,11 @@ public class XiaomiDeviceIdImpl implements IDeviceId {
         if (method != null) {
             try {
                 result = (String) method.invoke(idProvider.newInstance(), context);
-            } catch (Exception e) {
-                Logger.print(e);
+            } catch (Throwable e) {
+                OAIDLog.print(e);
             }
         }
         return result;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }

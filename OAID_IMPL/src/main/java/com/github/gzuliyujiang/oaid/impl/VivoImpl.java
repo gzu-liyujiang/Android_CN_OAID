@@ -20,64 +20,46 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
-import com.github.gzuliyujiang.oaid.SystemUtils;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
+import com.github.gzuliyujiang.oaid.OAIDRom;
 
 import java.util.Objects;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class VivoDeviceIdImpl implements IDeviceId {
+public class VivoImpl implements IOAID {
     private final Context context;
 
-    public VivoDeviceIdImpl(Context context) {
+    public VivoImpl(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean supportOAID() {
-        return SystemUtils.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
+    public boolean supported() {
+        return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
             String ret = cursor.getString(cursor.getColumnIndex("value"));
             if (ret != null && ret.length() > 0) {
-                Logger.print("oaid from provider: " + uri);
+                OAIDLog.print("oaid from provider: " + uri);
                 getter.onOAIDGetComplete(ret);
             } else {
                 throw new RuntimeException("OAID query failed");
             }
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }

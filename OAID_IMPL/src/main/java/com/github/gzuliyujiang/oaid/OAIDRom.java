@@ -17,19 +17,19 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.text.TextUtils;
 
-import androidx.annotation.RestrictTo;
-
-import com.github.gzuliyujiang.logger.Logger;
-
 import java.lang.reflect.Method;
 
 /**
- * Created by liyujiang on 2020/5/29
+ * ROM识别工具类
  *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/29
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public final class SystemUtils {
+public final class OAIDRom {
+
+    private OAIDRom() {
+        super();
+    }
 
     public static String sysProperty(String key, String defValue) {
         String res = null;
@@ -37,8 +37,7 @@ public final class SystemUtils {
             @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
             Method method = clazz.getMethod("get", String.class, String.class);
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Exception ignore) {
         }
         if (res == null) {
             res = "";

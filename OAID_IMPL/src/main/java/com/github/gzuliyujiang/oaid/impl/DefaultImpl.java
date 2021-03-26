@@ -11,19 +11,29 @@
  * See the Mulan PSL v2 for more details.
  *
  */
-package com.github.gzuliyujiang.oaid;
+package com.github.gzuliyujiang.oaid.impl;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
+
+import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
 
 /**
- * Created by liyujiang on 2020/8/20
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
-public interface IOAIDGetter {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public class DefaultImpl implements IOAID {
 
-    void onOAIDGetComplete(@NonNull String oaid);
+    @Override
+    public boolean supported() {
+        return false;
+    }
 
-    void onOAIDGetError(@NonNull Exception exception);
+    @Override
+    public void doGet(@NonNull final IGetter getter) {
+        getter.onOAIDGetError(new RuntimeException("Unsupported"));
+    }
 
 }

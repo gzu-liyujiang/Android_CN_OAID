@@ -1,19 +1,16 @@
 /*
- * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ *
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ *
  */
-
-configurations {
-    all {
-        //此处可用于解决依赖冲突问题，参阅https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
-        resolutionStrategy {
-            force androidxLibrary.core
-            force androidxLibrary.lifecycle
-            force androidxLibrary.fragment
-            force androidxLibrary.recyclerview
-            force androidxLibrary.documentfile
-        }
-    }
-}
 
 android {
 
@@ -53,6 +50,8 @@ android {
         checkReleaseBuilds false
         abortOnError false
         disable 'InvalidPackage'
+        disable 'HardcodedText'
+        disable 'SmallSp'
     }
 
     compileOptions {

@@ -1,6 +1,18 @@
 /*
- * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ *
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ *
  */
+
+
 
 apply plugin: 'com.android.application'
 apply from: "${rootDir}/gradle/common.gradle"
@@ -14,11 +26,11 @@ android {
             //直接使用真实的密钥库文件，避免微信、高德地图等第三方SDK校验失败
             releaseConfig {
                 try {
-                    // {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
+                    // app/gradle.properties 或  {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
                     Map rootProp = project.getProperties()
-                    def signingStoreFile = project.rootProject.file('app/release.jks')
+                    def signingStoreFile = project.rootProject.file(rootProp.get('signingStoreFile', ''))
                     if (!signingStoreFile.exists()) {
-                        throw new Exception('app/release.jks can not found')
+                        throw new Exception(signingStoreFile + ' can not found')
                     }
                     println("[signing] store file: $signingStoreFile")
                     def signingStorePassword = rootProp.get('signingStorePassword', '')
@@ -57,10 +69,36 @@ android {
         manifestPlaceholders = [
                 MY_CHANNEL: "unknown",
         ]
+        // 配合 productFlavors 节点按不同维度打包
+        flavorDimensions "MODE"
+    }
+
+    // 打包维度列表，会按维度名字母顺序执行，最终发布的具体渠道包的生成可以借助360加固等工具
+    productFlavors {
+        // 发布模式/正式环境
+        publisher {
+            dimension "MODE"
+            // 环境信息
+            buildConfigField "String", "ENVIRONMENT", '"prod"'
+            // 修改 AndroidManifest.xml 里的变量
+            manifestPlaceholders = [
+                    MY_CHANNEL: "publisher-default",
+            ]
+        }
+        // 开发模式/测试环境
+        developer {
+            dimension "MODE"
+            // 环境信息
+            buildConfigField "String", "ENVIRONMENT", '"test"'
+            // 修改 AndroidManifest.xml 里的变量
+            manifestPlaceholders = [
+                    MY_CHANNEL: "developer-default",
+            ]
+        }
     }
 
     buildTypes {
-        //线上版本
+        // 线上版本
         release {
             debuggable false
             jniDebuggable false
@@ -74,7 +112,7 @@ android {
             proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
         }
-        //调试版本
+        // 调试版本
         debug {
             debuggable true
             jniDebuggable true
@@ -97,10 +135,6 @@ android {
     }
 
 }
-
-/*
- * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江 <1032694760@qq.com>, All Right Reserved.
- */
 
 //APK重命名
 println "********** apk outputs **********"

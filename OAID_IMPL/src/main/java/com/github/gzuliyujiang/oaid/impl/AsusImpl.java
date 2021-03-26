@@ -24,39 +24,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
 import com.asus.msa.SupplementaryDID.IDidAidlInterface;
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.lang.reflect.Method;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class AsusDeviceIdImpl implements IDeviceId {
+public class AsusImpl implements IOAID {
     private final Context context;
 
-    public AsusDeviceIdImpl(Context context) {
+    public AsusImpl(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean supportOAID() {
+    public boolean supported() {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.asus.msa.SupplementaryDID", 0);
             return pi != null;
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         Intent intent = new Intent("com.asus.msa.action.ACCESS_DID");
         ComponentName componentName = new ComponentName("com.asus.msa.SupplementaryDID", "com.asus.msa.SupplementaryDID.SupplementaryDIDService");
         intent.setComponent(componentName);
@@ -64,7 +62,7 @@ public class AsusDeviceIdImpl implements IDeviceId {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("ASUS SupplementaryDIDService connected");
+                    OAIDLog.print("ASUS SupplementaryDIDService connected");
                     try {
                         //IDidAidlInterface anInterface = new IDidAidlInterface.Stub.asInterface(service);
                         Method asInterface = IDidAidlInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
@@ -77,8 +75,8 @@ public class AsusDeviceIdImpl implements IDeviceId {
                             throw new RuntimeException("ASUS ID get failed");
                         }
                         getter.onOAIDGetComplete(ID);
-                    } catch (Exception e) {
-                        Logger.print(e);
+                    } catch (Throwable e) {
+                        OAIDLog.print(e);
                         getter.onOAIDGetError(e);
                     } finally {
                         context.unbindService(this);
@@ -87,32 +85,16 @@ public class AsusDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("ASUS SupplementaryDIDService disconnected");
+                    OAIDLog.print("ASUS SupplementaryDIDService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
                 throw new RuntimeException("ASUS SupplementaryDIDService bind failed");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // SecurityException: Not allowed to bind to service Intent
             getter.onOAIDGetError(e);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }

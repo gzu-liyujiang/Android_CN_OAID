@@ -16,16 +16,25 @@ package com.github.gzuliyujiang.oaid;
 import androidx.annotation.NonNull;
 
 /**
- * Created by liyujiang on 2020/5/30
+ * OAID获取回调
  *
  * @author 大定府羡民（1032694760@qq.com）
- * @deprecated Use {@link IOAIDGetter} instead
+ * @since 2020/8/20
  */
-@Deprecated
 public interface IGetter {
 
-    void onDeviceIdGetComplete(@NonNull String deviceId);
+    /**
+     * 成功获取到OAID
+     *
+     * @param result OAID
+     */
+    void onOAIDGetComplete(@NonNull String result);
 
-    void onDeviceIdGetError(@NonNull Exception exception);
+    /**
+     * OAID获取失败（不正常或获取不到）
+     *
+     * @param error 异常信息
+     */
+    void onOAIDGetError(@NonNull Throwable error);
 
 }

@@ -7,7 +7,7 @@
 
 ## 接入指引
 
-最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
+最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md) | [JavaDoc](/javadoc/index.html)）
 
 ### 依赖配置
 
@@ -51,6 +51,8 @@ dependencies {
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
 
+- 用法一：实时获取设备标识符
+
 ```groovy
         // 获取DID/IMEI/MEID，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
         DeviceID.getUniqueID(context);
@@ -60,11 +62,7 @@ dependencies {
         DeviceID.getPseudoID();
         // 获取GUID，随机生成，存到SharedPreferences，不会为空，但APP卸载后将丢失
         DeviceID.getGUID(context);
-```
-
-获取 OAID：`DeviceID.with(context).doGet(new IOAIDGetter() { ... });`
-
-```groovy
+        // 判断是否支持 OAID 并获取
         IDeviceId deviceId = DeviceID.with(context);
         if (!deviceId.supportOAID()) {
             // 不支持OAID，须自行生成GUID。
@@ -81,6 +79,15 @@ dependencies {
                 // 获取OAID失败
             }
         });
+```
+
+- 用法二：预先获取设备标识符
+
+```groovy 
+     // 在 Application#onCreate 里调用预取
+     DeviceUtils.register(this);
+     // 在需要用到设备标识的地方获取
+     DeviceUtils.getDeviceId();
 ```
 
 ## 混淆规则

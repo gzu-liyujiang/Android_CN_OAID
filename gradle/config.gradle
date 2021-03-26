@@ -1,94 +1,25 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ *
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ *
  */
 
 ext {
 
-    minSdkVersion = 17
-    targetSdkVersion = 30
+    minSdkVersion = 21
+    targetSdkVersion = 29
     compileSdkVersion = 30
     buildToolsVersion = '30.0.0'
     //启用x86架构支持（模拟器运行时需要）
     x86Support = true
     andResGuardVersion = '1.2.19'
-
-    signingStoreFile = rootProject.file('app/debug.keystore')
-    signingStorePassword = 'android'
-    signingKeyAlias = 'androiddebugkey'
-    signingKeyPassword = 'android'
-
-    library = [
-            logger                       : "com.orhanobut:logger:2.2.0",
-            immersionbar                 : "com.gyf.immersionbar:immersionbar:3.0.0",
-            toast                        : "com.hjq:toast:8.8",
-            xxpermissions                : "com.hjq:xxpermissions:8.8",
-            photoview                    : "com.bm.photoview:library:1.4.1",
-            material                     : "com.google.android.material:material:1.2.0",
-            //noinspection GradleDependency BRVA的3.x版本改用kotlin了，API变化很大
-            BaseRecyclerViewAdapterHelper: "com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45-androidx",
-            inline_activity_result       : "com.github.florent37:inline-activity-result:1.0.4",
-            better_link_movement_method  : "me.saket:better-link-movement-method:2.2.0",
-            glide                        : "com.github.bumptech.glide:glide:4.10.0",
-            universalimageloader         : "com.nostra13.universalimageloader:universal-image-loader:1.9.5",
-            gson                         : "com.google.code.gson:gson:2.8.6",
-            fastjson                     : "com.alibaba:fastjson:1.2.70",
-            okgo                         : "com.lzy.net:okgo:3.0.4",
-            FastNetworking               : "com.amitshekhar.android:android-networking:1.0.2",
-            okhttp                       : "com.squareup.okhttp3:okhttp:3.12.0",
-            okbinder                     : "com.github.7hens:okbinder:1.1",
-    ]
-
-
-    liyujiangLibrary = [
-            Logger            : "com.github.gzu-liyujiang:Logger:1.2.2",
-            RSAUtils          : "com.github.gzu-liyujiang:RSAUtils:2.0.0",
-            CJKCharsetDetector: "com.github.gzu-liyujiang:CJKCharsetDetector:1.0.2",
-            CN_OAID           : "com.github.gzu-liyujiang:Android_CN_OAID:1.0.1",
-            HttpRequest       : "com.github.gzu-liyujiang:HttpRequest:2.1.1",
-            ImageLoader       : "com.github.gzu-liyujiang:ImageLoader:1.1.0",
-            jsoner            : "com.github.gzu-liyujiang:jsoner:1.0.1.20200714",
-    ]
-
-    // 参见 https://developer.android.google.cn/jetpack/androidx/versions
-    androidxLibrary = [
-            annotation            : "androidx.annotation:annotation:1.1.0",
-            core                  : "androidx.core:core:1.3.0",
-            collection            : "androidx.collection:collection:1.1.0",
-            fragment              : "androidx.fragment:fragment:1.2.5",
-            appcompat             : "androidx.appcompat:appcompat:1.2.0",
-            localbroadcastmanager : "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0",
-            recyclerview          : "androidx.recyclerview:recyclerview:1.1.0",
-            recyclerview_selection: "androidx.recyclerview:recyclerview-selection:1.1.0",
-            webkit                : "androidx.webkit:webkit:1.3.0",
-            documentfile          : "androidx.documentfile:documentfile:1.0.1",
-            viewpager2            : "androidx.viewpager2:viewpager2:1.0.0",
-            cardview              : "androidx.cardview:cardview:1.0.0",
-            drawerlayout          : "androidx.drawerlayout:drawerlayout:1.0.0",
-            navigation_fragment   : "androidx.navigation:navigation-fragment:2.3.1",
-            navigation_ui         : "androidx.navigation:navigation-ui:2.3.1",
-            palette               : "androidx.palette:palette:1.0.0",
-            constraintlayout      : "androidx.constraintlayout:constraintlayout:2.0.4",
-            swiperefreshlayout    : "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0",
-            preference            : "androidx.preference:preference:1.2.0",
-            room                  : "androidx.room:room-runtime:2.2.0",
-            room_compiler         : "androidx.room:room-compiler:2.2.0",
-            lifecycle             : "androidx.lifecycle:lifecycle-common:2.2.0",
-            livedata              : "androidx.lifecycle:lifecycle-livedata:2.2.0",
-            viewmodel             : "androidx.lifecycle:lifecycle-viewmodel:2.2.0",
-            work                  : "androidx.work:work-runtime:2.4.0",
-            biometric             : "androidx.biometric:biometric:1.0.1",
-            datastore             : "androidx.datastore:datastore:1.0.0-alpha03",
-    ]
-
-    testLibrary = [
-            junit  : "junit:junit:4.13.1",
-            mockito: "org.mockito:mockito-core:3.6.0"
-    ]
-
-    androidTestLibrary = [
-            junit_ext    : "androidx.test.ext:junit:1.1.2",
-            test_runner  : "androidx.test:runner:1.3.0",
-            espresso_core: "androidx.test.espresso:espresso-core:3.3.0"
-    ]
 
 }

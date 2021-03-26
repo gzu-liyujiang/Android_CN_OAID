@@ -22,31 +22,29 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class NubiaDeviceIdImpl implements IDeviceId {
+public class NubiaImpl implements IOAID {
     private final Context context;
 
-    public NubiaDeviceIdImpl(Context context) {
+    public NubiaImpl(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean supportOAID() {
+    public boolean supported() {
         return false;
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         String oaid = null;
         Bundle bundle = null;
         try {
@@ -76,26 +74,10 @@ public class NubiaDeviceIdImpl implements IDeviceId {
             } else {
                 throw new RuntimeException(failedMsg);
             }
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }

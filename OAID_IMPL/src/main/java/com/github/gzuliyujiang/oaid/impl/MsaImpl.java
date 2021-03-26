@@ -24,39 +24,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
 import com.bun.lib.MsaIdInterface;
-import com.github.gzuliyujiang.logger.Logger;
-import com.github.gzuliyujiang.oaid.IDeviceId;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.github.gzuliyujiang.oaid.IOAIDGetter;
+import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.lang.reflect.Method;
 
 /**
- * Created by liyujiang on 2020/5/30
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class MsaDeviceIdImpl implements IDeviceId {
+public class MsaImpl implements IOAID {
     private final Context context;
 
-    public MsaDeviceIdImpl(Context context) {
+    public MsaImpl(Context context) {
         this.context = context;
     }
 
     @Override
-    public boolean supportOAID() {
+    public boolean supported() {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.mdid.msa", 0);
             return pi != null;
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(@NonNull final IOAIDGetter getter) {
+    public void doGet(@NonNull final IGetter getter) {
         startMsaKlService();
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
         intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
@@ -65,7 +63,7 @@ public class MsaDeviceIdImpl implements IDeviceId {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    Logger.print("MsaIdService connected");
+                    OAIDLog.print("MsaIdService connected");
                     try {
                         //MsaIdInterface anInterface = new MsaIdInterface.Stub.asInterface(service);
                         Method asInterface = MsaIdInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
@@ -78,8 +76,8 @@ public class MsaDeviceIdImpl implements IDeviceId {
                             throw new RuntimeException("Msa oaid get failed");
                         }
                         getter.onOAIDGetComplete(oaid);
-                    } catch (Exception e) {
-                        Logger.print(e);
+                    } catch (Throwable e) {
+                        OAIDLog.print(e);
                         getter.onOAIDGetError(e);
                     } finally {
                         context.unbindService(this);
@@ -88,13 +86,13 @@ public class MsaDeviceIdImpl implements IDeviceId {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    Logger.print("MsaIdService disconnected");
+                    OAIDLog.print("MsaIdService disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
                 throw new RuntimeException("MsaIdService bind failed");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             getter.onOAIDGetError(e);
         }
     }
@@ -106,25 +104,9 @@ public class MsaDeviceIdImpl implements IDeviceId {
             intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
             intent.putExtra("com.bun.msa.param.runinset", true);
             context.startService(intent);
-        } catch (Exception e) {
-            Logger.print(e);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void doGet(@NonNull final IGetter getter) {
-        doGet(new IOAIDGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
-                getter.onDeviceIdGetComplete(oaid);
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
-                getter.onDeviceIdGetError(exception);
-            }
-        });
     }
 
 }
