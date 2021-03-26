@@ -30,7 +30,7 @@ apply plugin: 'com.jfrog.bintray'
 def includeJar = false
 def includeDoc = false
 def pomLibGroupName = 'com.github.gzuliyujiang'
-def pomLibArtifactId = rootProject.name
+def pomLibArtifactId = project.name
 def pomLibVersion = getGitLatestTag()
 def pomLibDescription = "TODO description: ${rootProject.name} for Android"
 def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"
