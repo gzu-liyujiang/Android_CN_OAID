@@ -1,8 +1,0 @@
-include ':OAID_ASUS'
-include ':OAID_BUN'
-include ':OAID_HEYTAP'
-include ':OAID_SAMSUNG'
-include ':OAID_UODIS'
-include ':OAID_ZUI'
-include ':OAID_IMPL'
-include ':app'
