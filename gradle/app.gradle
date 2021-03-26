@@ -12,8 +12,6 @@
  *
  */
 
-
-
 apply plugin: 'com.android.application'
 apply from: "${rootDir}/gradle/common.gradle"
 apply from: "${rootDir}/gradle/resguard.gradle"

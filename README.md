@@ -54,29 +54,47 @@ dependencies {
 - 用法一：实时获取设备标识符
 
 ```groovy
-        // 获取DID/IMEI/MEID，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
-        DeviceID.getUniqueID(context);
-        // 获取安卓ID，可能为空
-        DeviceID.getAndroidID(context);
-        // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
-        DeviceID.getPseudoID();
-        // 获取GUID，随机生成，存到SharedPreferences，不会为空，但APP卸载后将丢失
-        DeviceID.getGUID(context);
-        // 判断是否支持 OAID 并获取
-        IDeviceId deviceId = DeviceID.with(context);
-        if (!deviceId.supportOAID()) {
-            // 不支持OAID，须自行生成GUID。
-            return;
+        final StringBuilder builder = new StringBuilder();
+        builder.append("UniqueID: ");
+        // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
+        String uniqueID = DeviceID.getUniqueID(this);
+        if (TextUtils.isEmpty(uniqueID)) {
+            builder.append("DID/IMEI/MEID获取失败");
+        } else {
+            builder.append(uniqueID);
         }
-        deviceId.doGet(new IOAIDGetter() {
+        builder.append("\n");
+        builder.append("AndroidID: ");
+        // 获取安卓ID，可能为空
+        String androidID = DeviceID.getAndroidID(this);
+        if (TextUtils.isEmpty(androidID)) {
+            builder.append("AndroidID获取失败");
+        } else {
+            builder.append(androidID);
+        }
+        builder.append("\n");
+        builder.append("PseudoID: ");
+        // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
+        builder.append(DeviceID.getPseudoID());
+        builder.append("\n");
+        builder.append("GUID: ");
+        // 获取GUID，随机生成，不会为空
+        builder.append(DeviceID.getGUID(this));
+        builder.append("\n");
+        // 获取OAID，异步回调
+        DeviceID.getOAID(this, new IGetter() {
             @Override
-            public void onOAIDGetComplete(@NonNull String oaid) {
+            public void onOAIDGetComplete(@NonNull String result) {
                 // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
+                builder.append("OAID: ").append(result);
+                tvDeviceIdResult.setText(builder);
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Exception exception) {
+            public void onOAIDGetError(@NonNull Throwable error) {
                 // 获取OAID失败
+                builder.append("OAID: ").append(error);
+                tvDeviceIdResult.setText(builder);
             }
         });
 ```
@@ -85,9 +103,9 @@ dependencies {
 
 ```groovy 
      // 在 Application#onCreate 里调用预取
-     DeviceUtils.register(this);
+     DeviceID.register(this);
      // 在需要用到设备标识的地方获取
-     DeviceUtils.getDeviceId();
+     DeviceID.getClientId();
 ```
 
 ## 混淆规则

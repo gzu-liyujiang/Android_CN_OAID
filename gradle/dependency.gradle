@@ -97,10 +97,10 @@ configurations {
     all {
         //此处可用于解决依赖冲突问题，参阅https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
         resolutionStrategy {
-            force androidxLibrary.annotation
             force androidxLibrary.core
             force androidxLibrary.collection
             force androidxLibrary.lifecycle
+            force androidxLibrary.fragment
             force androidxLibrary.appcompat
             force androidxLibrary.recyclerview
         }
