@@ -39,6 +39,7 @@ import com.github.gzuliyujiang.oaid.impl.SamsungImpl;
 import com.github.gzuliyujiang.oaid.impl.VivoImpl;
 import com.github.gzuliyujiang.oaid.impl.XiaomiImpl;
 
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -92,6 +93,20 @@ public final class DeviceID {
      */
     public static String getClientId() {
         return clientId == null ? "" : clientId;
+    }
+
+    /**
+     * @see #getClientId()
+     */
+    public static String getClientIdMD5() {
+        return clientId == null ? "" : calculateHash(clientId, "MD5");
+    }
+
+    /**
+     * @see #getClientId()
+     */
+    public static String getClientIdSHA1() {
+        return clientId == null ? "" : calculateHash(clientId, "SHA-1");
     }
 
     /**
@@ -227,6 +242,24 @@ public final class DeviceID {
             preferences.edit().putString("uuid", uuid).apply();
         }
         return uuid;
+    }
+
+    /**
+     * 计算哈希值，算法可以是MD2、MD5、SHA-1、SHA-224、SHA-256、SHA-512等。
+     * 支持的算法见 https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
+     */
+    public static String calculateHash(String str, String algorithm) {
+        try {
+            byte[] data = str.getBytes();
+            byte[] bytes = MessageDigest.getInstance(algorithm).digest(data);
+            StringBuilder sb = new StringBuilder();
+            for (byte aByte : bytes) {
+                sb.append(String.format("%02x", aByte));
+            }
+            return sb.toString();
+        } catch (Throwable e) {
+            return "";
+        }
     }
 
 }

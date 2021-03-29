@@ -105,6 +105,8 @@ dependencies {
     // 在 Application#onCreate 里调用预取
     DeviceID.register(this);
     // 在需要用到设备标识的地方获取
+    // 设备标识统一格式为MD5：DeviceID.getClientIdMD5()
+    // 设备标识统一格式为SHA1：DeviceID.getClientIdSHA1()
     tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientId()));
 ```
 

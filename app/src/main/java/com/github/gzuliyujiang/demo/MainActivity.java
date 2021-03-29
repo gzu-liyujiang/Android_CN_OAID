@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         } else if (id == R.id.btn_get_device_id_2) {
-            tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientId()));
+            tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientIdMD5()));
         }
     }
 
