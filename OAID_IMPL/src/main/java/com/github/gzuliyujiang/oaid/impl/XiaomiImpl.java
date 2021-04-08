@@ -26,19 +26,24 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 import java.lang.reflect.Method;
 
 /**
+ * 参阅 http://f4.market.xiaomi.com/download/MiPass/058fc4374ac89aea6dedd9dc03c60a5498241e0dd/DeviceId.jar
+ * 即 com.miui.deviceid.IdentifierManager
+ *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class XiaomiImpl implements IOAID {
     private final Context context;
-    private Class<?> idProvider;
+    private Class<?> idProviderClass;
+    private Object idProviderImpl;
 
     @SuppressLint("PrivateApi")
     public XiaomiImpl(Context context) {
         this.context = context;
         try {
-            idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
+            idProviderClass = Class.forName("com.android.id.impl.IdProviderImpl");
+            idProviderImpl = idProviderClass.newInstance();
         } catch (Throwable e) {
             OAIDLog.print(e);
         }
@@ -46,20 +51,19 @@ public class XiaomiImpl implements IOAID {
 
     @Override
     public boolean supported() {
-        return idProvider != null;
+        return idProviderImpl != null;
     }
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
-        if (idProvider == null) {
+        if (idProviderClass == null || idProviderImpl == null) {
             getter.onOAIDGetError(new NullPointerException("Xiaomi IdProvider not exists"));
             return;
         }
         try {
-            Method oaidMethod = idProvider.getMethod("getOAID", Context.class);
-            String did = invokeMethod(oaidMethod);
-            if (did != null && did.length() > 0) {
-                getter.onOAIDGetComplete(did);
+            String oaid = invokeMethod("getOAID");
+            if (oaid != null && oaid.length() > 0) {
+                getter.onOAIDGetComplete(oaid);
             } else {
                 throw new RuntimeException("Xiaomi OAID get failed");
             }
@@ -69,14 +73,13 @@ public class XiaomiImpl implements IOAID {
         }
     }
 
-    private String invokeMethod(Method method) {
+    private String invokeMethod(String methodName) {
         String result = null;
-        if (method != null) {
-            try {
-                result = (String) method.invoke(idProvider.newInstance(), context);
-            } catch (Throwable e) {
-                OAIDLog.print(e);
-            }
+        try {
+            Method method = idProviderClass.getMethod(methodName, Context.class);
+            result = (String) method.invoke(idProviderImpl, context);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
         }
         return result;
     }

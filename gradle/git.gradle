@@ -41,10 +41,19 @@ static def gitGitCommitNumber() {
 static def getGitLatestTag() {
     try {
         // See https://www.jianshu.com/p/2ecfd791c464
-        def cmd = 'git describe --tags --always --dirty=_developing'
-        return cmd.execute().text.trim() ?: '1.0.0'
+        def cmd = 'git describe --tags --always'
+        def version = cmd.execute().text.trim() ?: '0.0.1'
+        if (version.indexOf('-') != -1) {
+            version = version.split('-')[0]
+        } else if (version.indexOf('.') == -1) {
+            version = "0.0.9"
+        }
+        if (!version.matches("\\d+\\.\\d+\\.\\d+")) {
+            System.err.println("版本号格式建议为：Major.Minor.Patch")
+        }
+        return version
     } catch (ignored) {
-        return "error"
+        return "0.0.0"
     }
 }
 

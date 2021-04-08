@@ -14,8 +14,10 @@
 
 ext {
 
+    // Android 5.0
     minSdkVersion = 21
-    targetSdkVersion = 29
+    // Android 11.0
+    targetSdkVersion = 30
     compileSdkVersion = 30
     buildToolsVersion = '30.0.0'
     //启用x86架构支持（模拟器运行时需要）

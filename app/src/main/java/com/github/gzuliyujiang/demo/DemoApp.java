@@ -17,6 +17,7 @@ package com.github.gzuliyujiang.demo;
 import android.app.Application;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
  * Created by liyujiang on 2020/5/20.
@@ -28,6 +29,7 @@ public class DemoApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        OAIDLog.enable();
         DeviceID.register(this);
     }
 
