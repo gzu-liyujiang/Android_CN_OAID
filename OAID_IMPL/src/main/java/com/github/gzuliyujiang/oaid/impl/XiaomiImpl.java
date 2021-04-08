@@ -62,8 +62,12 @@ public class XiaomiImpl implements IOAID {
                 getter.onOAIDGetComplete(did);
                 return;
             }
+        } catch (Throwable e) {
+            OAIDLog.print(e);
+        }
+        try {
             Method oaidMethod = idProvider.getMethod("getOAID", Context.class);
-            did = invokeMethod(oaidMethod);
+            String did = invokeMethod(oaidMethod);
             if (did != null && did.length() > 0) {
                 getter.onOAIDGetComplete(did);
             } else {
