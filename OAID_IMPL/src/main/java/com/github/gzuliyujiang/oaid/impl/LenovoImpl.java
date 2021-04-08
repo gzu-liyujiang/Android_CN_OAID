@@ -31,6 +31,8 @@ import com.zui.deviceidservice.IDeviceidInterface;
 import java.lang.reflect.Method;
 
 /**
+ * 参阅 com.umeng.umsdk:oaid_lenovo:1.0.0
+ *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
@@ -69,11 +71,11 @@ public class LenovoImpl implements IOAID {
                         if (anInterface == null) {
                             throw new RuntimeException("IDeviceidInterface is null");
                         }
-                        String deviceId = anInterface.a();
-                        if (deviceId == null || deviceId.length() == 0) {
-                            throw new RuntimeException("Lenovo deviceId get failed");
+                        String oaid = anInterface.getOAID();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("Lenovo OAID get failed");
                         }
-                        getter.onOAIDGetComplete(deviceId);
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Throwable e) {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);

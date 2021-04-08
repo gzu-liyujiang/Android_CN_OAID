@@ -28,6 +28,8 @@ import com.github.gzuliyujiang.oaid.OAIDRom;
 import java.util.Objects;
 
 /**
+ * 参阅 com.umeng.umsdk:oaid_vivo:1.0.0.1
+ *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */

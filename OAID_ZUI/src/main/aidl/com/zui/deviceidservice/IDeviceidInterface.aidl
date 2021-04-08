@@ -5,10 +5,10 @@ package com.zui.deviceidservice;
 
 interface IDeviceidInterface {
 
-  String a();
+  String getUDID();
 
-  String b();
+  String getOAID();
 
-  boolean c();
+  boolean isSupport();
 
 }

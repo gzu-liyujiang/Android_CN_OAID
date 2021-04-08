@@ -35,6 +35,8 @@ import java.lang.reflect.Method;
 import java.security.MessageDigest;
 
 /**
+ * 参阅 com.umeng.umsdk:oaid_oppo:1.0.4
+ *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
