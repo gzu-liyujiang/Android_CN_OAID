@@ -94,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.append(androidID);
         }
         builder.append("\n");
+        builder.append("WidevineID: ");
+        // 获取数字版权管理ID，可能为空
+        String widevineID = DeviceID.getWidevineID(this);
+        if (TextUtils.isEmpty(widevineID)) {
+            builder.append("WidevineID获取失败");
+        } else {
+            builder.append(widevineID);
+        }
+        builder.append("\n");
         builder.append("PseudoID: ");
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
         builder.append(DeviceID.getPseudoID());

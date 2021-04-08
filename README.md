@@ -73,6 +73,15 @@ dependencies {
             builder.append(androidID);
         }
         builder.append("\n");
+        builder.append("WidevineID: ");
+        // 获取数字版权管理ID，可能为空
+        String widevineID = DeviceID.getWidevineID(this);
+        if (TextUtils.isEmpty(widevineID)) {
+            builder.append("WidevineID获取失败");
+        } else {
+            builder.append(widevineID);
+        }
+        builder.append("\n");
         builder.append("PseudoID: ");
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
         builder.append(DeviceID.getPseudoID());
@@ -162,13 +171,17 @@ dependencies {
 
 ## 参考资料
 
-OAID 即 Open Anonymous Identifier，开放匿名标识符，是移动智能终端补充设备标识体系中的一员。
+OAID 即 Open Anonymous Device Identifier，开放匿名设备标识符，是移动智能终端补充设备标识体系中的一员。
 
 - [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
-- [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](http://www.msa-alliance.cn/login.jsp?url=%2Fcol.jsp%3Fid%3D120&errno=11&mid=634&fid=ABUIABA9GAAgpKaN6QUoq7em2QI) 。
-- 华为官方文档 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
-- Flyme SDK [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
+- [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
+- 华为 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
+- 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
+- 魅族 [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
+- VIVO [移动智能终端补充设备标识服务](https://dev.vivo.com.cn/documentCenter/doc/253) 。
+- OPPO [移动智能终端补充设备标识体系](https://open.oppomobile.com/wiki/doc#id=10608) 。
+- 三星 [适配指导 | Android Q Device ID权限变更](https://support-cn.samsung.com/App/DeveloperChina/notice/detail?noticeid=115) 。
 - 北京数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”。
 - StackOverFlow [Is there a unique Android device ID ?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。

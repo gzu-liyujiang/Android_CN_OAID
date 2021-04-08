@@ -15,35 +15,40 @@
 ext {
 
     library = [
-            logger                     : "com.orhanobut:logger:2.2.0",
-            immersionbar               : "com.gyf.immersionbar:immersionbar:3.0.0",
-            toast                      : "com.hjq:toast:8.8",
-            xxpermissions              : "com.hjq:xxpermissions:9.8",
-            photoview                  : "com.bm.photoview:library:1.4.1",
-            material                   : "com.google.android.material:material:1.2.0",
-            inline_activity_result     : "com.github.florent37:inline-activity-result:1.0.4",
-            better_link_movement_method: "me.saket:better-link-movement-method:2.2.0",
-            glide                      : "com.github.bumptech.glide:glide:4.12.0",
-            picasso                    : "com.squareup.picasso:picasso:2.8",
-            universalimageloader       : "com.nostra13.universalimageloader:universal-image-loader:1.9.5",
-            gson                       : "com.google.code.gson:gson:2.8.6",
-            fastjson                   : "com.alibaba:fastjson:1.2.70",
-            okgo                       : "com.lzy.net:okgo:3.0.4",
-            FastNetworking             : "com.amitshekhar.android:android-networking:1.0.2",
-            PersistentCookieJar        : "com.github.franmontiel:PersistentCookieJar:v1.0.1",
-            SmartRefreshKernel         : "com.scwang.smart:refresh-layout-kernel:2.0.3",
-            SmartRefreshHeaderClassic  : "com.scwang.smart:refresh-header-classics:2.0.3",
-            SmartRefreshHeaderMaterial : "com.scwang.smart:refresh-header-material:2.0.3",
-            SmartRefreshFooterClassic  : "com.scwang.smart:refresh-footer-classics:2.0.3",
-            SmartRefreshFooterBall     : "com.scwang.smart:refresh-footer-ball:2.0.3",
-            GifDrawable                : "pl.droidsonroids.gif:android-gif-drawable:1.2.19",
-            FileDownloader             : "com.liulishuo.filedownloader:library:1.7.7",
-            banner                     : "com.youth.banner:banner:2.1.0",
-            shapeofview                : "com.github.florent37:shapeofview:1.3.2",
-            lcardview                  : "org.linwg1988:lcardview:1.5.4",
-            FlowLayoutManager          : "com.github.1002326270xc:LayoutManager-FlowLayout:v1.8",
+            logger                    : "com.orhanobut:logger:2.2.0",
+            immersionbar              : "com.gyf.immersionbar:immersionbar:3.0.0",
+            toast                     : "com.hjq:toast:8.8",
+            xxpermissions             : "com.hjq:xxpermissions:9.8",
+            photoview                 : "com.bm.photoview:library:1.4.1",
+            material                  : "com.google.android.material:material:1.2.0",
+            inline_activity_result    : "com.github.florent37:inline-activity-result:1.0.4",
+            glide                     : "com.github.bumptech.glide:glide:4.12.0",
+            picasso                   : "com.squareup.picasso:picasso:2.8",
+            universalimageloader      : "com.nostra13.universalimageloader:universal-image-loader:1.9.5",
+            gson                      : "com.google.code.gson:gson:2.8.6",
+            fastjson                  : "com.alibaba:fastjson:1.2.70",
+            okgo                      : "com.lzy.net:okgo:3.0.4",
+            FastNetworking            : "com.amitshekhar.android:android-networking:1.0.2",
+            PersistentCookieJar       : "com.github.franmontiel:PersistentCookieJar:v1.0.1",
+            SmartRefreshKernel        : "com.scwang.smart:refresh-layout-kernel:2.0.3",
+            SmartRefreshHeaderClassic : "com.scwang.smart:refresh-header-classics:2.0.3",
+            SmartRefreshHeaderMaterial: "com.scwang.smart:refresh-header-material:2.0.3",
+            SmartRefreshFooterClassic : "com.scwang.smart:refresh-footer-classics:2.0.3",
+            SmartRefreshFooterBall    : "com.scwang.smart:refresh-footer-ball:2.0.3",
+            GifDrawable               : "pl.droidsonroids.gif:android-gif-drawable:1.2.19",
+            FileDownloader            : "com.liulishuo.filedownloader:library:1.7.7",
+            banner                    : "com.youth.banner:banner:2.1.0",
+            shapeofview               : "com.github.florent37:shapeofview:1.4.7",
+            lcardview                 : "org.linwg1988:lcardview:1.5.4",
+            FlowLayoutManager         : "com.github.1002326270xc:LayoutManager-FlowLayout:v1.8",
             //noinspection GradleDependency 注意：zxing 3.4.0开始，扫码/二维码生成只支持API>=24，若要支持Android7.0以下则需降级到3.3.3版本
-            zxing                      : "com.google.zxing:core:3.3.3",
+            zxing                     : "com.google.zxing:core:3.3.3",
+            OAID_IMPL                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:3.0.1",
+            OAID_ASUS                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:3.0.1",
+            OAID_BUN                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:3.0.1",
+            OAID_SAMSUNG              : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:3.0.1",
+            OAID_UODIS                : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:3.0.1",
+            OAID_ZUI                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:3.0.1",
     ]
 
     androidxLibrary = [
@@ -56,6 +61,7 @@ ext {
             recyclerview          : "androidx.recyclerview:recyclerview:1.1.0",
             recyclerview_selection: "androidx.recyclerview:recyclerview-selection:1.1.0",
             webkit                : "androidx.webkit:webkit:1.3.0",
+            exifinterface         : "androidx.exifinterface:exifinterface:1.2.0",
             documentfile          : "androidx.documentfile:documentfile:1.0.1",
             viewpager             : "androidx.viewpager:viewpager:1.0.0",
             viewpager2            : "androidx.viewpager2:viewpager2:1.0.0",
@@ -93,16 +99,15 @@ ext {
 
 }
 
-configurations {
-    all {
-        //此处可用于解决依赖冲突问题，参阅https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
-        resolutionStrategy {
-            force androidxLibrary.core
-            force androidxLibrary.collection
-            force androidxLibrary.lifecycle
-            force androidxLibrary.fragment
-            force androidxLibrary.appcompat
-            force androidxLibrary.recyclerview
-        }
+configurations.all {
+    resolutionStrategy {
+        //此处可用于解决依赖冲突问题，参阅 https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
+        force androidxLibrary.annotation
+        force androidxLibrary.core
+        force androidxLibrary.collection
+        force androidxLibrary.lifecycle
+        force androidxLibrary.fragment
+        force androidxLibrary.appcompat
+        force androidxLibrary.recyclerview
     }
 }
