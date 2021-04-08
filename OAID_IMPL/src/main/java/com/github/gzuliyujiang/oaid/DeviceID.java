@@ -54,7 +54,7 @@ import java.util.UUID;
  */
 public final class DeviceID {
     private static String clientId;
-    private static IOAID oaid;
+    private static IOAID ioaid;
 
     private DeviceID() {
         super();
@@ -123,7 +123,7 @@ public final class DeviceID {
         return clientId == null ? "" : calculateHash(clientId, "SHA-1");
     }
 
-    private static IOAID getIOAID(@NonNull Context context) {
+    private static IOAID createIOAID(@NonNull Context context) {
         if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
             return new LenovoImpl(context);
         }
@@ -164,10 +164,10 @@ public final class DeviceID {
      * @param getter  回调
      */
     public static void getOAID(@NonNull Context context, @NonNull IGetter getter) {
-        if (oaid == null) {
-            oaid = getIOAID(context);
+        if (ioaid == null) {
+            ioaid = createIOAID(context);
         }
-        oaid.doGet(getter);
+        ioaid.doGet(getter);
     }
 
     /**
@@ -175,11 +175,11 @@ public final class DeviceID {
      *
      * @param context 上下文
      */
-    public static boolean supported(@NonNull Context context) {
-        if (oaid == null) {
-            oaid = getIOAID(context);
+    public static boolean supportedOAID(@NonNull Context context) {
+        if (ioaid == null) {
+            ioaid = createIOAID(context);
         }
-        return oaid.supported();
+        return ioaid.supported();
     }
 
     /**

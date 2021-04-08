@@ -2,9 +2,10 @@
 
 ## 3.0.2 - 2021/04/08
 
-- 小米手机获取OAID问题 @andot PR#18
+- 小米手机获取OAID问题 [@andot PR#18](https://github.com/gzu-liyujiang/Android_CN_OAID/pull/18)
 - 增加数字版权管理设备ID
 - 增加各大手机厂商关于OAID的说明文档
+- 允许判断设备是否支持OAID [@andot PR#19](https://github.com/gzu-liyujiang/Android_CN_OAID/pull/19)
 
 ## 3.0.1 - 2021/03/29
 

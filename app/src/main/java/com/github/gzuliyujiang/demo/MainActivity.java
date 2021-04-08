@@ -111,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 获取GUID，随机生成，不会为空
         builder.append(DeviceID.getGUID(this));
         builder.append("\n");
+        // 是否支持OAID
+        builder.append("supportedOAID: ").append(DeviceID.supportedOAID(this));
+        builder.append("\n");
         // 获取OAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
