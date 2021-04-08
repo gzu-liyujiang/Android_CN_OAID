@@ -52,6 +52,7 @@ import java.util.UUID;
  */
 public final class DeviceID {
     private static String clientId;
+    private static IOAID oaid;
 
     private DeviceID() {
         super();
@@ -109,6 +110,40 @@ public final class DeviceID {
         return clientId == null ? "" : calculateHash(clientId, "SHA-1");
     }
 
+    private static IOAID getIOAID(@NonNull Context context) {
+        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
+            return new LenovoImpl(context);
+        }
+        if (OAIDRom.isMeizu()) {
+            return new MeizuImpl(context);
+        }
+        if (OAIDRom.isNubia()) {
+            return new NubiaImpl(context);
+        }
+        if (OAIDRom.isXiaomi() || OAIDRom.isBlackShark()) {
+            return new XiaomiImpl(context);
+        }
+        if (OAIDRom.isSamsung()) {
+            return new SamsungImpl(context);
+        }
+        if (OAIDRom.isVivo()) {
+            return new VivoImpl(context);
+        }
+        if (OAIDRom.isASUS()) {
+            return new AsusImpl(context);
+        }
+        if (OAIDRom.isHuawei()) {
+            return new HuaweiImpl(context);
+        }
+        if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
+            return new OppoImpl(context);
+        }
+        if (OAIDRom.isZTE() || OAIDRom.isFreeme() || OAIDRom.isSSUI()) {
+            return new MsaImpl(context);
+        }
+        return new DefaultImpl();
+    }
+
     /**
      * 异步获取OAID
      *
@@ -116,31 +151,22 @@ public final class DeviceID {
      * @param getter  回调
      */
     public static void getOAID(@NonNull Context context, @NonNull IGetter getter) {
-        IOAID oaid;
-        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
-            oaid = new LenovoImpl(context);
-        } else if (OAIDRom.isMeizu()) {
-            oaid = new MeizuImpl(context);
-        } else if (OAIDRom.isNubia()) {
-            oaid = new NubiaImpl(context);
-        } else if (OAIDRom.isXiaomi() || OAIDRom.isBlackShark()) {
-            oaid = new XiaomiImpl(context);
-        } else if (OAIDRom.isSamsung()) {
-            oaid = new SamsungImpl(context);
-        } else if (OAIDRom.isVivo()) {
-            oaid = new VivoImpl(context);
-        } else if (OAIDRom.isASUS()) {
-            oaid = new AsusImpl(context);
-        } else if (OAIDRom.isHuawei()) {
-            oaid = new HuaweiImpl(context);
-        } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
-            oaid = new OppoImpl(context);
-        } else if (OAIDRom.isZTE() || OAIDRom.isFreeme() || OAIDRom.isSSUI()) {
-            oaid = new MsaImpl(context);
-        } else {
-            oaid = new DefaultImpl();
+        if (oaid == null) {
+            oaid = getIOAID(context);
         }
         oaid.doGet(getter);
+    }
+
+    /**
+     * 判断是否支持OAID
+     *
+     * @param context 上下文
+     */
+    public static boolean supported(@NonNull Context context) {
+        if (oaid == null) {
+            oaid = getIOAID(context);
+        }
+        return oaid.supported();
     }
 
     /**
@@ -157,9 +183,9 @@ public final class DeviceID {
             // Android 10+ 不允许获取 IMEI、MEID 之类的设备唯一标识
             return "";
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                context.checkPermission(Manifest.permission.READ_PHONE_STATE, Process.myPid(),
-                        Process.myUid()) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && context.checkPermission(Manifest.permission.READ_PHONE_STATE, Process.myPid(),
+                Process.myUid()) != PackageManager.PERMISSION_GRANTED) {
             // Android 6-9 需要申请电话权限才能获取设备唯一标识
             return "";
         }
@@ -209,7 +235,7 @@ public final class DeviceID {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sb.append(Arrays.deepToString(Build.SUPPORTED_ABIS).length() % 10);
         } else {
-            //noinspection deprecation
+            // noinspection deprecation
             sb.append(Build.CPU_ABI.length() % 10);
         }
         sb.append(Build.DEVICE.length() % 10);
@@ -245,8 +271,8 @@ public final class DeviceID {
     }
 
     /**
-     * 计算哈希值，算法可以是MD2、MD5、SHA-1、SHA-224、SHA-256、SHA-512等。
-     * 支持的算法见 https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
+     * 计算哈希值，算法可以是MD2、MD5、SHA-1、SHA-224、SHA-256、SHA-512等。 支持的算法见
+     * https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
      */
     public static String calculateHash(String str, String algorithm) {
         try {
