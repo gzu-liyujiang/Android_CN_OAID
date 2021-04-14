@@ -70,14 +70,15 @@ public final class OAIDRom {
         return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
                 Build.BRAND.equalsIgnoreCase("XIAOMI") ||
                 Build.BRAND.equalsIgnoreCase("REDMI") ||
-                Build.BRAND.equalsIgnoreCase("meitu") ||
+                Build.BRAND.equalsIgnoreCase("MEITU") ||
                 !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
     }
 
     public static boolean isOppo() {
-        // 欧珀手机
+        // 欧珀手机、真我手机
         return Build.MANUFACTURER.equalsIgnoreCase("OPPO") ||
                 Build.BRAND.equalsIgnoreCase("OPPO") ||
+                Build.BRAND.equalsIgnoreCase("REALME") ||
                 !TextUtils.isEmpty(sysProperty("ro.build.version.opporom", ""));
     }
 
