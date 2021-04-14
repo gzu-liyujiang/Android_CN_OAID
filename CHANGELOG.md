@@ -1,5 +1,9 @@
 # 更新日志
 
+## 3.0.3 - 2021/04/14
+
+- 更细致的识别手机厂商及其品牌，增加荣耀、红米、爱酷、真我等品牌的支持。
+
 ## 3.0.2 - 2021/04/08
 
 - 小米手机获取OAID问题 [@andot PR#18](https://github.com/gzu-liyujiang/Android_CN_OAID/pull/18)
