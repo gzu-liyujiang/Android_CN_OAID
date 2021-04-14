@@ -83,9 +83,10 @@ public final class OAIDRom {
     }
 
     public static boolean isVivo() {
-        // 维沃手机
+        // 维沃手机、爱酷手机
         return Build.MANUFACTURER.equalsIgnoreCase("VIVO") ||
                 Build.BRAND.equalsIgnoreCase("VIVO") ||
+                Build.BRAND.equalsIgnoreCase("IQOO") ||
                 !TextUtils.isEmpty(sysProperty("ro.vivo.os.version", ""));
     }
 
@@ -165,7 +166,7 @@ public final class OAIDRom {
     }
 
     public static boolean isSmartisan() {
-        // 锤子手机
+        // 锤子手机、坚果手机
         return Build.MANUFACTURER.equalsIgnoreCase("SMARTISAN") ||
                 Build.BRAND.equalsIgnoreCase("SMARTISAN") ||
                 !TextUtils.isEmpty(sysProperty("ro.smartisan.version", ""));
