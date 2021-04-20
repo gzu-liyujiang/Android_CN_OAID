@@ -22,6 +22,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
@@ -31,6 +32,7 @@ import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 import com.heytap.openid.IOpenID;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 
@@ -65,7 +67,7 @@ public class OppoImpl implements IOAID {
         Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
         intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
         try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
+            boolean isBinded = context.getApplicationContext().bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     OAIDLog.print("HeyTap IdentifyService connected");
@@ -80,7 +82,7 @@ public class OppoImpl implements IOAID {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);
                     } finally {
-                        context.unbindService(this);
+                        context.getApplicationContext().unbindService(this);
                     }
                 }
 
@@ -99,9 +101,9 @@ public class OppoImpl implements IOAID {
 
     @SuppressLint("PackageManagerGetSignatures")
     private String realGetOUID(IBinder service) throws Exception {
-        String pkgName = context.getPackageName();
+        String pkgName = context.getApplicationContext().getPackageName();
         if (sign == null) {
-            Signature[] signatures = context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures;
+            Signature[] signatures = context.getApplicationContext().getPackageManager().getPackageInfo(pkgName, PackageManager.GET_SIGNATURES).signatures;
             byte[] byteArray = signatures[0].toByteArray();
             MessageDigest messageDigest = MessageDigest.getInstance("SHA1");
             byte[] digest = messageDigest.digest(byteArray);
@@ -111,14 +113,19 @@ public class OppoImpl implements IOAID {
             }
             sign = sb.toString();
             //IOpenID anInterface = new IOpenID.Stub.asInterface(service);
-            Method asInterface = IOpenID.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-            IOpenID anInterface = (IOpenID) asInterface.invoke(null, service);
-            if (anInterface == null) {
-                throw new RuntimeException("IOpenID is null");
-            }
-            return anInterface.getSerID(pkgName, sign, "OUID");
+            return getSerId(service, pkgName, sign);
         }
-        return null;
+        return getSerId(service, pkgName, sign);
+    }
+
+    private String getSerId(IBinder service, String pkgName, String sign) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, RemoteException {
+        Method asInterface = null;
+        asInterface = IOpenID.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
+        IOpenID anInterface = (IOpenID) asInterface.invoke(null, service);
+        if (anInterface == null) {
+            throw new RuntimeException("IOpenID is null");
+        }
+        return anInterface.getSerID(pkgName, sign, "OUID");
     }
 
 }
