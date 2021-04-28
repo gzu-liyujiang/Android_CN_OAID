@@ -21,7 +21,14 @@ ext {
     compileSdkVersion = 30
     buildToolsVersion = '30.0.0'
     //启用x86架构支持（模拟器运行时需要）
-    x86Support = true
-    andResGuardVersion = '1.2.19'
+    enableX86Support = true
+    //发布包是否混淆Java代码
+    enableJavaProguard = true
+    //发布包是否移除未用到的资源文件
+    removeUnusedResource = true
+    //发布包是否混淆资源文件
+    enableResourceProguard = true
+    //资源文件混淆工具版本
+    andResGuardVersion = '1.2.21'
 
 }

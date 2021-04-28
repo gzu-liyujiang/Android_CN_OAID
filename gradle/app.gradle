@@ -14,9 +14,53 @@
 
 apply plugin: 'com.android.application'
 apply from: "${rootDir}/gradle/common.gradle"
-apply from: "${rootDir}/gradle/resguard.gradle"
+if (enableResourceProguard) {
+    apply from: "${rootDir}/gradle/resguard.gradle"
+}
 
 android {
+    configurations.all {
+        resolutionStrategy {
+            //此处可用于解决依赖冲突问题，参阅 https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
+            force androidxLibrary.annotation
+            force androidxLibrary.core
+            force androidxLibrary.collection
+            force androidxLibrary.lifecycle
+            force androidxLibrary.fragment
+            force androidxLibrary.appcompat
+            force androidxLibrary.recyclerview
+        }
+    }
+
+    splits {
+        //CPU架构分包
+        abi {
+            //是否开启
+            enable true
+            //清除默认架构列表
+            reset()
+            //支持的架构：armeabi、armeabi-v7a、arm64-v8a、x86、x86_64、mips、mips64
+            //目前主流手机都支持armeabi-v7a，armeabi已过时，arm64-v8a是未来的主流，电脑上的模拟器支持x86，mips基本不用于手机
+            if (enableX86Support as boolean) {
+                //需要的架构，调用前需要先用`reset`将默认架构清除
+                include 'armeabi-v7a', 'x86'
+            } else {
+                include 'armeabi-v7a'
+            }
+            //是否打一个包含全部架构的包
+            universalApk false
+        }
+        //分辨率分包
+        density {
+            // 是否开启
+            enable false
+        }
+        //语言分包
+        language {
+            // 是否开启
+            enable = false
+        }
+    }
 
     defaultConfig {
         multiDexEnabled false
@@ -32,11 +76,11 @@ android {
                     }
                     println("[signing] store file: $signingStoreFile")
                     def signingStorePassword = rootProp.get('signingStorePassword', '')
-                    println("[signing] store password: $signingStorePassword")
+                    //println("[signing] store password: $signingStorePassword")
                     def signingKeyAlias = rootProp.get('signingKeyAlias', '')
                     println("[signing] key alias: $signingKeyAlias")
                     def signingKeyPassword = rootProp.get('signingKeyPassword', '')
-                    println("[signing] key password: $signingKeyPassword")
+                    //println("[signing] key password: $signingKeyPassword")
                     storeFile signingStoreFile
                     storePassword signingStorePassword
                     keyAlias signingKeyAlias
@@ -48,11 +92,11 @@ android {
                     def signingStorePath = project.rootProject.file('app/debug.keystore').getAbsolutePath()
                     println("[signing] store file: $signingStorePath")
                     def signingStorePassword = 'android'
-                    println("[signing] store password: $signingStorePassword")
+                    //println("[signing] store password: $signingStorePassword")
                     def signingKeyAlias = 'androiddebugkey'
                     println("[signing] key alias: $signingKeyAlias")
                     def signingKeyPassword = 'android'
-                    println("[signing] key password: $signingKeyPassword")
+                    //println("[signing] key password: $signingKeyPassword")
                     storeFile new File(signingStorePath)
                     storePassword signingStorePassword
                     keyAlias signingKeyAlias
@@ -74,20 +118,20 @@ android {
     // 打包维度列表，会按维度名字母顺序执行，最终发布的具体渠道包的生成可以借助360加固等工具
     productFlavors {
         // 发布模式/正式环境
-        publisher {
+        pub {
             dimension "MODE"
-            // 环境信息
-            buildConfigField "String", "ENVIRONMENT", '"prod"'
+            // 服务端接口地址
+            buildConfigField "String", "API_BASE_URL", '"https://api.xmofun.com/renren-api"'
             // 修改 AndroidManifest.xml 里的变量
             manifestPlaceholders = [
                     MY_CHANNEL: "publisher-default",
             ]
         }
         // 开发模式/测试环境
-        developer {
+        dev {
             dimension "MODE"
-            // 环境信息
-            buildConfigField "String", "ENVIRONMENT", '"test"'
+            // 服务端接口地址
+            buildConfigField "String", "API_BASE_URL", '"https://test.xmofun.com/renren-api"'
             // 修改 AndroidManifest.xml 里的变量
             manifestPlaceholders = [
                     MY_CHANNEL: "developer-default",
@@ -102,10 +146,10 @@ android {
             jniDebuggable false
             //是否zip优化
             zipAlignEnabled true
-            //是否移除无用的资源：工具栏->Refactor->Remove Unused Resources
-            shrinkResources false
-            //是否混淆
-            minifyEnabled true
+            //是否移除无用的资源文件：工具栏->Refactor->Remove Unused Resources
+            shrinkResources enableJavaProguard as boolean && removeUnusedResource as boolean
+            //是否混淆Java代码
+            minifyEnabled enableJavaProguard as boolean
             //混淆配置文件
             proguardFiles 'proguard-common.pro', 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
@@ -121,17 +165,6 @@ android {
         }
     }
 
-    splits {
-        abi {
-            reset()
-            enable true
-            //支持的CPU架构：armeabi、armeabi-v7a、arm64-v8a、x86、x86_64、mips、mips64
-            //目前主流手机都支持armeabi-v7a，armeabi已过时，arm64-v8a是未来的主流，电脑上的模拟器支持x86，mips基本不用于手机
-            include 'armeabi-v7a'
-            universalApk x86Support as boolean
-        }
-    }
-
 }
 
 //APK重命名
@@ -144,7 +177,7 @@ android.applicationVariants.all { variant ->
         }
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
             def versionName = getGitLatestTag();
-            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}.apk"
+            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-${versionCode}.apk"
             //这里只能用相对路径，不然报错
             outputFileName = new File(fileName)
             println "outputFile=$outputFile"
@@ -152,11 +185,9 @@ android.applicationVariants.all { variant ->
     }
     //APK构建完成后，备份release版本到指定目录
     tasks.all { it ->
-        def maybeNeedCopy
+        def maybeNeedCopy = false
         if (it.name.startsWith("resguard")) {
             maybeNeedCopy = true
-        } else {
-            maybeNeedCopy = it.name.startsWith("assemble");
         }
         if (maybeNeedCopy) {
             it.doLast {

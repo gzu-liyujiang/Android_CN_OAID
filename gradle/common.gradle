@@ -49,9 +49,8 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
-        disable 'InvalidPackage'
-        disable 'HardcodedText'
-        disable 'SmallSp'
+        // 执行命令 `${ANDROID_SDK_HOME}/tools/bin/lint --list` 查看可用的ID
+        disable 'InvalidPackage', 'HardcodedText', 'SmallSp', 'ContentDescription', 'AddJavascriptInterface'
     }
 
     compileOptions {
@@ -80,10 +79,6 @@ android {
         exclude 'androidsupportmultidexversion.txt'
         exclude 'LICENSE*'
         exclude 'junit/*/*'
-        exclude 'publicsuffixes.gz'
-        exclude 'okhttp3/internal/publicsuffix/publicsuffixes.gz'
-        //exclude 'assets/libwbsafeedit_x86'
-        //exclude 'assets/libwbsafeedit_x86_64'
     }
 
 }

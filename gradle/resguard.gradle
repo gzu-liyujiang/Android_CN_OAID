@@ -1,13 +1,21 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ *
+ * The software is licensed under the Mulan PSL v2.
+ * You can use this software according to the terms and conditions of the Mulan PSL v2.
+ * You may obtain a copy of Mulan PSL v2 at:
+ *     http://license.coscl.org.cn/MulanPSL2
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+ * PURPOSE.
+ * See the Mulan PSL v2 for more details.
+ *
  */
 
 // 参见 https://github.com/shwenzhang/AndResGuard
 apply plugin: 'AndResGuard'
 
 andResGuard {
-    def versionName = rootProject.getGitLatestTag()
-    def date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+08:00"))
     File file = rootProject.file("resource_mapping.txt")
     mappingFile = file.exists() ? file : null
     use7zip = true
@@ -23,14 +31,14 @@ andResGuard {
      * Optional: if finalApkBackupPath is null, AndResGuard will overwrite final apk
      * to the path which assemble[Task] write to
      **/
-    finalApkBackupPath = rootProject.file("归档/app-release-resguard-" + versionName + "-" + date + ".apk")
+    finalApkBackupPath = null
     // You need put all resource which access via getIdentifier into whiteList.
     // See https://github.com/shwenzhang/AndResGuard/blob/master/doc/white_list.md
     whiteList = [
             // Your icon
             "R.mipmap.ic_launcher*",
             "R.drawable.ic_launcher*",
-            // Umeng SDK
+            // Umeng(友盟SDK)
             "R.anim.umeng*",
             "R.string.umeng*",
             "R.string.UM*",
@@ -61,11 +69,11 @@ andResGuard {
             "R.string.firebase_database_url",
             "R.string.google_api_key",
             "R.string.google_crash_reporting_api_key",
-            // getui(个推)
+            // getui(个推SDK)
             "R.drawable.push",
             "R.drawable.push_small",
             "R.layout.getui_notification",
-            // JPush(极光推送)
+            // JPush(极光推送SDK)
             "R.drawable.jpush_notification_icon",
             // GrowingIO
             "R.string.growingio_project_id",
@@ -92,7 +100,7 @@ andResGuard {
             "R.id.hms_*",
             // fabric
             "R.string.com.crashlytics.*",
-            // RongIM(融云)
+            // RongIM(融云SDK)
             "R.dimen.rc_*",
             "R.id.rc_*",
             "R.style.rc_*",
@@ -109,7 +117,16 @@ andResGuard {
             "R.drawable.ssdk*",
             "R.layout.mob*",
             "R.style.mobcommon*",
-
+            //穿山甲广告SDK
+            "R.string.tt_*",
+            "R.integer.tt_*",
+            "R.layout.tt_*",
+            "R.drawable.tt_*",
+            "R.style.tt_*",
+            "R.dimen.tt_*",
+            "R.anim.tt_*",
+            "R.color.tt_*",
+            "R.id.tt_*",
     ]
     compressFilePattern = [
             "*.png",

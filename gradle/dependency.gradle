@@ -14,14 +14,15 @@
 
 ext {
 
+    // GitHub社区开源库
     library = [
             logger                    : "com.orhanobut:logger:2.2.0",
-            immersionbar              : "com.gyf.immersionbar:immersionbar:3.0.0",
+            xcrash                    : "com.iqiyi.xcrash:xcrash-android-lib:3.0.0",
+            mmkv                      : "com.tencent:mmkv-static:1.2.7",
             toast                     : "com.hjq:toast:8.8",
-            xxpermissions             : "com.hjq:xxpermissions:9.8",
             photoview                 : "com.bm.photoview:library:1.4.1",
             material                  : "com.google.android.material:material:1.2.0",
-            inline_activity_result    : "com.github.florent37:inline-activity-result:1.0.4",
+            flexbox                   : "com.google.android:flexbox:2.0.1",
             glide                     : "com.github.bumptech.glide:glide:4.12.0",
             picasso                   : "com.squareup.picasso:picasso:2.8",
             universalimageloader      : "com.nostra13.universalimageloader:universal-image-loader:1.9.5",
@@ -36,78 +37,76 @@ ext {
             SmartRefreshFooterClassic : "com.scwang.smart:refresh-footer-classics:2.0.3",
             SmartRefreshFooterBall    : "com.scwang.smart:refresh-footer-ball:2.0.3",
             GifDrawable               : "pl.droidsonroids.gif:android-gif-drawable:1.2.19",
-            FileDownloader            : "com.liulishuo.filedownloader:library:1.7.7",
+            aria                      : "com.arialyy.aria:core:3.8.15",
             banner                    : "com.youth.banner:banner:2.1.0",
             shapeofview               : "com.github.florent37:shapeofview:1.4.7",
             lcardview                 : "org.linwg1988:lcardview:1.5.4",
             FlowLayoutManager         : "com.github.1002326270xc:LayoutManager-FlowLayout:v1.8",
             //noinspection GradleDependency 注意：zxing 3.4.0开始，扫码/二维码生成只支持API>=24，若要支持Android7.0以下则需降级到3.3.3版本
             zxing                     : "com.google.zxing:core:3.3.3",
-            OAID_IMPL                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:3.0.1",
-            OAID_ASUS                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:3.0.1",
-            OAID_BUN                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:3.0.1",
-            OAID_SAMSUNG              : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:3.0.1",
-            OAID_UODIS                : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:3.0.1",
-            OAID_ZUI                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:3.0.1",
+            OAID_IMPL                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:3.0.3",
+            OAID_ASUS                 : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:3.0.3",
+            OAID_BUN                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:3.0.3",
+            OAID_SAMSUNG              : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:3.0.3",
+            OAID_UODIS                : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:3.0.3",
+            OAID_ZUI                  : "com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:3.0.3",
     ]
 
+    // 谷歌支持库 https://developer.android.google.cn/jetpack/androidx/versions/stable-channel?hl=zh-cn
     androidxLibrary = [
             annotation            : "androidx.annotation:annotation:1.1.0",
-            core                  : "androidx.core:core:1.3.0",
+            core                  : "androidx.core:core:1.5.0-rc01",
             collection            : "androidx.collection:collection:1.1.0",
-            fragment              : "androidx.fragment:fragment:1.2.4",
+            fragment              : "androidx.fragment:fragment:1.3.0",
             appcompat             : "androidx.appcompat:appcompat:1.2.0",
             localbroadcastmanager : "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0",
             recyclerview          : "androidx.recyclerview:recyclerview:1.1.0",
             recyclerview_selection: "androidx.recyclerview:recyclerview-selection:1.1.0",
-            webkit                : "androidx.webkit:webkit:1.3.0",
-            exifinterface         : "androidx.exifinterface:exifinterface:1.2.0",
+            webkit                : "androidx.webkit:webkit:1.4.0",
+            exifinterface         : "androidx.exifinterface:exifinterface:1.3.2",
             documentfile          : "androidx.documentfile:documentfile:1.0.1",
             viewpager             : "androidx.viewpager:viewpager:1.0.0",
             viewpager2            : "androidx.viewpager2:viewpager2:1.0.0",
             cardview              : "androidx.cardview:cardview:1.0.0",
-            drawerlayout          : "androidx.drawerlayout:drawerlayout:1.0.0",
+            drawerlayout          : "androidx.drawerlayout:drawerlayout:1.1.1",
             coordinatorlayout     : "androidx.coordinatorlayout:coordinatorlayout:1.1.0",
-            navigation_ui         : "androidx.navigation:navigation-ui:2.3.1",
-            navigation_fragment   : "androidx.navigation:navigation-fragment:2.3.1",
-            palette               : "androidx.palette:palette:1.0.0",
+            navigation_ui         : "androidx.navigation:navigation-ui:2.3.3",
+            navigation_fragment   : "androidx.navigation:navigation-fragment:2.3.3",
             constraintlayout      : "androidx.constraintlayout:constraintlayout:2.0.4",
-            swiperefreshlayout    : "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0",
-            slidingpanelayout     : "androidx.slidingpanelayout:slidingpanelayout:1.0.0",
-            preference            : "androidx.preference:preference:1.2.0",
-            room                  : "androidx.room:room-runtime:2.2.0",
+            swiperefreshlayout    : "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0",
+            slidingpanelayout     : "androidx.slidingpanelayout:slidingpanelayout:1.1.0",
+            preference            : "androidx.preference:preference:1.1.1",
+            room                  : "androidx.room:room-runtime:2.2.6",
+            biometric             : "androidx.biometric:biometric:1.1.0",
             lifecycle             : "androidx.lifecycle:lifecycle-common:2.3.0",
             livedata              : "androidx.lifecycle:lifecycle-livedata:2.3.0",
             viewmodel             : "androidx.lifecycle:lifecycle-viewmodel:2.3.0",
+            paging                : "androidx.paging:paging-runtime:2.1.2",
+            startup               : "androidx.startup:startup-runtime:1.0.0",
+            emoji                 : "androidx.emoji:emoji:1.1.0",
+            work                  : "androidx.work:work-runtime:2.5.0",
+            futures               : "androidx.concurrent:concurrent-futures:1.1.0",
+            autofill              : "androidx.autofill:autofill:1.1.0",
     ]
 
+    // 注解库
     annotationLibrary = [
-            room : "androidx.room:room-compiler:2.2.0",
+            room : "androidx.room:room-compiler:2.2.6",
             glide: "com.github.bumptech.glide:compiler:4.12.0",
+            aria : "com.arialyy.aria:compiler:3.8.15",
     ]
 
+    // Java测试库
     testLibrary = [
             junit  : "junit:junit:4.13.1",
             mockito: "org.mockito:mockito-core:3.6.0"
     ]
 
+    // Android测试库
     androidTestLibrary = [
             junit_ext    : "androidx.test.ext:junit:1.1.2",
             test_runner  : "androidx.test:runner:1.3.0",
             espresso_core: "androidx.test.espresso:espresso-core:3.3.0"
     ]
 
-}
-
-configurations.all {
-    resolutionStrategy {
-        //此处可用于解决依赖冲突问题，参阅 https://developer.android.google.cn/studio/build/dependencies#duplicate_classes
-        force androidxLibrary.annotation
-        force androidxLibrary.core
-        force androidxLibrary.collection
-        force androidxLibrary.lifecycle
-        force androidxLibrary.fragment
-        force androidxLibrary.appcompat
-        force androidxLibrary.recyclerview
-    }
 }

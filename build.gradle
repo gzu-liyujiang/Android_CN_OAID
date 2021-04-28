@@ -21,16 +21,11 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven {
-            url 'https://developer.huawei.com/repo/'
-            name '华为云调试'
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
         classpath "com.tencent.mm:AndResGuard-gradle-plugin:${andResGuardVersion}"
-        classpath 'com.huawei.agconnect:agcp:1.4.1.300'
     }
 }
 
@@ -38,8 +33,10 @@ allprojects {
     repositories {
         //本地的Maven仓库：{USER_HOME}/.m2/repository，如C:/Users/Administrator/.m2/repository
         mavenLocal()
-        //项目里的aar文件
-        flatDir { dirs "libs" }
+        //项目中的AAR包
+        flatDir {
+            dir rootProject.file("app/libs")
+        }
         //JitPack提供的Maven仓库
         maven { url "https://jitpack.io" }
         //JFrog公司提供的Maven仓库：https://jcenter.bintray.com

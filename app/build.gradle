@@ -13,7 +13,6 @@
  */
 
 apply from: "${rootDir}/gradle/app.gradle"
-apply plugin: 'com.huawei.agconnect'
 
 dependencies {
     implementation project(":OAID_ASUS")
@@ -24,7 +23,6 @@ dependencies {
     implementation project(":OAID_ZUI")
     implementation project(":OAID_IMPL")
     implementation androidxLibrary.appcompat
-    implementation library.xxpermissions
 }
 
 android {
