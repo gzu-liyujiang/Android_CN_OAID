@@ -14,6 +14,7 @@
 
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,10 @@ public final class OAIDFactory {
     }
 
     public static IOAID create(@NonNull Context context) {
+        if (!(context instanceof Application)) {
+            // See https://github.com/gzu-liyujiang/Android_CN_OAID/pull/23
+            context = context.getApplicationContext();
+        }
         if (ioaid == null) {
             if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
                 ioaid = new LenovoImpl(context);

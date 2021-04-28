@@ -78,7 +78,11 @@ class MsaImpl implements IOAID {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);
                     } finally {
-                        context.unbindService(this);
+                        try {
+                            context.unbindService(this);
+                        } catch (Throwable e) {
+                            OAIDLog.print(e);
+                        }
                     }
                 }
 
