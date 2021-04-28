@@ -50,6 +50,7 @@ static def getGitLatestTag() {
         }
         if (!version.matches(/\d+\.\d+(\.\d+)?/)) {
             System.err.println("Version format: Major.Minor.Patch")
+            throw new IllegalArgumentException("Git TAG as version, format is: Major.Minor.Patch")
         }
         return version
     } catch (ignored) {
@@ -89,3 +90,4 @@ static def getGitLatestCommitHashShort() {
         return "error"
     }
 }
+

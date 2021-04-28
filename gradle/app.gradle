@@ -121,7 +121,7 @@ android {
         pub {
             dimension "MODE"
             // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://api.xmofun.com/renren-api"'
+            buildConfigField "String", "API_BASE_URL", '"https://api.example.com"'
             // 修改 AndroidManifest.xml 里的变量
             manifestPlaceholders = [
                     MY_CHANNEL: "publisher-default",
@@ -131,7 +131,7 @@ android {
         dev {
             dimension "MODE"
             // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://test.xmofun.com/renren-api"'
+            buildConfigField "String", "API_BASE_URL", '"https://test.example.com"'
             // 修改 AndroidManifest.xml 里的变量
             manifestPlaceholders = [
                     MY_CHANNEL: "developer-default",
@@ -176,8 +176,9 @@ android.applicationVariants.all { variant ->
             return
         }
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
-            def versionName = getGitLatestTag();
-            String fileName = "${outputFile.name.replace('-release.apk', '')}-v${versionName}-${versionCode}.apk"
+            def versionName = getGitLatestTag()
+            // 命名格式“app_[版本号]_[其他信息].apk”
+            String fileName = "app_${versionName}_${outputFile.name.replace('app-', '').replace('.apk', '')}-${versionCode}.apk"
             //这里只能用相对路径，不然报错
             outputFileName = new File(fileName)
             println "outputFile=$outputFile"
@@ -192,7 +193,7 @@ android.applicationVariants.all { variant ->
         if (maybeNeedCopy) {
             it.doLast {
                 variant.outputs.each { output ->
-                    File outputFile = output.outputFile;
+                    File outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
                         File targetDir = rootProject.file("归档")
                         targetDir.mkdirs()
