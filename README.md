@@ -19,31 +19,24 @@ allprojects {
 }
 ```
 
-在没有用到移动安全联盟 SDK 的情况下，依赖如下：
+**4.0.0版本以后重新调整了与移动安全联盟 SDK 共存的方案**，直接使用如下依赖即可：
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号' //华硕
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:版本号' //中兴、卓易
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_HEYTAP:版本号' //欧珀、一加
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:版本号' //三星
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:版本号' //华为
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:版本号' //联想、摩托罗拉
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号' //具体实现
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:library:4.0.0'
 }
 ```
 
-若项目中直接或间接地使用了移动安全联盟的 SDK，则可能需要取消相关有冲突的依赖项，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
+**对于4.0.0以前的版本，若项目中直接或间接地使用了移动安全联盟的 SDK，则可能需要取消相关有冲突的依赖项**，例如，取消和“msa_mdid_1.0.22.aar”有冲突的项依赖如下：
 
 ```groovy
 dependencies {
-    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:版本号'  //华硕
-    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:版本号'  //中兴、卓易
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_HEYTAP:版本号'  //欧珀、一加
-    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:版本号'  //三星
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_UODIS:版本号'  //华为
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:版本号'  //联想、摩托罗拉
-    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:版本号'  //具体实现
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_IMPL:3.0.3'  //具体实现，必须
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ASUS:3.0.3'  //华硕，有冲突时请注释掉
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_BUN:3.0.3'  //中兴、卓易，有冲突时请注释掉
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_HEYTAP:3.0.3'  //欧珀、一加，有冲突时请注释掉
+    //implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_SAMSUNG:3.0.3'  //三星，有冲突时请注释掉
+    implementation 'com.github.gzu-liyujiang.Android_CN_OAID:OAID_ZUI:3.0.3'  //联想、摩托罗拉，有冲突时请注释掉
 }
 ```
 
@@ -125,21 +118,21 @@ dependencies {
 
 ## 混淆规则
 
-本库自带`consumer-rules.pro`混淆规则，不混淆厂商的相关接口及类。若通过远程依赖的方式应用，则无需进行额外配置：
+本库自带`consumer-rules.pro`如下混淆规则，不混淆厂商的相关接口及类。若通过远程依赖的方式引用，则无需进行额外配置：
 
 ```proguard
--keep class com.asus.msa.SupplementaryDID.** { *; }
--keep interface com.asus.msa.SupplementaryDID.** { *; }
--keep class com.bun.lib.** { *; }
--keep interface com.bun.lib.** { *; }
--keep class com.heytap.openid.** { *; }
--keep interface com.heytap.openid.** { *; }
--keep class com.samsung.android.deviceidservice.** { *; }
--keep interface com.samsung.android.deviceidservice.** { *; }
--keep class com.uodis.opendevice.aidl.** { *; }
--keep interface com.uodis.opendevice.aidl.** { *; }
--keep class com.zui.deviceidservice.** { *; }
--keep interface com.zui.deviceidservice.** { *; }
+-keep class repeackage.com.uodis.opendevice.aidl.** { *; }
+-keep interface repeackage.com.uodis.opendevice.aidl.** { *; }
+-keep class repeackage.com.asus.msa.SupplementaryDID.** { *; }
+-keep interface repeackage.com.asus.msa.SupplementaryDID.** { *; }
+-keep class repeackage.com.bun.lib.** { *; }
+-keep interface repeackage.com.bun.lib.** { *; }
+-keep class repeackage.com.heytap.openid.** { *; }
+-keep interface repeackage.com.heytap.openid.** { *; }
+-keep class repeackage.com.samsung.android.deviceidservice.** { *; }
+-keep interface repeackage.com.samsung.android.deviceidservice.** { *; }
+-keep class repeackage.com.zui.deviceidservice.** { *; }
+-keep interface repeackage.com.zui.deviceidservice.** { *; }
 ```
 
 ## 厂商支持

@@ -1,0 +1,13 @@
+# 本库模块专用的混淆规则
+-keep class repeackage.com.uodis.opendevice.aidl.** { *; }
+-keep interface repeackage.com.uodis.opendevice.aidl.** { *; }
+-keep class repeackage.com.asus.msa.SupplementaryDID.** { *; }
+-keep interface repeackage.com.asus.msa.SupplementaryDID.** { *; }
+-keep class repeackage.com.bun.lib.** { *; }
+-keep interface repeackage.com.bun.lib.** { *; }
+-keep class repeackage.com.heytap.openid.** { *; }
+-keep interface repeackage.com.heytap.openid.** { *; }
+-keep class repeackage.com.samsung.android.deviceidservice.** { *; }
+-keep interface repeackage.com.samsung.android.deviceidservice.** { *; }
+-keep class repeackage.com.zui.deviceidservice.** { *; }
+-keep interface repeackage.com.zui.deviceidservice.** { *; }

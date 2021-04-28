@@ -12,16 +12,8 @@
  *
  */
 
-apply from: "${rootDir}/gradle/app.gradle"
+apply from: "${rootDir}/gradle/library.gradle"
 
 dependencies {
-    implementation project(':library')
-    implementation androidxLibrary.appcompat
-}
-
-android {
-    defaultConfig {
-        //应用的实际包名
-        applicationId "com.github.gzuliyujiang.demo"
-    }
+    implementation androidxLibrary.annotation
 }
