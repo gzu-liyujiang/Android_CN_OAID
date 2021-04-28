@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -31,8 +30,7 @@ import java.util.Objects;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class MeizuImpl implements IOAID {
+class MeizuImpl implements IOAID {
     private final Context context;
 
     public MeizuImpl(Context context) {

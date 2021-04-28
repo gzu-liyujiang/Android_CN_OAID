@@ -30,6 +30,7 @@ public class DemoApp extends Application {
     public void onCreate() {
         super.onCreate();
         OAIDLog.enable();
+        // 注意：如果不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
         DeviceID.register(this);
     }
 

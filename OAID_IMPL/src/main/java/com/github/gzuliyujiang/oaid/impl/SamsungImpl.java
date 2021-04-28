@@ -21,7 +21,6 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -34,8 +33,7 @@ import java.lang.reflect.Method;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class SamsungImpl implements IOAID {
+class SamsungImpl implements IOAID {
     private final Context context;
 
     public SamsungImpl(Context context) {

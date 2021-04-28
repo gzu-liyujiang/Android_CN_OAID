@@ -21,7 +21,6 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.asus.msa.SupplementaryDID.IDidAidlInterface;
 import com.github.gzuliyujiang.oaid.IGetter;
@@ -34,8 +33,7 @@ import java.lang.reflect.Method;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class AsusImpl implements IOAID {
+class AsusImpl implements IOAID {
     private final Context context;
 
     public AsusImpl(Context context) {

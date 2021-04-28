@@ -48,11 +48,17 @@ public final class OAIDLog {
         if (!enable) {
             return;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append("^_^\n");
+        sb.append("---------------------------------------------------------------------------\n");
         if (log instanceof Throwable) {
-            Log.w(TAG, (Throwable) log);
+            sb.append(Log.getStackTraceString((Throwable) log));
         } else {
-            Log.d(TAG, log.toString());
+            sb.append(log.toString());
         }
+        sb.append("\n");
+        sb.append("---------------------------------------------------------------------------\n");
+        Log.d(TAG, sb.toString());
     }
 
 }

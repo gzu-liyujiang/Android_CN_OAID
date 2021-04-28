@@ -17,7 +17,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -32,8 +31,7 @@ import java.lang.reflect.Method;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class XiaomiImpl implements IOAID {
+class XiaomiImpl implements IOAID {
     private final Context context;
     private Class<?> idProviderClass;
     private Object idProviderImpl;

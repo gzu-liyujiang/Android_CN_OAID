@@ -111,7 +111,7 @@ dependencies {
         });
 ```
 
-- 用法二：预先获取设备标识符
+- 用法二：预先获取设备标识符（**建议不要和用法一同时存在**）
 
 ```text 
     // 在 Application#onCreate 里调用预取
@@ -119,7 +119,8 @@ dependencies {
     // 在需要用到设备标识的地方获取
     // 设备标识统一格式为MD5：DeviceID.getClientIdMD5()
     // 设备标识统一格式为SHA1：DeviceID.getClientIdSHA1()
-    tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientId()));
+    // 开放匿名设备标识：DeviceID.getOAID()
+  tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientId()));
 ```
 
 ## 混淆规则
@@ -170,6 +171,7 @@ dependencies {
 - ![支持OAID的情况](/screenshot/oaid_meizu.png)
 - ![不支持OAID的情况](/screenshot/oaid_360.png)
 - ![不支持OAID的情况](/screenshot/oaid_samsung.png)
+- ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
 - ![不支持OAID的情况](/screenshot/oaid_simulator.png)
 
 ## 参考资料

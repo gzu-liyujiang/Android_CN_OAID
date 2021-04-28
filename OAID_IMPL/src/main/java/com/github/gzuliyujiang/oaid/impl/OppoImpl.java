@@ -25,7 +25,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -42,8 +41,7 @@ import java.security.MessageDigest;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class OppoImpl implements IOAID {
+class OppoImpl implements IOAID {
     private final Context context;
     private String sign;
 

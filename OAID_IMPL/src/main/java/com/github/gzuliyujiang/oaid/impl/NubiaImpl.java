@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -30,8 +29,7 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-public class NubiaImpl implements IOAID {
+class NubiaImpl implements IOAID {
     private final Context context;
 
     public NubiaImpl(Context context) {

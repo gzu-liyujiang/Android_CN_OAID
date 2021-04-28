@@ -14,40 +14,50 @@
 
 package com.github.gzuliyujiang.demo;
 
+import android.Manifest;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.IGetter;
-import com.hjq.permissions.OnPermissionCallback;
-import com.hjq.permissions.Permission;
-import com.hjq.permissions.XXPermissions;
-
-import java.util.List;
 
 /**
- * Created by liyujiang on 2020/5/20.
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/20
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements ActivityResultCallback<Boolean>, View.OnClickListener {
+    private ActivityResultLauncher<String> resultLauncher;
     private TextView tvDeviceIdResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        resultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), this);
         setContentView(R.layout.activity_main);
         TextView tvDeviceInfo = findViewById(R.id.tv_device_info);
         tvDeviceInfo.setText(obtainDeviceInfo());
         findViewById(R.id.btn_get_device_id_1).setOnClickListener(this);
         findViewById(R.id.btn_get_device_id_2).setOnClickListener(this);
         tvDeviceIdResult = findViewById(R.id.tv_device_id_result);
+    }
+
+    @Override
+    public void onActivityResult(Boolean result) {
+        if (result != null && result) {
+            obtainDeviceId();
+            return;
+        }
+        Toast.makeText(this, "请授予电话状态权限！", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -58,17 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 obtainDeviceId();
                 return;
             }
-            XXPermissions.with(this).permission(Permission.READ_PHONE_STATE).request(new OnPermissionCallback() {
-                @Override
-                public void onGranted(List<String> permissions, boolean all) {
-                    obtainDeviceId();
-                }
-
-                @Override
-                public void onDenied(List<String> permissions, boolean never) {
-                    obtainDeviceId();
-                }
-            });
+            resultLauncher.launch(Manifest.permission.READ_PHONE_STATE);
         } else if (id == R.id.btn_get_device_id_2) {
             tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientIdMD5()));
         }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.append("\n");
         builder.append("WidevineID: ");
         // 获取数字版权管理ID，可能为空
-        String widevineID = DeviceID.getWidevineID(this);
+        String widevineID = DeviceID.getWidevineID();
         if (TextUtils.isEmpty(widevineID)) {
             builder.append("WidevineID获取失败");
         } else {
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onOAIDGetError(@NonNull Throwable error) {
                 // 获取OAID失败
-                builder.append("OAID: ").append(error);
+                builder.append("OAID: 失败，").append(error);
                 tvDeviceIdResult.setText(builder);
             }
         });
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sb.append("\n");
         sb.append("SystemVersion：");
         sb.append(Build.VERSION.RELEASE);
-        sb.append(" (API ");
+        sb.append(" (Level ");
         sb.append(Build.VERSION.SDK_INT);
         sb.append(")");
         return sb.toString();

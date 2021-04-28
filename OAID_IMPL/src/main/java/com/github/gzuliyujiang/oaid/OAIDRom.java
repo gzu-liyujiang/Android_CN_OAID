@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/29
  */
+@SuppressWarnings("All")
 public final class OAIDRom {
 
     private OAIDRom() {
