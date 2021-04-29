@@ -107,36 +107,6 @@ android {
                 }
             }
         }
-        // 修改 AndroidManifest.xml 里的变量，占位值无法覆盖的坑可参阅 https://www.jianshu.com/p/1d5271c2c366
-        manifestPlaceholders = [
-                MY_CHANNEL: "unknown",
-        ]
-        // 配合 productFlavors 节点按不同维度打包
-        flavorDimensions "MODE"
-    }
-
-    // 打包维度列表，会按维度名字母顺序执行，最终发布的具体渠道包的生成可以借助360加固等工具
-    productFlavors {
-        // 发布模式/正式环境
-        pub {
-            dimension "MODE"
-            // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://api.example.com"'
-            // 修改 AndroidManifest.xml 里的变量
-            manifestPlaceholders = [
-                    MY_CHANNEL: "publisher-default",
-            ]
-        }
-        // 开发模式/测试环境
-        dev {
-            dimension "MODE"
-            // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://test.example.com"'
-            // 修改 AndroidManifest.xml 里的变量
-            manifestPlaceholders = [
-                    MY_CHANNEL: "developer-default",
-            ]
-        }
     }
 
     buildTypes {
