@@ -314,20 +314,28 @@ public final class DeviceID {
         File file = null;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
                 TextUtils.equals(Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED)) {
+            BufferedReader reader = null;
             try {
                 file = new File(Environment.getExternalStorageDirectory(), "Android/.GUID_uuid");
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                BufferedReader reader = new BufferedReader(new FileReader(file));
+                reader = new BufferedReader(new FileReader(file));
                 uuid = reader.readLine();
-                reader.close();
                 OAIDLog.print("Get uuid from sdcard: " + uuid);
                 if (!TextUtils.isEmpty(uuid)) {
                     return uuid;
                 }
             } catch (Throwable e) {
                 OAIDLog.print(e);
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (Throwable e) {
+                        OAIDLog.print(e);
+                    }
+                }
             }
         }
         uuid = Settings.Global.getString(context.getContentResolver(), "GUID_uuid");
@@ -345,12 +353,20 @@ public final class DeviceID {
         OAIDLog.print("Get uuid from random: " + uuid);
         preferences.edit().putString("uuid", uuid).apply();
         if (file != null) {
+            BufferedWriter writer = null;
             try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                writer = new BufferedWriter(new FileWriter(file));
                 writer.write(uuid);
-                writer.close();
             } catch (Throwable e) {
                 OAIDLog.print(e);
+            } finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    } catch (Throwable e) {
+                        OAIDLog.print(e);
+                    }
+                }
             }
         }
         if (Settings.System.canWrite(context)) {
