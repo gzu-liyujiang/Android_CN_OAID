@@ -23,7 +23,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion as int
         targetSdkVersion rootProject.ext.targetSdkVersion as int
         versionCode gitGitCommitNumber() as int
-        versionName getGitLatestTag()
+        versionName getSemVersion()
         println("versionCode: $versionCode\nversionName: $versionName")
         buildConfigField "String", "BUILD_TIME", '"' + new Date().format("yyyy-MM-dd HH:mm") + '"'
         buildConfigField "String", "GIT_BRANCH", '"' + getGitBranch() + '"'

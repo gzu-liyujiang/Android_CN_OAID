@@ -20,6 +20,7 @@ ext {
     getGitBranch = this.&getGitBranch
     getGitLatestCommitHash = this.&getGitLatestCommitHash
     getGitLatestCommitHashShort = this.&getGitLatestCommitHashShort
+    getSemVersion = this.&getSemVersion
 }
 
 @SuppressWarnings(["unused"])
@@ -42,17 +43,7 @@ static def getGitLatestTag() {
     try {
         // See https://www.jianshu.com/p/2ecfd791c464
         def cmd = 'git describe --tags --always'
-        def version = cmd.execute().text.trim() ?: '1.0.0'
-        if (version.indexOf('-') != -1) {
-            version = version.split('-')[0]
-        } else if (version.indexOf('.') == -1) {
-            version = "1.0.0"
-        }
-        if (!version.matches(/\d+\.\d+(\.\d+)?/)) {
-            System.err.println("Version format: Major.Minor.Patch")
-            throw new IllegalArgumentException("Git TAG as version, format is: Major.Minor.Patch")
-        }
-        return version
+        return cmd.execute().text.trim() ?: '0.1.0'
     } catch (ignored) {
         return "0.0.0"
     }
@@ -74,9 +65,9 @@ static def getGitLatestCommitHash() {
     try {
         // See https://www.cnblogs.com/fuyaozhishang/p/7675551.html
         def cmd = 'git rev-parse HEAD'
-        return cmd.execute().text.trim() ?: "unknown"
+        return cmd.execute().text.trim()
     } catch (ignored) {
-        return "error"
+        return System.currentTimeMillis()
     }
 }
 
@@ -85,9 +76,27 @@ static def getGitLatestCommitHashShort() {
     try {
         // See https://www.jianshu.com/p/1f81af606e41
         def cmd = 'git rev-parse --short HEAD'
-        return cmd.execute().text.trim() ?: "unknown"
+        return cmd.execute().text.trim()
     } catch (ignored) {
-        return "error"
+        return (int) (System.currentTimeMillis() / 1000)
     }
 }
 
+@SuppressWarnings(["unused"])
+static def getSemVersion() {
+    try {
+        def version = getGitLatestTag()
+        if (version.indexOf('-') != -1) {
+            version = version.split('-')[0]
+        } else if (version.indexOf('.') == -1) {
+            version = "0.1.0"
+        }
+        if (!version.matches(/\d+\.\d+(\.\d+)?/)) {
+            System.err.println("Git标签需遵循语义化版本号规范（不要加元数据）：https://semver.org/lang/zh-CN")
+            throw new IllegalArgumentException("Git TAG format: [Major].[Minor].[Patch]")
+        }
+        return version
+    } catch (ignored) {
+        return "0.0.0"
+    }
+}
