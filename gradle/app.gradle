@@ -146,7 +146,7 @@ android.applicationVariants.all { variant ->
             return
         }
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
-            def versionName = getGitLatestTag()
+            def versionName = rootProject.ext.getAppVersionName()
             // 命名格式“app_[版本号]_[其他信息].apk”
             String fileName = "app_${versionName}_${outputFile.name.replace('app-', '').replace('.apk', '')}-${versionCode}.apk"
             //这里只能用相对路径，不然报错
