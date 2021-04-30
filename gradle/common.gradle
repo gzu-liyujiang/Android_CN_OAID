@@ -14,20 +14,20 @@
 
 android {
 
-    compileSdkVersion rootProject.ext.compileSdkVersion as int
+    compileSdkVersion rootProject.ext.compileSdkVersion as Integer
     buildToolsVersion rootProject.ext.buildToolsVersion
     // 配置资源名前缀提示，避免资源名重复
     //resourcePrefix project.name == 'app' ? '' : project.name.toLowerCase() + '_'
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion as int
-        targetSdkVersion rootProject.ext.targetSdkVersion as int
-        versionCode gitGitCommitNumber() as int
-        versionName getSemVersion()
+        minSdkVersion rootProject.ext.minSdkVersion as Integer
+        targetSdkVersion rootProject.ext.targetSdkVersion as Integer
+        versionCode rootProject.ext.getAppVersionCode() as Integer
+        versionName rootProject.ext.getAppVersionName()
         println("versionCode: $versionCode\nversionName: $versionName")
         buildConfigField "String", "BUILD_TIME", '"' + new Date().format("yyyy-MM-dd HH:mm") + '"'
-        buildConfigField "String", "GIT_BRANCH", '"' + getGitBranch() + '"'
-        buildConfigField "String", "GIT_LATEST_COMMIT_HASH", '"' + getGitLatestCommitHashShort() + '"'
+        buildConfigField "String", "GIT_BRANCH", '"' + rootProject.ext.getGitBranch() + '"'
+        buildConfigField "String", "GIT_LATEST_COMMIT_HASH", '"' + rootProject.ext.getGitLatestCommitHashShort() + '"'
     }
 
     sourceSets {

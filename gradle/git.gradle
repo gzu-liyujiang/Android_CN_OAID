@@ -12,18 +12,17 @@
  *
  */
 
-//See https://blog.csdn.net/sinat_35073873/article/details/53263651
-//将函数设置为extra属性中去，这样，加载utils.gradle的Project就能调用此文件中定义的函数了
+//扩展函数，参阅 https://blog.csdn.net/sinat_35073873/article/details/53263651
 ext {
     gitGitCommitNumber = this.&gitGitCommitNumber
     getGitLatestTag = this.&getGitLatestTag
     getGitBranch = this.&getGitBranch
     getGitLatestCommitHash = this.&getGitLatestCommitHash
     getGitLatestCommitHashShort = this.&getGitLatestCommitHashShort
-    getSemVersion = this.&getSemVersion
+    getAppVersionCode = this.&getAppVersionCode
+    getAppVersionName = this.&getAppVersionName
 }
 
-@SuppressWarnings(["unused"])
 static def gitGitCommitNumber() {
     try {
         // See https://blog.csdn.net/liumeng920/article/details/51011251
@@ -38,7 +37,6 @@ static def gitGitCommitNumber() {
     }
 }
 
-@SuppressWarnings(["unused"])
 static def getGitLatestTag() {
     try {
         // See https://www.jianshu.com/p/2ecfd791c464
@@ -49,7 +47,6 @@ static def getGitLatestTag() {
     }
 }
 
-@SuppressWarnings(["unused"])
 static def getGitBranch() {
     try {
         // See https://www.jianshu.com/p/1f81af606e41
@@ -60,7 +57,6 @@ static def getGitBranch() {
     }
 }
 
-@SuppressWarnings(["unused"])
 static def getGitLatestCommitHash() {
     try {
         // See https://www.cnblogs.com/fuyaozhishang/p/7675551.html
@@ -71,7 +67,6 @@ static def getGitLatestCommitHash() {
     }
 }
 
-@SuppressWarnings(["unused"])
 static def getGitLatestCommitHashShort() {
     try {
         // See https://www.jianshu.com/p/1f81af606e41
@@ -82,8 +77,13 @@ static def getGitLatestCommitHashShort() {
     }
 }
 
-@SuppressWarnings(["unused"])
-static def getSemVersion() {
+static def getAppVersionCode() {
+    def base = 20210000
+    def grow = gitGitCommitNumber()
+    return base + grow
+}
+
+static def getAppVersionName() {
     try {
         def version = getGitLatestTag()
         if (version.indexOf('-') != -1) {
