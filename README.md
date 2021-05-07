@@ -151,7 +151,7 @@ dependencies {
 | 魅族（Meizu）            | Android 10 及以上               |
 | 三星（Samsung）          | Android 10 及以上               |
 | 努比亚（Nubia）          | Android 10 及以上               |
-| 一加/万普拉斯（OnePlus） | Android 10 及以上               |
+| 一加（OnePlus）          | Android 10 及以上               |
 | 中兴（ZTE）              | Android 10 及以上               |
 | 卓易（FreemeOS）         | Android 10 及以上               |
 
@@ -159,26 +159,26 @@ dependencies {
 
 ## 效果预览
 
-- ![支持OAID的情况](/screenshot/oaid_vivo.png)
-- ![支持OAID的情况](/screenshot/oaid_oppo.png)
-- ![支持OAID的情况](/screenshot/oaid_huawei.png)
-- ![支持OAID的情况](/screenshot/oaid_xiaomi.png)
-- ![支持OAID的情况](/screenshot/oaid_meizu.png)
-- ![支持OAID的情况](/screenshot/oaid_realme.png)
-- ![支持OAID的情况](/screenshot/oaid_lenovo.png)
-- ![不支持OAID的情况](/screenshot/oaid_360.png)
-- ![不支持OAID的情况](/screenshot/oaid_samsung.png)
-- ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
-- ![不支持OAID的情况](/screenshot/oaid_simulator.png)
+- 维沃手机 ![支持OAID的情况](/screenshot/oaid_vivo.png)
+- 欧珀手机 ![支持OAID的情况](/screenshot/oaid_oppo.png)
+- 华为手机 ![支持OAID的情况](/screenshot/oaid_huawei.png)
+- 小米手机 ![支持OAID的情况](/screenshot/oaid_xiaomi.png)
+- 魅族手机 ![支持OAID的情况](/screenshot/oaid_meizu.png)
+- 真我手机 ![支持OAID的情况](/screenshot/oaid_realme.png)
+- 联想手机 ![支持OAID的情况](/screenshot/oaid_lenovo.png)
+- 360手机 ![不支持OAID的情况](/screenshot/oaid_360.png)
+- 三星手机 ![不支持OAID的情况](/screenshot/oaid_samsung.png)
+- 酷派手机 ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
+- 安卓模拟器 ![不支持OAID的情况](/screenshot/oaid_simulator.png)
 
 ## 参考资料
 
-OAID 即 Open Anonymous Device Identifier，开放匿名设备标识符，是移动智能终端补充设备标识体系中的一员。
+OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符），华为称之为 Open Advertising ID （开放广告标识符）。
 
-- [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn）。
+- [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn ）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
-- 华为 [《获取 OAID 信息（SDK 方式）》](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides-V5/identifier-service-obtaining-oaid-sdk-0000001050064988-V5) 。
+- 华为 [开放广告标识符（OAID）](https://developer.huawei.com/consumer/cn/codelab/HMSAdsOAID/index.html#0) 。
 - 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
 - 魅族 [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
 - 维沃 [移动智能终端补充设备标识服务](https://dev.vivo.com.cn/documentCenter/doc/253) 。
@@ -187,7 +187,6 @@ OAID 即 Open Anonymous Device Identifier，开放匿名设备标识符，是移
 - 北京数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”。
 - StackOverFlow [Is there a unique Android device ID ?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
-- 「使用心得」[极光推送的设备唯一性标识 RegistrationID](https://community.jiguang.cn/article/38100) 。
 
 ## 许可协议
 
