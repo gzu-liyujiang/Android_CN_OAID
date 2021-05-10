@@ -1,15 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
- *
- * The software is licensed under the Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- *     http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v2 for more details.
- *
+ * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
 
 apply plugin: 'com.android.application'
@@ -69,17 +59,17 @@ android {
             releaseConfig {
                 try {
                     // app/gradle.properties 或  {rootProject}/gradle.properties 或  {USER_HOME}/.gradle/gradle.properties
-                    Map rootProp = project.getProperties()
-                    def signingStoreFile = project.rootProject.file(rootProp.get('signingStoreFile', ''))
+                    Map projectProps = project.getProperties()
+                    def signingStoreFile = project.rootProject.file(projectProps.get('signingStoreFile', ''))
                     if (!signingStoreFile.exists()) {
                         throw new Exception(signingStoreFile + ' can not found')
                     }
                     println("[signing] store file: $signingStoreFile")
-                    def signingStorePassword = rootProp.get('signingStorePassword', '')
+                    def signingStorePassword = projectProps.get('signingStorePassword', '')
                     //println("[signing] store password: $signingStorePassword")
-                    def signingKeyAlias = rootProp.get('signingKeyAlias', '')
+                    def signingKeyAlias = projectProps.get('signingKeyAlias', '')
                     println("[signing] key alias: $signingKeyAlias")
-                    def signingKeyPassword = rootProp.get('signingKeyPassword', '')
+                    def signingKeyPassword = projectProps.get('signingKeyPassword', '')
                     //println("[signing] key password: $signingKeyPassword")
                     storeFile signingStoreFile
                     storePassword signingStorePassword
