@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
 
 //扩展函数，参阅 https://blog.csdn.net/sinat_35073873/article/details/53263651
@@ -81,8 +81,8 @@ static def getAppVersionName() {
         } else if (version.indexOf('.') == -1) {
             version = "0.1.0"
         }
-        if (!version.matches(/\d+\.\d+(\.\d+)?/)) {
-            System.err.println("Git标签需遵循语义化版本号规范（不要加元数据）：https://semver.org/lang/zh-CN")
+        if (!version.matches(/\d+\.\d+(\.\d+)?(\.\d+)?/)) {
+            System.err.println("Git tags must follow the semver specification (don't add metadata)：https://semver.org/lang/zh-CN")
             throw new IllegalArgumentException("Git TAG format: [Major].[Minor].[Patch]")
         }
         return version

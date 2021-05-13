@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
 
 ext {
@@ -29,6 +29,7 @@ ext {
             GifDrawable               : "pl.droidsonroids.gif:android-gif-drawable:1.2.22",
             aria                      : "com.arialyy.aria:core:3.8.15",
             banner                    : "com.youth.banner:banner:2.1.0",
+            shimmer                   : "com.facebook.shimmer:shimmer:0.5.0",
             shapeofview               : "com.github.florent37:shapeofview:1.4.7",
             lcardview                 : "org.linwg1988:lcardview:1.5.4",
             FlowLayoutManager         : "com.github.1002326270xc:LayoutManager-FlowLayout:v1.8",

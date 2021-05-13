@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     apply from: "${rootDir}/gradle/git.gradle"
@@ -11,11 +13,11 @@ buildscript {
         jcenter()
         google()
         mavenCentral()
+        maven { url 'https://repo1.maven.org/maven2/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-        classpath "com.tencent.mm:AndResGuard-gradle-plugin:${andResGuardVersion}"
     }
 }
 
@@ -23,11 +25,9 @@ allprojects {
     repositories {
         //本地的Maven仓库：{USER_HOME}/.m2/repository，如C:/Users/Administrator/.m2/repository
         mavenLocal()
-        maven { url rootProject.file("maven") }
-        //项目中的AAR包
-        flatDir {
-            dir rootProject.file("app/libs")
-        }
+        maven { url "https://gitee.com/li_yu_jiang/maven-repo/raw/master" }
+        //项目里的aar文件
+        //flatDir { dir rootProject.file("app/libs") }
         //JitPack提供的Maven仓库
         maven { url "https://www.jitpack.io" }
         //noinspection JcenterRepositoryObsolete http://developer.android.google.cn/r/tools/jcenter-end-of-service
@@ -36,6 +36,7 @@ allprojects {
         google()
         //Sonatype公司提供的中央库：http://central.maven.org/maven2
         mavenCentral()
+        maven { url 'https://repo1.maven.org/maven2/' }
     }
 }
 

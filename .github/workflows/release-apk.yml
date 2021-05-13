@@ -24,4 +24,4 @@ jobs:
     - name: Grant execute permission for gradlew (Lost on Windows system)
       run: chmod +x gradlew
     - name: Build and guard with Gradle
-      run: ./gradlew clean resguardRelease --warning-mode all
+      run: ./gradlew clean assembleRelease --warning-mode all

@@ -1,53 +1,30 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
 
 // See https://github.com/bintray/gradle-bintray-plugin
 //
-// 步骤一：打包到{USER_HOME}/.m2/repository
-// ./gradlew build publishToMavenLocal --info
-// "./gradlew.bat" build publishToMavenLocal --info
-//
-// 步骤二：上传到JFrog Bintray的Maven仓库，即jcenter
-// ./gradlew bintrayUpload --info
-// "./gradlew.bat" bintrayUpload --info
+// 打包到{USER_HOME}/.m2/repository
+// ./gradlew clean build publishReleasePublicationToLocalRepository --info --warning-mode all
+// "./gradlew.bat" clean build publishReleasePublicationToLocalRepository --info --warning-mode all
 
 //用于将打包项目发布到Jfrog Bintray的Maven仓库
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
 
 //项目相关信息
 def includeJar = false
 def includeDoc = false
+def includeSrc = false
 def pomLibGroupName = 'com.github.gzuliyujiang'
 def pomLibArtifactId = project.name
 def pomLibVersion = getGitLatestTag()
 def pomLibDescription = "TODO description: ${rootProject.name} for Android"
-def pomSiteUrl = "https://github.com/gzu-liyujiang/${rootProject.name}"
-def pomGitUrl = "https://github.com/gzu-liyujiang/${rootProject.name}.git"
-def pomIssueUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/issues"
-def pomReleaseNotesUrl = "https://github.com/gzu-liyujiang/${rootProject.name}/README.md"
+def pomSiteUrl = "https://gitee.com/li_yu_jiang/${rootProject.name}"
 def pomLicenses = ["Apache License 2.0", "Mulan PSL v2"]
 //开发者信息
 def pomDeveloperId = 'liyujiang-gzu'
-def pomDeveloperOrg = 'gzu-liyujiang'
 def pomDeveloperName = '李玉江'
 def pomDeveloperEmail = '1032694760@qq.com'
-//GitHub仓库信息
-def githubRepositoryOwner = pomDeveloperOrg
-def githubRepositoryName = pomLibArtifactId
-def githubUserName = project.findProperty("githubUserName") ?: pomDeveloperId
-//1、在`https://github.com/settings/tokens`创建个人token，勾选包读写权限。
-//2、在`https://github.com/gzu-liyujiang/${rootProject.name}/settings/secrets`将token添加为secrets。
-//3、在GithubActions文件里添加`env:TOKEN: ${{ secrets.TOKEN }}`。
-//或者直接使用`${{ secrets.GITHUB_TOKEN }}`，参阅 https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token
-def githubToken = project.findProperty("githubToken") ?: System.getenv("TOKEN")
-println("github credentials: user=$githubUserName")
-
-// {USER_HOME}/.gradle/gradle.properties
-def bintrayUserName = project.findProperty('bintrayUserName') ?: ''
-def bintrayApiKey = project.findProperty('bintrayApiKey') ?: ''
-println("bintray credentials: user=$bintrayUserName")
 
 /**
  * generate xxx-sources.jar
@@ -89,23 +66,13 @@ javadoc {
 }
 
 afterEvaluate {
+    //发布jar或aar包
     publishing {
         repositories {
             maven {
-                // 执行命令`gradlew publishReleasePublicationToGitHubRepository`
-                // See https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-gradle-for-use-with-github-packages
-                // See https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
-                name = 'GitHub'
-                url = "https://maven.pkg.github.com/${githubRepositoryOwner}/${githubRepositoryName}"
-                credentials {
-                    username = githubUserName
-                    password = githubToken
-                }
-            }
-            maven {
                 // 执行命令`gradlew publishReleasePublicationToLocalRepository`
                 name = 'Local'
-                // 可同步到`https://github.com/gzu-liyujiang/maven-repo`，通过`https://raw.githubusercontent.com/gzu-liyujiang/maven-repo/master`访问
+                // 可同步到`https://gitee.com/li_yu_jiang/maven-repo`，通过`https://gitee.com/li_yu_jiang/maven-repo/raw/master`访问
                 url = rootProject.file("归档")
             }
         }
@@ -124,7 +91,9 @@ afterEvaluate {
                 if (includeJar) {
                     artifact "${buildDir}/intermediates/aar_main_jar/release/classes.jar"
                 }
-                artifact sourcesJar
+                if (includeSrc) {
+                    artifact sourcesJar
+                }
                 if (includeDoc) {
                     artifact javadocJar
                 }
@@ -163,69 +132,4 @@ afterEvaluate {
             }
         }
     }
-
-    bintray {
-        user = bintrayUserName
-        key = bintrayApiKey
-        //对应前面的publishing.publications.release
-        publications = ['release']
-        //[Default: false] Whether to run this as dry-run, without deploying
-        dryRun = false
-        //[Default: false] Whether version should be auto published after an upload
-        publish = true
-        //[Default: false] Whether to override version artifacts already published
-        override = true
-        //Package configuration. The plugin will use the repo and name property to check if the package already exists. In that case, there's no need to configure the other package property (like userOrg, desc, etc).
-        pkg {
-            //existing repository in bintray to add the artifacts to (for example: 'generic', 'maven' etc)
-            repo = "maven"
-            //package name
-            name = pomLibArtifactId
-            //发布到中央仓库上的项目说明
-            desc = pomLibDescription
-            //an optional organization name when the repo belongs to one of the user's orgs. If not added will use 'BINTRAY_USER' by default
-            userOrg = pomDeveloperOrg
-            //your package licenses (mandatory if the package doesn't exist yet and must be created, and if the package is an OSS package; optional otherwise)
-            licenses = pomLicenses
-            //your VCS URL (mandatory if the package doesn't exist yet and must be created, and if the package is an OSS package; optional otherwise)
-            vcsUrl = pomGitUrl
-            //项目主页
-            websiteUrl = pomSiteUrl
-            //项目讨论页
-            issueTrackerUrl = pomIssueUrl
-            publicDownloadNumbers = true
-            //Optional Github readme file
-            githubReleaseNotesFile = pomReleaseNotesUrl
-            //Optional version descriptor
-            version {
-                //Bintray logical version name
-                name = pomLibVersion
-                //Optional - Version-specific description
-                desc = pomLibDescription
-                //Optional - Date of the version release. 2 possible values: date in the format of 'yyyy-MM-dd'T'HH:mm:ss.SSSZZ' OR a java.util.Date instance
-                released = new Date()
-                //版本控制Tag名称
-                vcsTag = pomLibVersion
-                //Optional configuration for GPG signing
-                gpg {
-                    //Determines whether to GPG sign the files. The default is false
-                    sign = false
-                    //Optional. The passphrase for GPG signing
-                    //passphrase = 'passphrase'
-                }
-                //Optional configuration for Maven Central sync of the version
-                mavenCentralSync {
-                    //[Default: true] Determines whether to sync the version to Maven Central
-                    sync = false
-                    //OSS user token: mandatory
-                    //user = 'userToken'
-                    //OSS user password: mandatory
-                    //password = 'paasword'
-                    //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
-                    close = '1'
-                }
-            }
-        }
-    }
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2013-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
  */
 
 apply plugin: 'com.android.library'

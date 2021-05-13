@@ -4,9 +4,6 @@
 
 apply plugin: 'com.android.application'
 apply from: "${rootDir}/gradle/common.gradle"
-if (enableResourceProguard) {
-    apply from: "${rootDir}/gradle/resguard.gradle"
-}
 
 android {
     configurations.all {
@@ -130,13 +127,14 @@ android {
 //APK重命名
 println "********** apk outputs **********"
 android.applicationVariants.all { variant ->
+    def versionName = rootProject.ext.getAppVersionName()
+    def versionCode = rootProject.ext.getAppVersionCode()
     variant.outputs.all {
         if (variant.buildType.name == 'debug') {
             //debug版本不重定义输出目录，也不重命名
             return
         }
         if (outputFileName != null && outputFileName.endsWith(".apk")) {
-            def versionName = rootProject.ext.getAppVersionName()
             // 命名格式“app_[版本号]_[其他信息].apk”
             String fileName = "app_${versionName}_${outputFile.name.replace('app-', '').replace('.apk', '')}-${versionCode}.apk"
             //这里只能用相对路径，不然报错
@@ -147,7 +145,7 @@ android.applicationVariants.all { variant ->
     //APK构建完成后，备份release版本到指定目录
     tasks.all { it ->
         def maybeNeedCopy = false
-        if (it.name.startsWith("resguard")) {
+        if (it.name.startsWith("assemble")) {
             maybeNeedCopy = true
         }
         if (maybeNeedCopy) {
@@ -155,7 +153,7 @@ android.applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     File outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
-                        File targetDir = rootProject.file("归档")
+                        File targetDir = rootProject.file("归档/v${versionName}-${versionCode}")
                         targetDir.mkdirs()
                         copy {
                             from outputFile
