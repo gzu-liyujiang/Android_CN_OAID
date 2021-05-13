@@ -23,7 +23,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.0.0'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.0.1'
 }
 ```
 
@@ -176,6 +176,7 @@ dependencies {
 - 360手机 ![不支持OAID的情况](/screenshot/oaid_360.png)
 - 酷派手机 ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
 - 安卓模拟器 ![不支持OAID的情况](/screenshot/oaid_simulator.png)
+- 努比亚、华硕、摩托罗拉、爱酷等尚未测试，手上有真机的小伙伴欢迎帮忙测试。
 
 ## 参考资料
 
