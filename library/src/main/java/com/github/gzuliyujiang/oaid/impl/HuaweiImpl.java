@@ -18,7 +18,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
@@ -54,6 +57,17 @@ class HuaweiImpl implements IOAID {
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                String oaid = Settings.Global.getString(context.getContentResolver(), "pps_oaid");
+                if (!TextUtils.isEmpty(oaid)) {
+                    getter.onOAIDGetComplete(oaid);
+                    return;
+                }
+            } catch (Throwable e) {
+                OAIDLog.print(e);
+            }
+        }
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
         intent.setPackage("com.huawei.hwid");
         try {
@@ -63,11 +77,11 @@ class HuaweiImpl implements IOAID {
                     OAIDLog.print("Huawei OPENIDS_SERVICE connected");
                     try {
                         OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                        String IDs = anInterface.getIDs();
-                        if (IDs == null || IDs.length() == 0) {
-                            throw new RuntimeException("Huawei IDs get failed");
+                        String oaid = anInterface.getOAID();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("Huawei oaid get failed");
                         }
-                        getter.onOAIDGetComplete(IDs);
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Throwable e) {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);

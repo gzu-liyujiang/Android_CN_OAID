@@ -69,11 +69,11 @@ class AsusImpl implements IOAID {
                         if (anInterface == null) {
                             throw new RuntimeException("IDidAidlInterface is null");
                         }
-                        String ID = anInterface.getID();
-                        if (ID == null || ID.length() == 0) {
-                            throw new RuntimeException("ASUS ID get failed");
+                        String oaid = anInterface.getOAID();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("ASUS oaid get failed");
                         }
-                        getter.onOAIDGetComplete(ID);
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Throwable e) {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);

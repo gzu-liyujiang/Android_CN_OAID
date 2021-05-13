@@ -68,11 +68,11 @@ class SamsungImpl implements IOAID {
                         if (anInterface == null) {
                             throw new RuntimeException("IDeviceIdService is null");
                         }
-                        String deviceId = anInterface.getID();
-                        if (deviceId == null || deviceId.length() == 0) {
-                            throw new RuntimeException("Samsung DeviceId get failed");
+                        String oaid = anInterface.getOAID();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("Samsung oaid get failed");
                         }
-                        getter.onOAIDGetComplete(deviceId);
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Throwable e) {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);

@@ -25,9 +25,15 @@ package repeackage.com.bun.lib;
  *
  *     interface MsaIdInterface {
  *
+ *     boolean isSupported();
+ *
+ *     boolean isDataArrived();
+ *
  *     String getOAID();
  *
- *     boolean isSupported();
+ *     String getVAID();
+ *
+ *     String getAAID();
  *
  *     void shutDown();
  *
@@ -41,13 +47,28 @@ public interface MsaIdInterface extends android.os.IInterface {
      */
     public static class Default implements MsaIdInterface {
         @Override
+        public boolean isSupported() throws android.os.RemoteException {
+            return false;
+        }
+
+        @Override
+        public boolean isDataArrived() throws android.os.RemoteException {
+            return false;
+        }
+
+        @Override
         public java.lang.String getOAID() throws android.os.RemoteException {
             return null;
         }
 
         @Override
-        public boolean isSupported() throws android.os.RemoteException {
-            return false;
+        public java.lang.String getVAID() throws android.os.RemoteException {
+            return null;
+        }
+
+        @Override
+        public java.lang.String getAAID() throws android.os.RemoteException {
+            return null;
         }
 
         @Override
@@ -101,6 +122,20 @@ public interface MsaIdInterface extends android.os.IInterface {
                     reply.writeString(descriptor);
                     return true;
                 }
+                case TRANSACTION_isSupported: {
+                    data.enforceInterface(descriptor);
+                    boolean _result = this.isSupported();
+                    reply.writeNoException();
+                    reply.writeInt(((_result) ? (1) : (0)));
+                    return true;
+                }
+                case TRANSACTION_isDataArrived: {
+                    data.enforceInterface(descriptor);
+                    boolean _result = this.isDataArrived();
+                    reply.writeNoException();
+                    reply.writeInt(((_result) ? (1) : (0)));
+                    return true;
+                }
                 case TRANSACTION_getOAID: {
                     data.enforceInterface(descriptor);
                     java.lang.String _result = this.getOAID();
@@ -108,11 +143,18 @@ public interface MsaIdInterface extends android.os.IInterface {
                     reply.writeString(_result);
                     return true;
                 }
-                case TRANSACTION_isSupported: {
+                case TRANSACTION_getVAID: {
                     data.enforceInterface(descriptor);
-                    boolean _result = this.isSupported();
+                    java.lang.String _result = this.getVAID();
                     reply.writeNoException();
-                    reply.writeInt(((_result) ? (1) : (0)));
+                    reply.writeString(_result);
+                    return true;
+                }
+                case TRANSACTION_getAAID: {
+                    data.enforceInterface(descriptor);
+                    java.lang.String _result = this.getAAID();
+                    reply.writeNoException();
+                    reply.writeString(_result);
                     return true;
                 }
                 case TRANSACTION_shutDown: {
@@ -144,6 +186,46 @@ public interface MsaIdInterface extends android.os.IInterface {
             }
 
             @Override
+            public boolean isSupported() throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                boolean _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_isSupported, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().isSupported();
+                    }
+                    _reply.readException();
+                    _result = (0 != _reply.readInt());
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
+            @Override
+            public boolean isDataArrived() throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                boolean _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_isDataArrived, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().isDataArrived();
+                    }
+                    _reply.readException();
+                    _result = (0 != _reply.readInt());
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
+            @Override
             public java.lang.String getOAID() throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -164,18 +246,38 @@ public interface MsaIdInterface extends android.os.IInterface {
             }
 
             @Override
-            public boolean isSupported() throws android.os.RemoteException {
+            public java.lang.String getVAID() throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
-                boolean _result;
+                java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_isSupported, _data, _reply, 0);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getVAID, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().isSupported();
+                        return getDefaultImpl().getVAID();
                     }
                     _reply.readException();
-                    _result = (0 != _reply.readInt());
+                    _result = _reply.readString();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
+            @Override
+            public java.lang.String getAAID() throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                java.lang.String _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getAAID, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().getAAID();
+                    }
+                    _reply.readException();
+                    _result = _reply.readString();
                 } finally {
                     _reply.recycle();
                     _data.recycle();
@@ -204,12 +306,21 @@ public interface MsaIdInterface extends android.os.IInterface {
             public static MsaIdInterface sDefaultImpl;
         }
 
-        static final int TRANSACTION_getOAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-        static final int TRANSACTION_isSupported = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
-        static final int TRANSACTION_shutDown = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+        static final int TRANSACTION_isSupported = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_isDataArrived = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_getOAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+        static final int TRANSACTION_getVAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
+        static final int TRANSACTION_getAAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+        static final int TRANSACTION_shutDown = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
 
         public static boolean setDefaultImpl(MsaIdInterface impl) {
-            if (Stub.Proxy.sDefaultImpl == null && impl != null) {
+            // Only one user of this interface can use this function
+            // at a time. This is a heuristic to detect if two different
+            // users in the same process use this function.
+            if (Stub.Proxy.sDefaultImpl != null) {
+                throw new IllegalStateException("setDefaultImpl() called twice");
+            }
+            if (impl != null) {
                 Stub.Proxy.sDefaultImpl = impl;
                 return true;
             }
@@ -221,9 +332,15 @@ public interface MsaIdInterface extends android.os.IInterface {
         }
     }
 
+    public boolean isSupported() throws android.os.RemoteException;
+
+    public boolean isDataArrived() throws android.os.RemoteException;
+
     public java.lang.String getOAID() throws android.os.RemoteException;
 
-    public boolean isSupported() throws android.os.RemoteException;
+    public java.lang.String getVAID() throws android.os.RemoteException;
+
+    public java.lang.String getAAID() throws android.os.RemoteException;
 
     public void shutDown() throws android.os.RemoteException;
 }

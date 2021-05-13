@@ -25,7 +25,11 @@ package repeackage.com.samsung.android.deviceidservice;
  *
  *     interface IDeviceIdService {
  *
- *         String getID();
+ *         String getOAID();
+ *
+ *         String getVAID(String str);
+ *
+ *         String getAAID(String str);
  *
  *     }
  * </pre>
@@ -37,7 +41,17 @@ public interface IDeviceIdService extends android.os.IInterface {
      */
     public static class Default implements IDeviceIdService {
         @Override
-        public java.lang.String getID() throws android.os.RemoteException {
+        public java.lang.String getOAID() throws android.os.RemoteException {
+            return null;
+        }
+
+        @Override
+        public java.lang.String getVAID(java.lang.String str) throws android.os.RemoteException {
+            return null;
+        }
+
+        @Override
+        public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException {
             return null;
         }
 
@@ -88,9 +102,27 @@ public interface IDeviceIdService extends android.os.IInterface {
                     reply.writeString(descriptor);
                     return true;
                 }
-                case TRANSACTION_getID: {
+                case TRANSACTION_getOAID: {
                     data.enforceInterface(descriptor);
-                    java.lang.String _result = this.getID();
+                    java.lang.String _result = this.getOAID();
+                    reply.writeNoException();
+                    reply.writeString(_result);
+                    return true;
+                }
+                case TRANSACTION_getVAID: {
+                    data.enforceInterface(descriptor);
+                    java.lang.String _arg0;
+                    _arg0 = data.readString();
+                    java.lang.String _result = this.getVAID(_arg0);
+                    reply.writeNoException();
+                    reply.writeString(_result);
+                    return true;
+                }
+                case TRANSACTION_getAAID: {
+                    data.enforceInterface(descriptor);
+                    java.lang.String _arg0;
+                    _arg0 = data.readString();
+                    java.lang.String _result = this.getAAID(_arg0);
                     reply.writeNoException();
                     reply.writeString(_result);
                     return true;
@@ -118,15 +150,57 @@ public interface IDeviceIdService extends android.os.IInterface {
             }
 
             @Override
-            public java.lang.String getID() throws android.os.RemoteException {
+            public java.lang.String getOAID() throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_getID, _data, _reply, 0);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getOAID, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().getID();
+                        return getDefaultImpl().getOAID();
+                    }
+                    _reply.readException();
+                    _result = _reply.readString();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
+            @Override
+            public java.lang.String getVAID(java.lang.String str) throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                java.lang.String _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeString(str);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getVAID, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().getVAID(str);
+                    }
+                    _reply.readException();
+                    _result = _reply.readString();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
+            @Override
+            public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                java.lang.String _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeString(str);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getAAID, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().getAAID(str);
                     }
                     _reply.readException();
                     _result = _reply.readString();
@@ -140,10 +214,18 @@ public interface IDeviceIdService extends android.os.IInterface {
             public static IDeviceIdService sDefaultImpl;
         }
 
-        static final int TRANSACTION_getID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_getOAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_getVAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_getAAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
 
         public static boolean setDefaultImpl(IDeviceIdService impl) {
-            if (Stub.Proxy.sDefaultImpl == null && impl != null) {
+            // Only one user of this interface can use this function
+            // at a time. This is a heuristic to detect if two different
+            // users in the same process use this function.
+            if (Stub.Proxy.sDefaultImpl != null) {
+                throw new IllegalStateException("setDefaultImpl() called twice");
+            }
+            if (impl != null) {
                 Stub.Proxy.sDefaultImpl = impl;
                 return true;
             }
@@ -155,5 +237,9 @@ public interface IDeviceIdService extends android.os.IInterface {
         }
     }
 
-    public java.lang.String getID() throws android.os.RemoteException;
+    public java.lang.String getOAID() throws android.os.RemoteException;
+
+    public java.lang.String getVAID(java.lang.String str) throws android.os.RemoteException;
+
+    public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException;
 }

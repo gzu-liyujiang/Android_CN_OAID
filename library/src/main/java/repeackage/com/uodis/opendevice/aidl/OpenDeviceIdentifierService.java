@@ -25,7 +25,9 @@ package repeackage.com.uodis.opendevice.aidl;
  *
  *     interface OpenDeviceIdentifierService {
  *
- *         String getIDs();
+ *         String getOAID();
+ *
+ *         boolean limitAdTrackingEnabled();
  *
  *     }
  * </pre>
@@ -37,8 +39,13 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
      */
     public static class Default implements OpenDeviceIdentifierService {
         @Override
-        public java.lang.String getIDs() throws android.os.RemoteException {
+        public java.lang.String getOAID() throws android.os.RemoteException {
             return null;
+        }
+
+        @Override
+        public boolean limitAdTrackingEnabled() throws android.os.RemoteException {
+            return false;
         }
 
         @Override
@@ -88,11 +95,18 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
                     reply.writeString(descriptor);
                     return true;
                 }
-                case TRANSACTION_getIDs: {
+                case TRANSACTION_getOAID: {
                     data.enforceInterface(descriptor);
-                    java.lang.String _result = this.getIDs();
+                    java.lang.String _result = this.getOAID();
                     reply.writeNoException();
                     reply.writeString(_result);
+                    return true;
+                }
+                case TRANSACTION_limitAdTrackingEnabled: {
+                    data.enforceInterface(descriptor);
+                    boolean _result = this.limitAdTrackingEnabled();
+                    reply.writeNoException();
+                    reply.writeInt(((_result) ? (1) : (0)));
                     return true;
                 }
                 default: {
@@ -118,15 +132,15 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
             }
 
             @Override
-            public java.lang.String getIDs() throws android.os.RemoteException {
+            public java.lang.String getOAID() throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_getIDs, _data, _reply, 0);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getOAID, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().getIDs();
+                        return getDefaultImpl().getOAID();
                     }
                     _reply.readException();
                     _result = _reply.readString();
@@ -137,13 +151,40 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
                 return _result;
             }
 
+            @Override
+            public boolean limitAdTrackingEnabled() throws android.os.RemoteException {
+                android.os.Parcel _data = android.os.Parcel.obtain();
+                android.os.Parcel _reply = android.os.Parcel.obtain();
+                boolean _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_limitAdTrackingEnabled, _data, _reply, 0);
+                    if (!_status && getDefaultImpl() != null) {
+                        return getDefaultImpl().limitAdTrackingEnabled();
+                    }
+                    _reply.readException();
+                    _result = (0 != _reply.readInt());
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
+
             public static OpenDeviceIdentifierService sDefaultImpl;
         }
 
-        static final int TRANSACTION_getIDs = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_getOAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_limitAdTrackingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 
         public static boolean setDefaultImpl(OpenDeviceIdentifierService impl) {
-            if (Stub.Proxy.sDefaultImpl == null && impl != null) {
+            // Only one user of this interface can use this function
+            // at a time. This is a heuristic to detect if two different
+            // users in the same process use this function.
+            if (Stub.Proxy.sDefaultImpl != null) {
+                throw new IllegalStateException("setDefaultImpl() called twice");
+            }
+            if (impl != null) {
                 Stub.Proxy.sDefaultImpl = impl;
                 return true;
             }
@@ -155,5 +196,7 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
         }
     }
 
-    public java.lang.String getIDs() throws android.os.RemoteException;
+    public java.lang.String getOAID() throws android.os.RemoteException;
+
+    public boolean limitAdTrackingEnabled() throws android.os.RemoteException;
 }

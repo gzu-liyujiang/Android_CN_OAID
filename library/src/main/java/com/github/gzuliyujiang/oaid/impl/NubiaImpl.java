@@ -47,18 +47,14 @@ class NubiaImpl implements IOAID {
         Bundle bundle = null;
         try {
             Uri uri = Uri.parse("content://cn.nubia.identity/identity");
-            if (Build.VERSION.SDK_INT > 17) {
-                ContentProviderClient client = context.getContentResolver().acquireContentProviderClient(uri);
-                if (client != null) {
-                    bundle = client.call("getOAID", null, null);
-                    if (Build.VERSION.SDK_INT >= 24) {
-                        client.close();
-                    } else {
-                        client.release();
-                    }
+            ContentProviderClient client = context.getContentResolver().acquireContentProviderClient(uri);
+            if (client != null) {
+                bundle = client.call("getOAID", null, null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    client.close();
+                } else {
+                    client.release();
                 }
-            } else {
-                bundle = context.getContentResolver().call(uri, "getOAID", null, null);
             }
             if (bundle == null) {
                 throw new RuntimeException("getOAID call failed");

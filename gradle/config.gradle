@@ -4,8 +4,8 @@
 
 ext {
 
-    // Android 5.0
-    minSdkVersion = 21
+    // Android 4.4
+    minSdkVersion = 19
     // Android 11.0
     targetSdkVersion = 30
     compileSdkVersion = 30
