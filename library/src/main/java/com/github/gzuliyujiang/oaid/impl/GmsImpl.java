@@ -72,6 +72,10 @@ class GmsImpl implements IOAID {
                     OAIDLog.print("Google Play Service connected");
                     try {
                         IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
+                        if (anInterface.isLimitAdTrackingEnabled(true)) {
+                            // 实测在系统设置中停用了广告化功能也是能获取到广告标识符的
+                            OAIDLog.print("User has disabled advertising identifier");
+                        }
                         String id = anInterface.getId();
                         if (id == null || id.length() == 0) {
                             throw new RuntimeException("Android Advertising ID get failed");

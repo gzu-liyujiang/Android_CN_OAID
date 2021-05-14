@@ -66,6 +66,9 @@ class LenovoImpl implements IOAID {
                         if (anInterface == null) {
                             throw new RuntimeException("IDeviceidInterface is null");
                         }
+                        if (!anInterface.isSupport()) {
+                            throw new RuntimeException("IDeviceidInterface#isSupport return false");
+                        }
                         String oaid = anInterface.getOAID();
                         if (oaid == null || oaid.length() == 0) {
                             throw new RuntimeException("Lenovo OAID get failed");

@@ -68,6 +68,9 @@ class MsaImpl implements IOAID {
                         if (anInterface == null) {
                             throw new RuntimeException("MsaIdInterface is null");
                         }
+                        if (!anInterface.isSupported()) {
+                            throw new RuntimeException("MsaIdInterface#isSupported return false");
+                        }
                         String oaid = anInterface.getOAID();
                         if (oaid == null || oaid.length() == 0) {
                             throw new RuntimeException("Msa oaid get failed");

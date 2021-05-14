@@ -95,6 +95,11 @@ class HuaweiImpl implements IOAID {
                     OAIDLog.print("Huawei OPENIDS_SERVICE connected");
                     try {
                         OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
+                        if (anInterface.isOaidTrackLimited()) {
+                            // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
+                            getter.onOAIDGetError(new RuntimeException("User has disabled advertising identifier"));
+                            return;
+                        }
                         String oaid = anInterface.getOaid();
                         if (oaid == null || oaid.length() == 0) {
                             throw new RuntimeException("Huawei Advertising ID get failed");

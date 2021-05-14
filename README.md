@@ -185,6 +185,8 @@ dependencies {
 
 ### 不支持 OAID 或 AAID
 
+- 用户关闭广告标识符 ![](/screenshot/oaid_disabled.png)
+
 ```text
 锤子（Smartisan）、酷派（Yulong,Coolpad）、360（360）、奇酷（QiKu）、海信（Hisense）、金立（Gionee）、
 美图（Meitu）、糖果（SOAP）、格力（Gree）、朵唯（Doov）、优思（Uniscope）、夏普（SHARP）、乐视（LeTV）、
