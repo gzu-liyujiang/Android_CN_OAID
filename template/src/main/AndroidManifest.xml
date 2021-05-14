@@ -11,16 +11,10 @@
   ~ See the Mulan PSL v2 for more details.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.gzuliyujiang.oaid">
+<manifest package="com.example.module">
 
-    <uses-permission android:name="com.asus.msa.SupplementaryDID.ACCESS" />
-    <uses-permission android:name="freemme.permission.msa" />
+    <application>
 
-    <queries>
-        <!-- Android 11+：https://developer.android.google.cn/about/versions/11/privacy/package-visibility?hl=zh-cn -->
-        <package android:name="com.google.android.gms" />
-        <package android:name="com.android.vending" />
-    </queries>
+    </application>
 
 </manifest>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 
 apply from: "${rootDir}/gradle/app.gradle"
@@ -20,7 +19,6 @@ dependencies {
 }
 
 android {
-
     defaultConfig {
         //应用的实际包名
         applicationId "com.github.gzuliyujiang.demo"
@@ -48,7 +46,7 @@ android {
         dev {
             dimension "MODE"
             // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"http://test.example.com"'
+            buildConfigField "String", "API_BASE_URL", '"https://test.example.com"'
             // 修改 AndroidManifest.xml 里的变量
             manifestPlaceholders = [
                     MY_CHANNEL: "developer-default",
