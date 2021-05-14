@@ -15,36 +15,36 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
  */
-package repeackage.com.uodis.opendevice.aidl;
+package repeackage.com.google.android.gms.ads.identifier.internal;
 
 /**
  * 本文件代码根据以下AIDL生成，只改包名以便解决和移动安全联盟的SDK冲突问题：
  * <pre>
- *     // OpenDeviceIdentifierService.aidl
- *     package com.uodis.opendevice.aidl;
+ *     // IAdvertisingIdService.aidl
+ *     package com.google.android.gms.ads.identifier.internal;
  *
- *     interface OpenDeviceIdentifierService {
+ *     interface IAdvertisingIdService {
  *
  *         String getId();
  *
- *         boolean isLimitAdTrackingEnabled();
+ *         boolean isLimitAdTrackingEnabled(boolean boo);
  *
  *     }
  * </pre>
  */
 @SuppressWarnings("All")
-public interface OpenDeviceIdentifierService extends android.os.IInterface {
+public interface IAdvertisingIdService extends android.os.IInterface {
     /**
-     * Default implementation for OpenDeviceIdentifierService.
+     * Default implementation for IAdvertisingIdService.
      */
-    public static class Default implements OpenDeviceIdentifierService {
+    public static class Default implements IAdvertisingIdService {
         @Override
         public java.lang.String getId() throws android.os.RemoteException {
             return null;
         }
 
         @Override
-        public boolean isLimitAdTrackingEnabled() throws android.os.RemoteException {
+        public boolean isLimitAdTrackingEnabled(boolean boo) throws android.os.RemoteException {
             return false;
         }
 
@@ -57,8 +57,8 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
     /**
      * Local-side IPC implementation stub class.
      */
-    public static abstract class Stub extends android.os.Binder implements OpenDeviceIdentifierService {
-        private static final java.lang.String DESCRIPTOR = "com.uodis.opendevice.aidl.OpenDeviceIdentifierService";
+    public static abstract class Stub extends android.os.Binder implements IAdvertisingIdService {
+        private static final java.lang.String DESCRIPTOR = "com.google.android.gms.ads.identifier.internal.IAdvertisingIdService";
 
         /**
          * Construct the stub at attach it to the interface.
@@ -68,18 +68,18 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
         }
 
         /**
-         * Cast an IBinder object into an repeackage.com.uodis.opendevice.aidl.OpenDeviceIdentifierService interface,
+         * Cast an IBinder object into an repeackage.com.google.android.gms.ads.identifier.internal.IAdvertisingIdService interface,
          * generating a proxy if needed.
          */
-        public static OpenDeviceIdentifierService asInterface(android.os.IBinder obj) {
+        public static IAdvertisingIdService asInterface(android.os.IBinder obj) {
             if ((obj == null)) {
                 return null;
             }
             android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            if (((iin != null) && (iin instanceof OpenDeviceIdentifierService))) {
-                return ((OpenDeviceIdentifierService) iin);
+            if (((iin != null) && (iin instanceof IAdvertisingIdService))) {
+                return ((IAdvertisingIdService) iin);
             }
-            return new OpenDeviceIdentifierService.Stub.Proxy(obj);
+            return new IAdvertisingIdService.Stub.Proxy(obj);
         }
 
         @Override
@@ -104,7 +104,9 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
                 }
                 case TRANSACTION_isLimitAdTrackingEnabled: {
                     data.enforceInterface(descriptor);
-                    boolean _result = this.isLimitAdTrackingEnabled();
+                    boolean _arg0;
+                    _arg0 = (0 != data.readInt());
+                    boolean _result = this.isLimitAdTrackingEnabled(_arg0);
                     reply.writeNoException();
                     reply.writeInt(((_result) ? (1) : (0)));
                     return true;
@@ -115,7 +117,7 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
             }
         }
 
-        private static class Proxy implements OpenDeviceIdentifierService {
+        private static class Proxy implements IAdvertisingIdService {
             private android.os.IBinder mRemote;
 
             Proxy(android.os.IBinder remote) {
@@ -152,15 +154,16 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
             }
 
             @Override
-            public boolean isLimitAdTrackingEnabled() throws android.os.RemoteException {
+            public boolean isLimitAdTrackingEnabled(boolean boo) throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 boolean _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeInt(((boo) ? (1) : (0)));
                     boolean _status = mRemote.transact(Stub.TRANSACTION_isLimitAdTrackingEnabled, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().isLimitAdTrackingEnabled();
+                        return getDefaultImpl().isLimitAdTrackingEnabled(boo);
                     }
                     _reply.readException();
                     _result = (0 != _reply.readInt());
@@ -171,13 +174,13 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
                 return _result;
             }
 
-            public static OpenDeviceIdentifierService sDefaultImpl;
+            public static IAdvertisingIdService sDefaultImpl;
         }
 
         static final int TRANSACTION_getId = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
         static final int TRANSACTION_isLimitAdTrackingEnabled = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 
-        public static boolean setDefaultImpl(OpenDeviceIdentifierService impl) {
+        public static boolean setDefaultImpl(IAdvertisingIdService impl) {
             // Only one user of this interface can use this function
             // at a time. This is a heuristic to detect if two different
             // users in the same process use this function.
@@ -191,12 +194,12 @@ public interface OpenDeviceIdentifierService extends android.os.IInterface {
             return false;
         }
 
-        public static OpenDeviceIdentifierService getDefaultImpl() {
+        public static IAdvertisingIdService getDefaultImpl() {
             return Stub.Proxy.sDefaultImpl;
         }
     }
 
     public java.lang.String getId() throws android.os.RemoteException;
 
-    public boolean isLimitAdTrackingEnabled() throws android.os.RemoteException;
+    public boolean isLimitAdTrackingEnabled(boolean boo) throws android.os.RemoteException;
 }

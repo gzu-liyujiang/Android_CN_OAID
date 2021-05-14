@@ -17,8 +17,8 @@
 **/*.iws
 **/build
 **/local.properties
-!**/.idea/codeStyles
-!**/.idea/copyright
+!**/.idea/codeStyles/**
+!**/.idea/copyright/**
 **/.idea/caches
 **/.idea/libraries
 **/.idea/modules
@@ -36,8 +36,10 @@
 **/proguard
 **/resource_mapping.txt
 **/gen
+**/debug
 **/release
 **/*.apk
+**/归档
 
 # NDK related
 **/.externalNativeBuild
@@ -47,14 +49,13 @@
 **/.gradle
 **/gradle-app.setting
 **/.gradletasknamecache
-!**/gradle/wrapper
+!**/gradle/wrapper/**
 
 # VS/VS Code
 **/.vs
 **/.suo
 **/.vscode
-!**/.vscode/launch.json
-!**/.vscode/tasks.json
+!**/.vscode/*.json
 **/.project
 **/.classpath
 **/.settings

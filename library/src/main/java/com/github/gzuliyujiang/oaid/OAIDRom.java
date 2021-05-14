@@ -46,33 +46,12 @@ public final class OAIDRom {
         return res;
     }
 
-    public static boolean isASUS() {
-        // 华硕手机
-        return Build.MANUFACTURER.equalsIgnoreCase("ASUS") ||
-                Build.BRAND.equalsIgnoreCase("ASUS");
-    }
-
     public static boolean isHuawei() {
         // 华为手机、荣耀手机
         return Build.MANUFACTURER.equalsIgnoreCase("HUAWEI") ||
                 Build.BRAND.equalsIgnoreCase("HUAWEI") ||
                 Build.BRAND.equalsIgnoreCase("HONOR") ||
                 !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
-    }
-
-    public static boolean isZTE() {
-        // 中兴手机
-        return Build.MANUFACTURER.equalsIgnoreCase("ZTE") ||
-                Build.BRAND.equalsIgnoreCase("ZTE");
-    }
-
-    public static boolean isXiaomi() {
-        // 小米手机、红米手机、美图手机
-        return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
-                Build.BRAND.equalsIgnoreCase("XIAOMI") ||
-                Build.BRAND.equalsIgnoreCase("REDMI") ||
-                Build.BRAND.equalsIgnoreCase("MEITU") ||
-                !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
     }
 
     public static boolean isOppo() {
@@ -87,14 +66,15 @@ public final class OAIDRom {
         // 维沃手机、爱酷手机
         return Build.MANUFACTURER.equalsIgnoreCase("VIVO") ||
                 Build.BRAND.equalsIgnoreCase("VIVO") ||
-                Build.BRAND.equalsIgnoreCase("IQOO") ||
                 !TextUtils.isEmpty(sysProperty("ro.vivo.os.version", ""));
     }
 
-    public static boolean isOnePlus() {
-        // 一加手机
-        return Build.MANUFACTURER.equalsIgnoreCase("ONEPLUS") ||
-                Build.BRAND.equalsIgnoreCase("ONEPLUS");
+    public static boolean isXiaomi() {
+        // 小米手机、红米手机、美图手机
+        return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
+                Build.BRAND.equalsIgnoreCase("XIAOMI") ||
+                Build.BRAND.equalsIgnoreCase("REDMI") ||
+                !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
     }
 
     public static boolean isBlackShark() {
@@ -103,22 +83,16 @@ public final class OAIDRom {
                 Build.BRAND.equalsIgnoreCase("BLACKSHARK");
     }
 
+    public static boolean isOnePlus() {
+        // 一加手机
+        return Build.MANUFACTURER.equalsIgnoreCase("ONEPLUS") ||
+                Build.BRAND.equalsIgnoreCase("ONEPLUS");
+    }
+
     public static boolean isSamsung() {
         // 三星手机
         return Build.MANUFACTURER.equalsIgnoreCase("SAMSUNG") ||
                 Build.BRAND.equalsIgnoreCase("SAMSUNG");
-    }
-
-    public static boolean isMotolora() {
-        // 摩托罗拉手机
-        return Build.MANUFACTURER.equalsIgnoreCase("MOTOLORA") ||
-                Build.BRAND.equalsIgnoreCase("MOTOLORA");
-    }
-
-    public static boolean isNubia() {
-        // 努比亚手机
-        return Build.MANUFACTURER.equalsIgnoreCase("NUBIA") ||
-                Build.BRAND.equalsIgnoreCase("NUBIA");
     }
 
     public static boolean isMeizu() {
@@ -129,10 +103,34 @@ public final class OAIDRom {
     }
 
     public static boolean isLenovo() {
-        // 联想手机
+        // 联想手机、乐檬手机
         return Build.MANUFACTURER.equalsIgnoreCase("LENOVO") ||
                 Build.BRAND.equalsIgnoreCase("LENOVO") ||
                 Build.BRAND.equalsIgnoreCase("ZUK");
+    }
+
+    public static boolean isNubia() {
+        // 努比亚手机
+        return Build.MANUFACTURER.equalsIgnoreCase("NUBIA") ||
+                Build.BRAND.equalsIgnoreCase("NUBIA");
+    }
+
+    public static boolean isASUS() {
+        // 华硕手机
+        return Build.MANUFACTURER.equalsIgnoreCase("ASUS") ||
+                Build.BRAND.equalsIgnoreCase("ASUS");
+    }
+
+    public static boolean isZTE() {
+        // 中兴手机
+        return Build.MANUFACTURER.equalsIgnoreCase("ZTE") ||
+                Build.BRAND.equalsIgnoreCase("ZTE");
+    }
+
+    public static boolean isMotolora() {
+        // 摩托罗拉手机
+        return Build.MANUFACTURER.equalsIgnoreCase("MOTOLORA") ||
+                Build.BRAND.equalsIgnoreCase("MOTOLORA");
     }
 
     public static boolean isFreeme() {
@@ -186,18 +184,6 @@ public final class OAIDRom {
                 Build.BRAND.equalsIgnoreCase("AMIGO") ||
                 Build.DISPLAY.toUpperCase().contains("AMIGO") ||
                 !TextUtils.isEmpty(sysProperty("ro.gn.gnromvernumber", ""));
-    }
-
-    public static boolean isSony() {
-        // 索尼手机
-        return Build.MANUFACTURER.equalsIgnoreCase("SONY") ||
-                Build.BRAND.equalsIgnoreCase("SONY");
-    }
-
-    public static boolean isLG() {
-        // LG手机
-        return Build.MANUFACTURER.equalsIgnoreCase("LG") ||
-                Build.BRAND.equalsIgnoreCase("LG");
     }
 
 }

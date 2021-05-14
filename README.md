@@ -136,51 +136,49 @@ dependencies {
 -keep interface repeackage.com.zui.deviceidservice.** { *; }
 ```
 
-## 厂商支持
+## 支持情况
 
-| 厂商                     | 版本                            |
-| ------------------------ | ------------------------------- |
-| 小米（Xiaomi，Redmi）    | MIUI 10.2 及以上                |
-| 黑鲨（BlackShark）       | MIUI 10.2 及以上                |
-| 维沃（VIVO，IQOO）       | Funtouch OS 9 及以上，Origin OS |
-| 华为（Huawei，Honor）    | HMS 2.6.2 及以上                |
-| 欧珀（OPPO，Realme）     | Color OS 7.0 及以上             |
-| 联想（Lenovo）           | ZUI 11.4 及以上                 |
-| 摩托罗拉（Motorola）     | ZUI 11.4 及以上                 |
-| 华硕（ASUS）             | Android 10 及以上               |
-| 魅族（Meizu）            | Android 10 及以上               |
-| 三星（Samsung）          | Android 10 及以上               |
-| 努比亚（Nubia）          | Android 10 及以上               |
-| 一加（OnePlus）          | Android 10 及以上               |
-| 中兴（ZTE）              | Android 10 及以上               |
-| 卓易（FreemeOS）         | Android 10 及以上               |
+| 厂商或品牌                        | 系统或框架                          |
+| --------------------------------- | ----------------------------------- |
+| 华为（HuaWei、Honor）             | HMS 2.6.2+ 、GMS                    |
+| 小米（XiaoMi、RedMi、BlackShark） | MIUI 10.2+、GMS                     |
+| 维沃（VIVO、IQOO）                | Funtouch OS 9+、Origin OS 1.0+、GMS |
+| 欧珀（OPPO、RealMe）              | Color OS 7.0+、GMS                  |
+| 三星（Samsung）                   | Android 10+、GMS                    |
+| 联想（Lenovo）                    | ZUI 11.4+、GMS                      |
+| 华硕（ASUS）                      | Android 10+、GMS                    |
+| 魅族（Meizu）                     | Android 10+、GMS                    |
+| 一加（OnePlus）                   | Android 10+、GMS                    |
+| 努比亚（Nubia）                   | Android 10+、GMS                    |
+| 其他（ZTE、Google、Motorola、……） | Freeme OS、SSUI、GMS                |
 
 > 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的 SDK，酷派、乐视、锤子、360 等厂商截止目前（2021.04.14）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，只能生成 GUID 代替。
 
 ## 效果预览
 
-- 维沃手机 ![支持OAID的情况](/screenshot/oaid_vivo.png)
-- 欧珀手机 ![支持OAID的情况](/screenshot/oaid_oppo.png)
-- 真我手机 ![支持OAID的情况](/screenshot/oaid_realme.png)
 - 华为手机 ![支持OAID的情况](/screenshot/oaid_huawei.png)
 - 荣耀手机 ![支持OAID的情况](/screenshot/oaid_honor.png)
 - 小米手机 ![支持OAID的情况](/screenshot/oaid_xiaomi.png)
 - 红米手机 ![支持OAID的情况](/screenshot/oaid_redmi.png)
 - 黑鲨手机 ![支持OAID的情况](/screenshot/oaid_blackshark.png)
+- 维沃手机 ![支持OAID的情况](/screenshot/oaid_vivo_iqoo.png)
+- 欧珀手机 ![支持OAID的情况](/screenshot/oaid_oppo.png)
+- 真我手机 ![支持OAID的情况](/screenshot/oaid_realme.png)
+- 三星手机 ![支持OAID的情况](/screenshot/oaid_samsung.png)
 - 魅族手机 ![支持OAID的情况](/screenshot/oaid_meizu.png)
 - 联想手机 ![支持OAID的情况](/screenshot/oaid_lenovo.png)
 - 一加手机 ![支持OAID的情况](/screenshot/oaid_oneplus.png)
-- 三星手机 ![支持OAID的情况](/screenshot/oaid_samsung.png)
 - 华硕手机 ![支持OAID的情况](/screenshot/oaid_asus.png)
-- 中兴手机 ![不支持OAID的情况](/screenshot/oaid_zte.png)
-- 360手机 ![不支持OAID的情况](/screenshot/oaid_360.png)
+- 中兴手机 ![支持OAID的情况](/screenshot/oaid_zte.png)
+- 谷歌手机 ![支持OAID的情况](/screenshot/oaid_google.png)
+- 摩托罗拉 ![支持OAID的情况](/screenshot/oaid_motorola.png)
+- 努比亚机 ![不支持OAID的情况](/screenshot/oaid_nubia.png)
+- 锤子手机 ![不支持OAID的情况](/screenshot/oaid_smartisan.png)
 - 酷派手机 ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
-- 安卓模拟器 ![不支持OAID的情况](/screenshot/oaid_simulator.png)
-- 努比亚、华硕、摩托罗拉、爱酷等尚未测试，手上有真机的小伙伴欢迎帮忙测试。
 
 ## 参考资料
 
-OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符），华为称之为 Open Advertising ID （开放广告标识符）。
+OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符），谷歌及华为称之为 Open Advertising ID （开放广告标识符）。
 
 - [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn ）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
@@ -194,6 +192,15 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - 北京数字联盟公开的获取各厂商 OAID 的简易代码：[Get_Oaid_CNAdid](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)。
 - 获取或生成设备唯一标识后，推荐参考“[一种 Android 移动设备构造 UDID 的方案](https://github.com/No89757/Udid) ”。
 - StackOverFlow [Is there a unique Android device ID ?](https://stackoverflow.com/questions/2785485/is-there-a-unique-android-device-id) 。
+
+## 远程真机
+
+- 免费 [华为远程真机云调试](https://developer.huawei.com/consumer/cn/agconnect/cloud-adjust) 。
+- 免费 [小米云测平台远程真机租用](https://testit.miui.com/remote) 。
+- 免费 [VIVO 云测平台远程真机](https://vcl.vivo.com.cn/#/machine/picking) 。
+- 免费 [OPPO 云测平台远程真机](https://open.oppomobile.com/cloudmachine/device/list-plus) 。
+- 免费 [三星远程开发测试平台真机调试](http://samsung.smarterapps.cn/index.php?app=home&mod=Index&act=samsung) 。
+- 新人试用 ~~腾讯WeTest云真机调试、阿里MQC远程真机调试、百度MTC远程真机调试、Testin远程真机测试、AllTesting真机测试~~ 。
 
 ## 许可协议
 

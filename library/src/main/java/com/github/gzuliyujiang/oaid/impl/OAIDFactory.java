@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 import com.github.gzuliyujiang.oaid.OAIDRom;
 
 /**
@@ -59,10 +60,19 @@ public final class OAIDFactory {
                 ioaid = new HuaweiImpl(context);
             } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
                 ioaid = new OppoImpl(context);
-            } else if (OAIDRom.isZTE() || OAIDRom.isFreeme() || OAIDRom.isSSUI()) {
-                ioaid = new MsaImpl(context);
+            }
+        }
+        if (ioaid == null || !ioaid.supported()) {
+            ioaid = new GmsImpl(context);
+            if (ioaid.supported()) {
+                OAIDLog.print("Google Mobile Service has been supported");
             } else {
-                ioaid = new DefaultImpl();
+                ioaid = new MsaImpl(context);
+                if (ioaid.supported()) {
+                    OAIDLog.print("Mobile Security Alliance has been supported");
+                } else {
+                    ioaid = new DefaultImpl();
+                }
             }
         }
         return ioaid;
