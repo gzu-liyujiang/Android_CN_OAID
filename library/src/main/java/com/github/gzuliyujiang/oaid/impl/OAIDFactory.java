@@ -63,14 +63,17 @@ public final class OAIDFactory {
             }
         }
         if (ioaid == null || !ioaid.supported()) {
-            ioaid = new GmsImpl(context);
+            // 若各厂商自家没有提供接口，则优先尝试移动安全联盟的接口
+            ioaid = new MsaImpl(context);
             if (ioaid.supported()) {
-                OAIDLog.print("Google Mobile Service has been found");
+                OAIDLog.print("Mobile Security Alliance has been found");
             } else {
-                ioaid = new MsaImpl(context);
+                // 若不支持移动安全联盟的接口，则尝试谷歌服务框架的接口
+                ioaid = new GmsImpl(context);
                 if (ioaid.supported()) {
-                    OAIDLog.print("Mobile Security Alliance has been found");
+                    OAIDLog.print("Google Play Service has been found");
                 } else {
+                    // 默认不支持
                     ioaid = new DefaultImpl();
                 }
             }
