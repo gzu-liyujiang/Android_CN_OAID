@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Right Reserved.
+ * Copyright (c) 2016-present, 贵州纳雍穿青人李裕江<1032694760@qq.com>, All Rights Reserved.
  */
 
 apply plugin: 'com.android.application'
@@ -142,7 +142,7 @@ android.applicationVariants.all { variant ->
             println "outputFile=$outputFile"
         }
     }
-    //APK构建完成后，备份release版本到指定目录
+    //APK构建完成后，备份release版本及其混淆信息到指定目录
     tasks.all { it ->
         def maybeNeedCopy = false
         if (it.name.startsWith("assemble")) {
@@ -151,16 +151,19 @@ android.applicationVariants.all { variant ->
         if (maybeNeedCopy) {
             it.doLast {
                 variant.outputs.each { output ->
+                    def isRelease = variant.buildType.name == 'release'
                     File outputFile = output.outputFile
-                    if (outputFile != null && outputFile.name.endsWith('.apk') && variant.buildType.name == 'release') {
+                    if (outputFile != null && outputFile.name.endsWith('.apk') && isRelease) {
                         File targetDir = rootProject.file("归档/v${versionName}-${versionCode}")
                         targetDir.mkdirs()
                         copy {
                             from outputFile
                             into targetDir
                         }
-                        File copyOutputFile = new File(targetDir, outputFile.name)
-                        println "copyOutputFile=$copyOutputFile"
+                        copy {
+                            from rootProject.file("app/proguard")
+                            into targetDir
+                        }
                     }
                 }
             }
