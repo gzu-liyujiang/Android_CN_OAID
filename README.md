@@ -3,7 +3,7 @@
 ![Release APK](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Release%20APK/badge.svg)
 ![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
 
-本项目抹平了各大 Android 手机厂商获取 OAID（开放匿名设备标识）的差异性，轻松通过几句代码即可获取不同手机的 OAID，可作为移动安全联盟官网提供的 SDK 闭源方案（miit_mdid_xxx.aar）的替代方案。另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
+安卓设备唯一标识解决方案，可作为移动安全联盟统一 SDK （miit_mdid_xxx.aar）的替代方案。本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID （安卓广告标识）的便携接口，另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
 
 ## 接入指引
 
@@ -152,7 +152,7 @@ dependencies {
 | 努比亚（Nubia）                   | Android 10+、Google Play Service 4.0+                    |
 | 其他（ZTE、HTC、Motorola、……）     | Freeme OS、SSUI、Google Play Service 4.0+                |
 
-> 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的 SDK，酷派、乐视、锤子、360 等厂商截止目前（2021.04.14）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，只能生成 GUID 代替。
+> 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码以及逆向分析参考移动安全联盟的 SDK、HUAWEI Ads SDK、小米 DeviceId.jar、Google Play Services SDK 等。
 
 ## 效果预览
 
@@ -196,7 +196,7 @@ dependencies {
 ## 参考资料
 
 OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符），
-谷歌及华为称之为 Open Advertising ID （开放广告标识符）。
+华为称之为 Open Advertising ID （开放广告标识符），谷歌称之为 Android Advertising ID （安卓广告标识符）。
 
 - [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from http://www.msa-alliance.cn ）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
