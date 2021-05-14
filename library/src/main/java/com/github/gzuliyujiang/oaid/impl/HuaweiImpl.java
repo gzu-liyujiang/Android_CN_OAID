@@ -17,7 +17,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -54,16 +53,16 @@ class HuaweiImpl implements IOAID {
     public boolean supported() {
         try {
             PackageManager pm = context.getPackageManager();
-            packageName = "com.huawei.hms";
-            if (pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null) {
+            packageName = "com.huawei.hwid";
+            if (pm.getPackageInfo(packageName, 0) != null) {
                 return true;
             }
             packageName = "com.huawei.hwid.tv";
-            if (pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null) {
+            if (pm.getPackageInfo(packageName, 0) != null) {
                 return true;
             }
-            packageName = "com.huawei.hwid";
-            return pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null;
+            packageName = "com.huawei.hms";
+            return pm.getPackageInfo(packageName, 0) != null;
         } catch (Throwable e) {
             OAIDLog.print(e);
             return false;
