@@ -23,7 +23,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.0.1'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.0'
 }
 ```
 
@@ -138,19 +138,19 @@ dependencies {
 
 ## 支持情况
 
-| 厂商或品牌                        | 系统或框架                          |
-| --------------------------------- | ----------------------------------- |
-| 华为（HuaWei、Honor）             | HMS 2.6.2+ 、GMS                    |
-| 小米（XiaoMi、RedMi、BlackShark） | MIUI 10.2+、GMS                     |
-| 维沃（VIVO、IQOO）                | Funtouch OS 9+、Origin OS 1.0+、GMS |
-| 欧珀（OPPO、RealMe）              | Color OS 7.0+、GMS                  |
-| 三星（Samsung）                   | Android 10+、GMS                    |
-| 联想（Lenovo）                    | ZUI 11.4+、GMS                      |
-| 华硕（ASUS）                      | Android 10+、GMS                    |
-| 魅族（Meizu）                     | Android 10+、GMS                    |
-| 一加（OnePlus）                   | Android 10+、GMS                    |
-| 努比亚（Nubia）                   | Android 10+、GMS                    |
-| 其他（ZTE、Google、Motorola、……） | Freeme OS、SSUI、GMS                |
+| 厂商或品牌                        | 系统或框架                                               |
+| --------------------------------- | -------------------------------------------------------- |
+| 华为（HuaWei、Honor）             | HMS Core 2.6.2+ 、Google Play Service 4.0+               |
+| 小米（XiaoMi、RedMi、BlackShark） | MIUI 10.2+、Google Play Service 4.0+                     |
+| 维沃（VIVO、IQOO）                | Funtouch OS 9+、Origin OS 1.0+、Google Play Service 4.0+ |
+| 欧珀（OPPO、RealMe）              | Color OS 7.0+、Google Play Service 4.0+                  |
+| 三星（Samsung）                   | Android 10+、Google Play Service 4.0+                    |
+| 联想（Lenovo）                    | ZUI 11.4+、Google Play Service 4.0+                      |
+| 华硕（ASUS）                      | Android 10+、Google Play Service 4.0+                    |
+| 魅族（Meizu）                     | Android 10+、Google Play Service 4.0+                    |
+| 一加（OnePlus）                   | Android 10+、Google Play Service 4.0+                    |
+| 努比亚（Nubia）                   | Android 10+、Google Play Service 4.0+                    |
+| 其他（ZTE、HTC、Motorola、……）     | Freeme OS、SSUI、Google Play Service 4.0+                |
 
 > 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码并逆向分析参考移动安全联盟的 SDK，酷派、乐视、锤子、360 等厂商截止目前（2021.04.14）并未见到移动安全联盟有支持，也未查阅到厂商相关公开资料，只能生成 GUID 代替。
 
@@ -170,11 +170,11 @@ dependencies {
 - 一加手机 ![支持OAID的情况](/screenshot/oaid_oneplus.png)
 - 华硕手机 ![支持OAID的情况](/screenshot/oaid_asus.png)
 - 中兴手机 ![支持OAID的情况](/screenshot/oaid_zte.png)
+- HTC手机 ![支持OAID的情况](/screenshot/oaid_htc.png)
 - 谷歌手机 ![支持OAID的情况](/screenshot/oaid_google.png)
 - 摩托罗拉 ![支持OAID的情况](/screenshot/oaid_motorola.png)
 - 努比亚机 ![不支持OAID的情况](/screenshot/oaid_nubia.png)
-- 锤子手机 ![不支持OAID的情况](/screenshot/oaid_smartisan.png)
-- 酷派手机 ![不支持OAID的情况](/screenshot/oaid_coolpad.png)
+- 已知不支持 OAID 或 AAID 的厂商或品牌：锤子、酷派、360、奇酷、海信、美图、金立、乐视
 
 ## 参考资料
 
@@ -200,7 +200,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - 免费 [VIVO 云测平台远程真机](https://vcl.vivo.com.cn/#/machine/picking) 。
 - 免费 [OPPO 云测平台远程真机](https://open.oppomobile.com/cloudmachine/device/list-plus) 。
 - 免费 [三星远程开发测试平台真机调试](http://samsung.smarterapps.cn/index.php?app=home&mod=Index&act=samsung) 。
-- 新人试用 ~~腾讯WeTest云真机调试、阿里MQC远程真机调试、百度MTC远程真机调试、Testin远程真机测试、AllTesting真机测试~~ 。
+- 新人试用 ~~腾讯 WeTest 云真机调试、阿里 MQC 远程真机调试、百度 MTC 远程真机调试、Testin 远程真机测试、AllTesting 真机测试~~ 。
 
 ## 许可协议
 

@@ -26,8 +26,6 @@ import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
-import java.lang.reflect.Method;
-
 import repeackage.com.asus.msa.SupplementaryDID.IDidAidlInterface;
 
 /**
@@ -63,11 +61,12 @@ class AsusImpl implements IOAID {
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     OAIDLog.print("ASUS SupplementaryDIDService connected");
                     try {
-                        //IDidAidlInterface anInterface = new IDidAidlInterface.Stub.asInterface(service);
-                        Method asInterface = IDidAidlInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        IDidAidlInterface anInterface = (IDidAidlInterface) asInterface.invoke(null, service);
+                        IDidAidlInterface anInterface = IDidAidlInterface.Stub.asInterface(service);
                         if (anInterface == null) {
                             throw new RuntimeException("IDidAidlInterface is null");
+                        }
+                        if (!anInterface.isSupport()) {
+                            throw new RuntimeException("IDidAidlInterface#isSupport return false");
                         }
                         String oaid = anInterface.getOAID();
                         if (oaid == null || oaid.length() == 0) {

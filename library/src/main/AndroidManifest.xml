@@ -18,4 +18,10 @@
     <uses-permission android:name="com.asus.msa.SupplementaryDID.ACCESS" />
     <uses-permission android:name="freemme.permission.msa" />
 
+    <queries>
+        <!-- Android 11+：https://developer.android.google.cn/about/versions/11/privacy/package-visibility?hl=zh-cn -->
+        <package android:name="com.google.android.gms" />
+        <package android:name="com.android.vending" />
+    </queries>
+
 </manifest>

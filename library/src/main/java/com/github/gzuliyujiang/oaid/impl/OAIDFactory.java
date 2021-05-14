@@ -48,7 +48,7 @@ public final class OAIDFactory {
                 ioaid = new MeizuImpl(context);
             } else if (OAIDRom.isNubia()) {
                 ioaid = new NubiaImpl(context);
-            } else if (OAIDRom.isXiaomi() || OAIDRom.isBlackShark()) {
+            } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
                 ioaid = new XiaomiImpl(context);
             } else if (OAIDRom.isSamsung()) {
                 ioaid = new SamsungImpl(context);
@@ -56,7 +56,7 @@ public final class OAIDFactory {
                 ioaid = new VivoImpl(context);
             } else if (OAIDRom.isASUS()) {
                 ioaid = new AsusImpl(context);
-            } else if (OAIDRom.isHuawei()) {
+            } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
                 ioaid = new HuaweiImpl(context);
             } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
                 ioaid = new OppoImpl(context);
@@ -65,11 +65,11 @@ public final class OAIDFactory {
         if (ioaid == null || !ioaid.supported()) {
             ioaid = new GmsImpl(context);
             if (ioaid.supported()) {
-                OAIDLog.print("Google Mobile Service has been supported");
+                OAIDLog.print("Google Mobile Service has been found");
             } else {
                 ioaid = new MsaImpl(context);
                 if (ioaid.supported()) {
-                    OAIDLog.print("Mobile Security Alliance has been supported");
+                    OAIDLog.print("Mobile Security Alliance has been found");
                 } else {
                     ioaid = new DefaultImpl();
                 }

@@ -50,8 +50,12 @@ public final class OAIDRom {
         // 华为手机、荣耀手机
         return Build.MANUFACTURER.equalsIgnoreCase("HUAWEI") ||
                 Build.BRAND.equalsIgnoreCase("HUAWEI") ||
-                Build.BRAND.equalsIgnoreCase("HONOR") ||
-                !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
+                Build.BRAND.equalsIgnoreCase("HONOR");
+    }
+
+    public static boolean isEmui() {
+        // 除了华为手机，其他手机也可能刷了EMUI
+        return !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
     }
 
     public static boolean isOppo() {
@@ -70,11 +74,15 @@ public final class OAIDRom {
     }
 
     public static boolean isXiaomi() {
-        // 小米手机、红米手机、美图手机
+        // 小米手机、红米手机
         return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
                 Build.BRAND.equalsIgnoreCase("XIAOMI") ||
-                Build.BRAND.equalsIgnoreCase("REDMI") ||
-                !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
+                Build.BRAND.equalsIgnoreCase("REDMI");
+    }
+
+    public static boolean isMiui() {
+        // 除了小米手机，其他手机也可能刷了MIUI
+        return !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
     }
 
     public static boolean isBlackShark() {
@@ -135,18 +143,20 @@ public final class OAIDRom {
 
     public static boolean isFreeme() {
         // 卓易手机
-        if (Build.MANUFACTURER.equalsIgnoreCase("FREEMEOS")) {
-            return true;
-        }
-        return !TextUtils.isEmpty(sysProperty("ro.build.freeme.label", ""));
+        return Build.MANUFACTURER.equalsIgnoreCase("FREEMEOS") ||
+                !TextUtils.isEmpty(sysProperty("ro.build.freeme.label", ""));
     }
 
     public static boolean isSSUI() {
-        // 这是啥玩意的手机？百度及谷歌都搜不到相关资料
-        if (Build.MANUFACTURER.equalsIgnoreCase("SSUI")) {
-            return true;
-        }
-        return !TextUtils.isEmpty(sysProperty("ro.ssui.product", ""));
+        // 这是啥玩意的手机或系统？百度及谷歌都搜不到相关资料
+        return Build.MANUFACTURER.equalsIgnoreCase("SSUI") ||
+                !TextUtils.isEmpty(sysProperty("ro.ssui.product", ""));
+    }
+
+    public static boolean isHtc() {
+        // HTC手机
+        return Build.MANUFACTURER.equalsIgnoreCase("HTC") ||
+                Build.BRAND.equalsIgnoreCase("HTC");
     }
 
     public static boolean is360() {
@@ -178,12 +188,24 @@ public final class OAIDRom {
                 !TextUtils.isEmpty(sysProperty("ro.letv.release.version", ""));
     }
 
-    public static boolean isAmigo() {
+    public static boolean isGionee() {
         // 金立手机
-        return Build.MANUFACTURER.equalsIgnoreCase("AMIGO") ||
-                Build.BRAND.equalsIgnoreCase("AMIGO") ||
+        return Build.MANUFACTURER.equalsIgnoreCase("GIONEE") ||
+                Build.BRAND.equalsIgnoreCase("GIONEE") ||
                 Build.DISPLAY.toUpperCase().contains("AMIGO") ||
                 !TextUtils.isEmpty(sysProperty("ro.gn.gnromvernumber", ""));
+    }
+
+    public static boolean isMeitu() {
+        // 美图手机
+        return Build.MANUFACTURER.equalsIgnoreCase("MEITU") ||
+                Build.BRAND.equalsIgnoreCase("MEITU");
+    }
+
+    public static boolean isHisense() {
+        // 海信手机
+        return Build.MANUFACTURER.equalsIgnoreCase("HISENSE") ||
+                Build.BRAND.equalsIgnoreCase("HISENSE");
     }
 
 }

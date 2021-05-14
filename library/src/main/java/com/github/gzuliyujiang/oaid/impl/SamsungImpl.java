@@ -62,9 +62,7 @@ class SamsungImpl implements IOAID {
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     OAIDLog.print("Samsung DeviceIdService connected");
                     try {
-                        //IDeviceIdService anInterface = new IDeviceIdService.Stub.asInterface(service);
-                        Method asInterface = IDeviceIdService.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        IDeviceIdService anInterface = (IDeviceIdService) asInterface.invoke(null, service);
+                        IDeviceIdService anInterface = IDeviceIdService.Stub.asInterface(service);
                         if (anInterface == null) {
                             throw new RuntimeException("IDeviceIdService is null");
                         }

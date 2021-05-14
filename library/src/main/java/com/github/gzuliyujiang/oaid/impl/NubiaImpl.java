@@ -38,11 +38,15 @@ class NubiaImpl implements IOAID {
 
     @Override
     public boolean supported() {
-        return false;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
     }
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
+        if (!supported()) {
+            getter.onOAIDGetError(new RuntimeException("Only supports Android 10 and above"));
+            return;
+        }
         String oaid = null;
         Bundle bundle = null;
         try {

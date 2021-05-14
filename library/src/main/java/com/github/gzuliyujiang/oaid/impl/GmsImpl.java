@@ -30,7 +30,11 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 import repeackage.com.google.android.gms.ads.identifier.internal.IAdvertisingIdService;
 
 /**
- * 参阅谷歌官方 Google Play Services SDK：AdvertisingIdClient.getAdvertisingIdInfo(context).getId()
+ * 参阅谷歌官方 Google Play Services SDK。
+ * <prev>
+ * implementation `com.google.android.gms:play-services-ads:19.4.0`
+ * AdvertisingIdClient.getAdvertisingIdInfo(context).getId()
+ * </pre>
  *
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/5/14 2:37
@@ -45,7 +49,7 @@ class GmsImpl implements IOAID {
     @Override
     public boolean supported() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.android.vending", 0);
             return pi != null;
         } catch (Throwable e) {
             OAIDLog.print(e);
@@ -55,18 +59,22 @@ class GmsImpl implements IOAID {
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
+        if (!supported()) {
+            getter.onOAIDGetError(new RuntimeException("Google Play services not available"));
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.ads.identifier.service.START");
         intent.setPackage("com.google.android.gms");
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("Google Mobile Service connected");
+                    OAIDLog.print("Google Play Service connected");
                     try {
                         IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
                         String id = anInterface.getId();
                         if (id == null || id.length() == 0) {
-                            throw new RuntimeException("Google advertising id get failed");
+                            throw new RuntimeException("Android Advertising ID get failed");
                         }
                         getter.onOAIDGetComplete(id);
                     } catch (Throwable e) {
@@ -83,11 +91,11 @@ class GmsImpl implements IOAID {
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("Google Mobile Service disconnected");
+                    OAIDLog.print("Google Play Service disconnected");
                 }
             }, Context.BIND_AUTO_CREATE);
             if (!isBinded) {
-                throw new RuntimeException("Google Mobile Service bind failed");
+                throw new RuntimeException("Google Play Service bind failed");
             }
         } catch (Throwable e) {
             getter.onOAIDGetError(e);

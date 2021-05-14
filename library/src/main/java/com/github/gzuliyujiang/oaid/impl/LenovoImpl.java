@@ -26,8 +26,6 @@ import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
-import java.lang.reflect.Method;
-
 import repeackage.com.zui.deviceidservice.IDeviceidInterface;
 
 /**
@@ -64,9 +62,7 @@ class LenovoImpl implements IOAID {
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     OAIDLog.print("Lenovo DeviceidService connected");
                     try {
-                        //IDeviceidInterface anInterface = new IDeviceidInterface.Stub.asInterface(service);
-                        Method asInterface = IDeviceidInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        IDeviceidInterface anInterface = (IDeviceidInterface) asInterface.invoke(null, service);
+                        IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
                         if (anInterface == null) {
                             throw new RuntimeException("IDeviceidInterface is null");
                         }

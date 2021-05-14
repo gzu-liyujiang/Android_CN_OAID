@@ -64,9 +64,7 @@ class MsaImpl implements IOAID {
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     OAIDLog.print("MsaIdService connected");
                     try {
-                        //MsaIdInterface anInterface = new MsaIdInterface.Stub.asInterface(service);
-                        Method asInterface = MsaIdInterface.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-                        MsaIdInterface anInterface = (MsaIdInterface) asInterface.invoke(null, service);
+                        MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
                         if (anInterface == null) {
                             throw new RuntimeException("MsaIdInterface is null");
                         }

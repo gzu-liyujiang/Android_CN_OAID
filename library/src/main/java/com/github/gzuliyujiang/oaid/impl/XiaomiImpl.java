@@ -59,7 +59,7 @@ class XiaomiImpl implements IOAID {
             return;
         }
         try {
-            String oaid = invokeMethod("getOAID");
+            String oaid = getOAID();
             if (oaid != null && oaid.length() > 0) {
                 getter.onOAIDGetComplete(oaid);
             } else {
@@ -71,10 +71,10 @@ class XiaomiImpl implements IOAID {
         }
     }
 
-    private String invokeMethod(String methodName) {
+    private String getOAID() {
         String result = null;
         try {
-            Method method = idProviderClass.getMethod(methodName, Context.class);
+            Method method = idProviderClass.getMethod("getOAID", Context.class);
             result = (String) method.invoke(idProviderImpl, context);
         } catch (Throwable e) {
             OAIDLog.print(e);

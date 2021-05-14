@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -32,13 +33,18 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 import repeackage.com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
 
 /**
- * 参阅华为官方SDK：AdvertisingIdClient.getAdvertisingIdInfo(context).getId()
+ * 参阅华为官方 HUAWEI Ads SDK。
+ * <prev>
+ * implementation `com.huawei.hms:ads-identifier:3.4.39.302`
+ * AdvertisingIdClient.getAdvertisingIdInfo(context).getId()
+ * </pre> *
  *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
 class HuaweiImpl implements IOAID {
     private final Context context;
+    private String packageName;
 
     public HuaweiImpl(Context context) {
         this.context = context;
@@ -47,8 +53,17 @@ class HuaweiImpl implements IOAID {
     @Override
     public boolean supported() {
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.huawei.hwid", 0);
-            return pi != null;
+            PackageManager pm = context.getPackageManager();
+            packageName = "com.huawei.hms";
+            if (pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null) {
+                return true;
+            }
+            packageName = "com.huawei.hwid.tv";
+            if (pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null) {
+                return true;
+            }
+            packageName = "com.huawei.hwid";
+            return pm.getPackageInfo(packageName, PackageManager.GET_META_DATA) != null;
         } catch (Throwable e) {
             OAIDLog.print(e);
             return false;
@@ -68,8 +83,12 @@ class HuaweiImpl implements IOAID {
                 OAIDLog.print(e);
             }
         }
+        if (TextUtils.isEmpty(packageName) && !supported()) {
+            getter.onOAIDGetError(new RuntimeException("Huawei Advertising ID not available"));
+            return;
+        }
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
-        intent.setPackage("com.huawei.hwid");
+        intent.setPackage(packageName);
         try {
             boolean isBinded = context.bindService(intent, new ServiceConnection() {
                 @Override
@@ -77,11 +96,11 @@ class HuaweiImpl implements IOAID {
                     OAIDLog.print("Huawei OPENIDS_SERVICE connected");
                     try {
                         OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                        String id = anInterface.getId();
-                        if (id == null || id.length() == 0) {
-                            throw new RuntimeException("Huawei advertising id get failed");
+                        String oaid = anInterface.getOaid();
+                        if (oaid == null || oaid.length() == 0) {
+                            throw new RuntimeException("Huawei Advertising ID get failed");
                         }
-                        getter.onOAIDGetComplete(id);
+                        getter.onOAIDGetComplete(oaid);
                     } catch (Throwable e) {
                         OAIDLog.print(e);
                         getter.onOAIDGetError(e);
