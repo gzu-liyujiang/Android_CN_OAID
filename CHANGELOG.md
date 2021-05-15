@@ -1,5 +1,9 @@
 # 更新日志
 
+## 4.1.1 - 2021/05/15
+
+- 加入 `READ_PHONE_STATE`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。
+
 ## 4.1.0 - 2021/05/14
 
 - 支持中兴及 Motorola、HTC、LG、Sony 等海外平台手机获取 AAID（安卓广告标识符）。

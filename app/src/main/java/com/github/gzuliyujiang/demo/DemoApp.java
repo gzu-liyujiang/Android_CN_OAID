@@ -19,16 +19,18 @@ import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
- * Created by liyujiang on 2020/5/20.
- *
  * @author 大定府羡民（1032694760@qq.com）
+ * @since 2020/5/20
  */
 public class DemoApp extends Application {
+
+    static {
+        OAIDLog.enable();
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        OAIDLog.enable();
         // 注意：如果不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
         DeviceID.register(this);
     }

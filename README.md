@@ -40,6 +40,16 @@ dependencies {
 }
 ```
 
+自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统，若项目中没用到 IMEI/MEID，那么建议在 `AndroidManifest.xml` 中加入如下代码移除电话权限：
+
+```xml
+<manifest>
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
+</manifest>
+```
+
 ### 代码示例
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
@@ -83,22 +93,22 @@ dependencies {
         // 获取GUID，随机生成，不会为空
         builder.append(DeviceID.getGUID(this));
         builder.append("\n");
-        // 是否支持OAID
-        builder.append("supportedOAID:").append(DeviceID.supportedOAID(this));
+        // 是否支持OAID/AAID
+        builder.append("supported:").append(DeviceID.supportedOAID(this));
         builder.append("\n");
-        // 获取OAID，异步回调
+        // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
             public void onOAIDGetComplete(@NonNull String result) {
-                // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-                builder.append("OAID: ").append(result);
+                // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
+                builder.append("OAID/AAID: ").append(result);
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
             public void onOAIDGetError(@NonNull Throwable error) {
-                // 获取OAID失败
-                builder.append("OAID: 失败，").append(error);
+                // 获取OAID/AAID失败
+                builder.append("OAID/AAID: 失败，").append(error);
                 tvDeviceIdResult.setText(builder);
             }
         });
@@ -107,7 +117,7 @@ dependencies {
 - 用法二：预先获取设备标识符（**建议不要和用法一同时存在**）
 
 ```text
-    // 在 Application#onCreate 里调用预取
+    // 在 Application#onCreate 里调用预取。注意：如果不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
     DeviceID.register(this);
     // 在需要用到设备标识的地方获取
     // 客户端标识原始值：DeviceID.getClientId()

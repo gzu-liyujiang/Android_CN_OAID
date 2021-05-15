@@ -110,22 +110,22 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         // 获取GUID，随机生成，不会为空
         builder.append(DeviceID.getGUID(this));
         builder.append("\n");
-        // 是否支持OAID
-        builder.append("supportedOAID: ").append(DeviceID.supportedOAID(this));
+        // 是否支持OAID/AAID
+        builder.append("supported: ").append(DeviceID.supportedOAID(this));
         builder.append("\n");
-        // 获取OAID，异步回调
+        // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
             public void onOAIDGetComplete(@NonNull String result) {
-                // 不同厂商的OAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-                builder.append("OAID: ").append(result);
+                // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
+                builder.append("OAID/AAID: ").append(result);
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
             public void onOAIDGetError(@NonNull Throwable error) {
-                // 获取OAID失败
-                builder.append("OAID: 失败，").append(error);
+                // 获取OAID/AAID失败
+                builder.append("OAID/AAID: ").append(error);
                 tvDeviceIdResult.setText(builder);
             }
         });
