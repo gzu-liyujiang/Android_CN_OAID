@@ -23,7 +23,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.0'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.1'
 }
 ```
 
