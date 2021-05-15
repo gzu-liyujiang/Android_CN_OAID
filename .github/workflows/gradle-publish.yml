@@ -12,7 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v2
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
@@ -21,7 +22,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-      #- name: Publish to mavenLocal()
-      #  run: ./gradlew publishToMavenLocal --warning-mode all
-      - name: Publish to local maven repository
-        run: ./gradlew publishReleasePublicationToLocal --warning-mode all
+      - name: Publish to mavenLocal()
+        run: ./gradlew publishToMavenLocal --info --warning-mode all
+      - name: Auto send a request to JitPack
+        uses: badasintended/autojitpack@v0
