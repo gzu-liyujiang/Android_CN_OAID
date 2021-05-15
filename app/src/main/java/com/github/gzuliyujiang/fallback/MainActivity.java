@@ -11,7 +11,7 @@
  * See the Mulan PSL v2 for more details.
  */
 
-package com.github.gzuliyujiang.demo;
+package com.github.gzuliyujiang.fallback;
 
 import android.Manifest;
 import android.os.Build;

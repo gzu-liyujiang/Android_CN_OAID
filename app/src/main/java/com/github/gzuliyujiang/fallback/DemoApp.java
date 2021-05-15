@@ -11,9 +11,12 @@
  * See the Mulan PSL v2 for more details.
  */
 
-package com.github.gzuliyujiang.demo;
+package com.github.gzuliyujiang.fallback;
 
 import android.app.Application;
+import android.content.Context;
+
+import androidx.multidex.MultiDex;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
@@ -26,6 +29,12 @@ public class DemoApp extends Application {
 
     static {
         OAIDLog.enable();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     @Override
