@@ -5,6 +5,9 @@
 
 安卓设备唯一标识解决方案，可作为移动安全联盟统一 SDK （miit_mdid_xxx.aar）的替代方案。本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID （安卓广告标识）的便携接口，另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
 
+- GitHub：https://github.com/gzu-liyujiang/Android_CN_OAID
+- 码云(GitEE)：https://gitee.com/li_yu_jiang/Android_CN_OAID
+
 ## 接入指引
 
 最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID) （[更新日志](/CHANGELOG.md) | [JavaDoc](https://gzu-liyujiang.github.io/Android_CN_OAID/)）
@@ -23,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.1'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.2'
 }
 ```
 
@@ -163,7 +166,7 @@ dependencies {
 | 魅族（Meizu）                     | Android 10+、Google Play Service 4.0+                    |
 | 一加（OnePlus）                   | Android 10+、Google Play Service 4.0+                    |
 | 努比亚（Nubia）                   | Android 10+、Google Play Service 4.0+                    |
-| 其他（ZTE、HTC、Motorola、……）     | Freeme OS、SSUI、Google Play Service 4.0+                |
+| 其他（ZTE、HTC、Motorola、……）    | Freeme OS、SSUI、Google Play Service 4.0+                |
 
 > 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码以及逆向分析参考移动安全联盟的 SDK、HUAWEI Ads SDK、小米 DeviceId.jar、Google Play Services SDK 等。
 
@@ -193,7 +196,7 @@ dependencies {
 - 摩托罗拉 ![](/screenshot/aaid_motorola.png)
 - 索尼手机 ![](/screenshot/aaid_sony.png)
 - 诺基亚机 ![](/screenshot/aaid_nokia.png)
-- HTC手机 ![](/screenshot/aaid_htc.png)
+- HTC 手机 ![](/screenshot/aaid_htc.png)
 - LG 手机 ![](/screenshot/aaid_lge.png)
 
 ### 不支持 OAID 或 AAID

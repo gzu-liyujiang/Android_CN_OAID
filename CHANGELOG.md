@@ -1,5 +1,11 @@
 # 更新日志
 
+## 4.1.2 - 2021/05/20
+
+- 精简代码，优化打印调试日志。
+- 修复 Android 6.0 以下系统版本获取 GUID 闪退（NoSuchMethodError: No static method canWrite...）。
+- 改进 Android 6.0 以下系统版本 GUID 持久化、稳定性。
+
 ## 4.1.1 - 2021/05/15
 
 - 加入 `READ_PHONE_STATE`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。
