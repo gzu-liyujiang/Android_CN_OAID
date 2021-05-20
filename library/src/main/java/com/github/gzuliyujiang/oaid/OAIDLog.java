@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 
 package com.github.gzuliyujiang.oaid;
@@ -48,17 +47,11 @@ public final class OAIDLog {
         if (!enable) {
             return;
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append("^_^\n");
-        sb.append("---------------------------------------------------------------------------\n");
-        if (log instanceof Throwable) {
-            sb.append(Log.getStackTraceString((Throwable) log));
-        } else {
-            sb.append(log.toString());
-        }
-        sb.append("\n");
-        sb.append("---------------------------------------------------------------------------\n");
-        Log.d(TAG, sb.toString());
+        String logStr = log.toString();
+        //if (log instanceof Throwable) {
+        //    Log.getStackTraceString((Throwable) log);
+        //}
+        Log.d(TAG, logStr);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,14 +9,11 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -88,46 +85,17 @@ class HuaweiImpl implements IOAID {
         }
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
         intent.setPackage(packageName);
-        try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("Huawei OPENIDS_SERVICE connected");
-                    try {
-                        OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                        if (anInterface.isOaidTrackLimited()) {
-                            // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
-                            getter.onOAIDGetError(new RuntimeException("User has disabled advertising identifier"));
-                            return;
-                        }
-                        String oaid = anInterface.getOaid();
-                        if (oaid == null || oaid.length() == 0) {
-                            throw new RuntimeException("Huawei Advertising ID get failed");
-                        }
-                        getter.onOAIDGetComplete(oaid);
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                        getter.onOAIDGetError(e);
-                    } finally {
-                        try {
-                            context.unbindService(this);
-                        } catch (Throwable e) {
-                            OAIDLog.print(e);
-                        }
-                    }
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+            @Override
+            public String runRemoteInterface(IBinder service) throws Throwable {
+                OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
+                if (anInterface.isOaidTrackLimited()) {
+                    // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
+                    throw new RuntimeException("User has disabled advertising identifier");
                 }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("Huawei OPENIDS_SERVICE disconnected");
-                }
-            }, Context.BIND_AUTO_CREATE);
-            if (!isBinded) {
-                throw new RuntimeException("Huawei OPENIDS_SERVICE bind failed");
+                return anInterface.getOaid();
             }
-        } catch (Throwable e) {
-            getter.onOAIDGetError(e);
-        }
+        });
     }
 
 }

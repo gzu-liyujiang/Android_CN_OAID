@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,15 +9,12 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
@@ -65,45 +62,17 @@ class GmsImpl implements IOAID {
         }
         Intent intent = new Intent("com.google.android.gms.ads.identifier.service.START");
         intent.setPackage("com.google.android.gms");
-        try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("Google Play Service connected");
-                    try {
-                        IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
-                        if (anInterface.isLimitAdTrackingEnabled(true)) {
-                            // 实测在系统设置中停用了广告化功能也是能获取到广告标识符的
-                            OAIDLog.print("User has disabled advertising identifier");
-                        }
-                        String id = anInterface.getId();
-                        if (id == null || id.length() == 0) {
-                            throw new RuntimeException("Android Advertising ID get failed");
-                        }
-                        getter.onOAIDGetComplete(id);
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                        getter.onOAIDGetError(e);
-                    } finally {
-                        try {
-                            context.unbindService(this);
-                        } catch (Throwable e) {
-                            OAIDLog.print(e);
-                        }
-                    }
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+            @Override
+            public String runRemoteInterface(IBinder service) throws Throwable {
+                IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
+                if (anInterface.isLimitAdTrackingEnabled(true)) {
+                    // 实测在系统设置中停用了广告化功能也是能获取到广告标识符的
+                    OAIDLog.print("User has disabled advertising identifier");
                 }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("Google Play Service disconnected");
-                }
-            }, Context.BIND_AUTO_CREATE);
-            if (!isBinded) {
-                throw new RuntimeException("Google Play Service bind failed");
+                return anInterface.getId();
             }
-        } catch (Throwable e) {
-            getter.onOAIDGetError(e);
-        }
+        });
     }
 
 }

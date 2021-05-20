@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
@@ -17,7 +16,6 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -29,7 +27,6 @@ import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
-import java.lang.reflect.Method;
 import java.security.MessageDigest;
 
 import repeackage.com.heytap.openid.IOpenID;
@@ -63,41 +60,12 @@ class OppoImpl implements IOAID {
     public void doGet(@NonNull final IGetter getter) {
         Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
         intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
-        try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("HeyTap IdentifyService connected");
-                    try {
-                        String ouid = realGetOUID(service);
-                        if (ouid == null || ouid.length() == 0) {
-                            throw new RuntimeException("HeyTap OUID get failed");
-                        } else {
-                            getter.onOAIDGetComplete(ouid);
-                        }
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                        getter.onOAIDGetError(e);
-                    } finally {
-                        try {
-                            context.unbindService(this);
-                        } catch (Throwable e) {
-                            OAIDLog.print(e);
-                        }
-                    }
-                }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("HeyTap IdentifyService disconnected");
-                }
-            }, Context.BIND_AUTO_CREATE);
-            if (!isBinded) {
-                throw new RuntimeException("HeyTap IdentifyService bind failed");
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+            @Override
+            public String runRemoteInterface(IBinder service) throws Throwable {
+                return realGetOUID(service);
             }
-        } catch (Throwable e) {
-            getter.onOAIDGetError(e);
-        }
+        });
     }
 
     @SuppressLint("PackageManagerGetSignatures")
@@ -119,18 +87,12 @@ class OppoImpl implements IOAID {
         return getSerId(service, pkgName, sign);
     }
 
-    private String getSerId(IBinder service, String pkgName, String sign) {
-        try {
-            //IOpenID anInterface = new IOpenID.Stub.asInterface(service);
-            Method asInterface = IOpenID.Stub.class.getDeclaredMethod("asInterface", IBinder.class);
-            IOpenID anInterface = (IOpenID) asInterface.invoke(null, service);
-            if (anInterface == null) {
-                throw new NullPointerException("IOpenID is null");
-            }
-            return anInterface.getSerID(pkgName, sign, "OUID");
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+    private String getSerId(IBinder service, String pkgName, String sign) throws Exception {
+        IOpenID anInterface = IOpenID.Stub.asInterface(service);
+        if (anInterface == null) {
+            throw new NullPointerException("IOpenID is null");
         }
+        return anInterface.getSerID(pkgName, sign, "OUID");
     }
 
 }

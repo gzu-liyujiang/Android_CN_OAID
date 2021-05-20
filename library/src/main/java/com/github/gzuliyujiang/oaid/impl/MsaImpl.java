@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,14 +9,11 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
@@ -25,8 +22,6 @@ import androidx.annotation.NonNull;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
-
-import java.lang.reflect.Method;
 
 import repeackage.com.bun.lib.MsaIdInterface;
 
@@ -58,47 +53,19 @@ class MsaImpl implements IOAID {
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
         intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
-        try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("MsaIdService connected");
-                    try {
-                        MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
-                        if (anInterface == null) {
-                            throw new RuntimeException("MsaIdInterface is null");
-                        }
-                        if (!anInterface.isSupported()) {
-                            throw new RuntimeException("MsaIdInterface#isSupported return false");
-                        }
-                        String oaid = anInterface.getOAID();
-                        if (oaid == null || oaid.length() == 0) {
-                            throw new RuntimeException("Msa oaid get failed");
-                        }
-                        getter.onOAIDGetComplete(oaid);
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                        getter.onOAIDGetError(e);
-                    } finally {
-                        try {
-                            context.unbindService(this);
-                        } catch (Throwable e) {
-                            OAIDLog.print(e);
-                        }
-                    }
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+            @Override
+            public String runRemoteInterface(IBinder service) throws Throwable {
+                MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
+                if (anInterface == null) {
+                    throw new RuntimeException("MsaIdInterface is null");
                 }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("MsaIdService disconnected");
+                if (!anInterface.isSupported()) {
+                    throw new RuntimeException("MsaIdInterface#isSupported return false");
                 }
-            }, Context.BIND_AUTO_CREATE);
-            if (!isBinded) {
-                throw new RuntimeException("MsaIdService bind failed");
+                return anInterface.getOAID();
             }
-        } catch (Throwable e) {
-            getter.onOAIDGetError(e);
-        }
+        });
     }
 
     private void startMsaKlService() {

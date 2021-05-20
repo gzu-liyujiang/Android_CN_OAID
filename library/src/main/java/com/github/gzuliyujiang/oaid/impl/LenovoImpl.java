@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,14 +9,11 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
@@ -56,47 +53,19 @@ class LenovoImpl implements IOAID {
     public void doGet(@NonNull final IGetter getter) {
         Intent intent = new Intent();
         intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
-        try {
-            boolean isBinded = context.bindService(intent, new ServiceConnection() {
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    OAIDLog.print("Lenovo DeviceidService connected");
-                    try {
-                        IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
-                        if (anInterface == null) {
-                            throw new RuntimeException("IDeviceidInterface is null");
-                        }
-                        if (!anInterface.isSupport()) {
-                            throw new RuntimeException("IDeviceidInterface#isSupport return false");
-                        }
-                        String oaid = anInterface.getOAID();
-                        if (oaid == null || oaid.length() == 0) {
-                            throw new RuntimeException("Lenovo OAID get failed");
-                        }
-                        getter.onOAIDGetComplete(oaid);
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                        getter.onOAIDGetError(e);
-                    } finally {
-                        try {
-                            context.unbindService(this);
-                        } catch (Throwable e) {
-                            OAIDLog.print(e);
-                        }
-                    }
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+            @Override
+            public String runRemoteInterface(IBinder service) throws Throwable {
+                IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
+                if (anInterface == null) {
+                    throw new RuntimeException("IDeviceidInterface is null");
                 }
-
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    OAIDLog.print("Lenovo DeviceidService disconnected");
+                if (!anInterface.isSupport()) {
+                    throw new RuntimeException("IDeviceidInterface#isSupport return false");
                 }
-            }, Context.BIND_AUTO_CREATE);
-            if (!isBinded) {
-                getter.onOAIDGetError(new RuntimeException("Lenovo DeviceidService bind failed"));
+                return anInterface.getOAID();
             }
-        } catch (Throwable e) {
-            getter.onOAIDGetError(e);
-        }
+        });
     }
 
 }
