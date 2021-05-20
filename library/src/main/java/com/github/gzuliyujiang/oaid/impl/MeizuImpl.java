@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
@@ -41,13 +40,11 @@ class MeizuImpl implements IOAID {
     public boolean supported() {
         try {
             ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
-            if (pi != null) {
-                return true;
-            }
+            return pi != null;
         } catch (Throwable e) {
             OAIDLog.print(e);
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -55,11 +52,12 @@ class MeizuImpl implements IOAID {
         Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null, new String[]{"oaid"}, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
-            String ret = cursor.getString(cursor.getColumnIndex("value"));
-            if (ret == null || ret.length() == 0) {
+            String oaid = cursor.getString(cursor.getColumnIndex("value"));
+            OAIDLog.print("OAID query success: " + oaid);
+            if (oaid == null || oaid.length() == 0) {
                 throw new RuntimeException("OAID query failed");
             }
-            getter.onOAIDGetComplete(ret);
+            getter.onOAIDGetComplete(oaid);
         } catch (Throwable e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);

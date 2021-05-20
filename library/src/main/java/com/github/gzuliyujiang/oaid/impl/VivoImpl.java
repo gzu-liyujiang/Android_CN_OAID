@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
@@ -50,10 +49,10 @@ class VivoImpl implements IOAID {
         Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
-            String ret = cursor.getString(cursor.getColumnIndex("value"));
-            if (ret != null && ret.length() > 0) {
-                OAIDLog.print("oaid from provider: " + uri);
-                getter.onOAIDGetComplete(ret);
+            String oaid = cursor.getString(cursor.getColumnIndex("value"));
+            if (oaid != null && oaid.length() > 0) {
+                OAIDLog.print("OAID query success: " + oaid);
+                getter.onOAIDGetComplete(oaid);
             } else {
                 throw new RuntimeException("OAID query failed");
             }

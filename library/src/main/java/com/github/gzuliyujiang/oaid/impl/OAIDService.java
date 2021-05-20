@@ -53,6 +53,7 @@ class OAIDService implements ServiceConnection {
             if (!ret) {
                 throw new RuntimeException("Service binding failed");
             }
+            OAIDLog.print("Service has been bound: " + intent);
         } catch (Throwable e) {
             getter.onOAIDGetError(e);
         }
@@ -60,12 +61,13 @@ class OAIDService implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        OAIDLog.print("onServiceConnected: " + name);
+        OAIDLog.print("Service has been connected: " + name.getClassName());
         try {
             String oaid = runner.runRemoteInterface(service);
             if (oaid == null || oaid.length() == 0) {
-                throw new RuntimeException("OAID acquire failed");
+                throw new RuntimeException("OAID/AAID acquire failed");
             }
+            OAIDLog.print("OAID/AAID acquire success: " + oaid);
             getter.onOAIDGetComplete(oaid);
         } catch (Throwable e) {
             OAIDLog.print(e);
@@ -73,6 +75,7 @@ class OAIDService implements ServiceConnection {
         } finally {
             try {
                 context.unbindService(this);
+                OAIDLog.print("Service has been unbound: " + name.getClassName());
             } catch (Throwable e) {
                 OAIDLog.print(e);
             }
@@ -81,7 +84,7 @@ class OAIDService implements ServiceConnection {
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        OAIDLog.print("onServiceDisconnected: " + name);
+        OAIDLog.print("Service has been disconnected: " + name.getClassName());
     }
 
     public interface RemoteRunner {

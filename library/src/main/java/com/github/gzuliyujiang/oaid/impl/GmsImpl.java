@@ -56,10 +56,6 @@ class GmsImpl implements IOAID {
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
-        if (!supported()) {
-            getter.onOAIDGetError(new RuntimeException("Google Play services not available"));
-            return;
-        }
         Intent intent = new Intent("com.google.android.gms.ads.identifier.service.START");
         intent.setPackage("com.google.android.gms");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {

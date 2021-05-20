@@ -13,6 +13,7 @@
 package com.github.gzuliyujiang.oaid.impl;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +43,11 @@ class OppoImpl implements IOAID {
     private String sign;
 
     public OppoImpl(Context context) {
-        this.context = context;
+        if (context instanceof Application) {
+            this.context = context;
+        } else {
+            this.context = context.getApplicationContext();
+        }
     }
 
     @Override

@@ -72,6 +72,7 @@ class HuaweiImpl implements IOAID {
             try {
                 String oaid = Settings.Global.getString(context.getContentResolver(), "pps_oaid");
                 if (!TextUtils.isEmpty(oaid)) {
+                    OAIDLog.print("Get oaid from global settings: " + oaid);
                     getter.onOAIDGetComplete(oaid);
                     return;
                 }

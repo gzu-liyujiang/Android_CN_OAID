@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
@@ -44,7 +43,9 @@ class NubiaImpl implements IOAID {
     @Override
     public void doGet(@NonNull final IGetter getter) {
         if (!supported()) {
-            getter.onOAIDGetError(new RuntimeException("Only supports Android 10 and above"));
+            String message = "Only supports Android 10.0 and above for Nubia";
+            OAIDLog.print(message);
+            getter.onOAIDGetError(new RuntimeException(message));
             return;
         }
         String oaid = null;
@@ -61,16 +62,16 @@ class NubiaImpl implements IOAID {
                 }
             }
             if (bundle == null) {
-                throw new RuntimeException("getOAID call failed");
+                throw new RuntimeException("OAID query failed: bundle is null");
             }
             if (bundle.getInt("code", -1) == 0) {
                 oaid = bundle.getString("id");
             }
-            String failedMsg = bundle.getString("message");
             if (oaid != null && oaid.length() > 0) {
+                OAIDLog.print("OAID query success: " + oaid);
                 getter.onOAIDGetComplete(oaid);
             } else {
-                throw new RuntimeException(failedMsg);
+                throw new RuntimeException("OAID query failed: " + bundle.getString("message"));
             }
         } catch (Throwable e) {
             OAIDLog.print(e);

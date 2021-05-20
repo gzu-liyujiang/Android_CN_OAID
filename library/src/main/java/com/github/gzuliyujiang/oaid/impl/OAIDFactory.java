@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 
 package com.github.gzuliyujiang.oaid.impl;
@@ -41,43 +40,47 @@ public final class OAIDFactory {
             // See https://github.com/gzu-liyujiang/Android_CN_OAID/pull/23
             context = context.getApplicationContext();
         }
-        if (ioaid == null) {
-            if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
-                ioaid = new LenovoImpl(context);
-            } else if (OAIDRom.isMeizu()) {
-                ioaid = new MeizuImpl(context);
-            } else if (OAIDRom.isNubia()) {
-                ioaid = new NubiaImpl(context);
-            } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
-                ioaid = new XiaomiImpl(context);
-            } else if (OAIDRom.isSamsung()) {
-                ioaid = new SamsungImpl(context);
-            } else if (OAIDRom.isVivo()) {
-                ioaid = new VivoImpl(context);
-            } else if (OAIDRom.isASUS()) {
-                ioaid = new AsusImpl(context);
-            } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
-                ioaid = new HuaweiImpl(context);
-            } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
-                ioaid = new OppoImpl(context);
-            }
+        if (ioaid != null) {
+            return ioaid;
         }
-        if (ioaid == null || !ioaid.supported()) {
-            // 若各厂商自家没有提供接口，则优先尝试移动安全联盟的接口
-            ioaid = new MsaImpl(context);
-            if (ioaid.supported()) {
-                OAIDLog.print("Mobile Security Alliance has been found");
-            } else {
-                // 若不支持移动安全联盟的接口，则尝试谷歌服务框架的接口
-                ioaid = new GmsImpl(context);
-                if (ioaid.supported()) {
-                    OAIDLog.print("Google Play Service has been found");
-                } else {
-                    // 默认不支持
-                    ioaid = new DefaultImpl();
-                }
-            }
+        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
+            ioaid = new LenovoImpl(context);
+        } else if (OAIDRom.isMeizu()) {
+            ioaid = new MeizuImpl(context);
+        } else if (OAIDRom.isNubia()) {
+            ioaid = new NubiaImpl(context);
+        } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
+            ioaid = new XiaomiImpl(context);
+        } else if (OAIDRom.isSamsung()) {
+            ioaid = new SamsungImpl(context);
+        } else if (OAIDRom.isVivo()) {
+            ioaid = new VivoImpl(context);
+        } else if (OAIDRom.isASUS()) {
+            ioaid = new AsusImpl(context);
+        } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
+            ioaid = new HuaweiImpl(context);
+        } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
+            ioaid = new OppoImpl(context);
         }
+        if (ioaid != null && ioaid.supported()) {
+            OAIDLog.print("Manufacturer interface has been found: " + ioaid.getClass().getName());
+            return ioaid;
+        }
+        // 若各厂商自家没有提供接口，则优先尝试移动安全联盟的接口
+        ioaid = new MsaImpl(context);
+        if (ioaid.supported()) {
+            OAIDLog.print("Mobile Security Alliance has been found: " + ioaid.getClass().getName());
+            return ioaid;
+        }
+        // 若不支持移动安全联盟的接口，则尝试谷歌服务框架的接口
+        ioaid = new GmsImpl(context);
+        if (ioaid.supported()) {
+            OAIDLog.print("Google Play Service has been found: " + ioaid.getClass().getName());
+            return ioaid;
+        }
+        // 默认不支持
+        ioaid = new DefaultImpl();
+        OAIDLog.print("OAID/AAID was not supported: " + ioaid.getClass().getName());
         return ioaid;
     }
 

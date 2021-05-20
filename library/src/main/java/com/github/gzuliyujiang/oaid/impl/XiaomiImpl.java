@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid.impl;
 
@@ -61,9 +60,10 @@ class XiaomiImpl implements IOAID {
         try {
             String oaid = getOAID();
             if (oaid != null && oaid.length() > 0) {
+                OAIDLog.print("OAID query success: " + oaid);
                 getter.onOAIDGetComplete(oaid);
             } else {
-                throw new RuntimeException("Xiaomi OAID get failed");
+                throw new RuntimeException("OAID query failed");
             }
         } catch (Throwable e) {
             OAIDLog.print(e);
@@ -71,15 +71,9 @@ class XiaomiImpl implements IOAID {
         }
     }
 
-    private String getOAID() {
-        String result = null;
-        try {
-            Method method = idProviderClass.getMethod("getOAID", Context.class);
-            result = (String) method.invoke(idProviderImpl, context);
-        } catch (Throwable e) {
-            OAIDLog.print(e);
-        }
-        return result;
+    private String getOAID() throws Throwable {
+        Method method = idProviderClass.getMethod("getOAID", Context.class);
+        return (String) method.invoke(idProviderImpl, context);
     }
 
 }
