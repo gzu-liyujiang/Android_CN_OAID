@@ -337,7 +337,7 @@ public final class DeviceID {
                 }
             }
         }
-        uuid = Settings.Global.getString(context.getContentResolver(), "GUID_uuid");
+        uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
         OAIDLog.print("Get uuid from settings: " + uuid);
         if (!TextUtils.isEmpty(uuid)) {
             return uuid;
@@ -368,14 +368,19 @@ public final class DeviceID {
                 }
             }
         }
-        if (Settings.System.canWrite(context)) {
-            try {
-                Settings.Global.putString(context.getContentResolver(), "GUID_uuid", uuid);
-            } catch (Throwable e) {
-                OAIDLog.print(e);
+        try {
+            if (Settings.System.canWrite(context)) {
+                try {
+                    Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
+                } catch (Throwable e) {
+                    OAIDLog.print(e);
+                }
+            } else {
+                OAIDLog.print("android.permission.WRITE_SETTINGS not granted");
             }
-        } else {
-            OAIDLog.print("android.permission.WRITE_SETTINGS not granted");
+        } catch (Throwable e) {
+            // Under Android 6.0, NoSuchMethodError: No static method canWrite...
+            OAIDLog.print(e);
         }
         return uuid;
     }
