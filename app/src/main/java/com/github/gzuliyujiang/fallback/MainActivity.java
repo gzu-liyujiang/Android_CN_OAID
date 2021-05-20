@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             obtainDeviceId();
             return;
         }
-        Toast.makeText(this, "请授予电话状态权限！", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "请授予电话状态权限以便获取IMEI！", Toast.LENGTH_LONG).show();
+        obtainDeviceId();
     }
 
     @Override

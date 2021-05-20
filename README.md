@@ -40,12 +40,15 @@ dependencies {
 }
 ```
 
-自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统，若项目中没用到 IMEI/MEID，那么建议在 `AndroidManifest.xml` 中加入如下代码移除电话权限：
+自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`、`WRITE_SETTINGS`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。为遵循最小必要原则保护用户隐私，若项目中没用到 IMEI 及 GUID，那么可酌情在 `AndroidManifest.xml` 中加入如下代码移除相关权限：
 
 ```xml
 <manifest>
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:node="remove" />
 </manifest>
 ```

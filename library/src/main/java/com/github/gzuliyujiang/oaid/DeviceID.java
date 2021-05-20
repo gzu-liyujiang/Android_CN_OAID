@@ -161,7 +161,12 @@ public final class DeviceID {
     }
 
     /**
-     * 获取唯一设备标识。Android 6-9 需要申请电话权限，Android 10+ 不再允许获取。
+     * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI，Android 10+ 非系统应用则不再允许获取 IMEI。
+     * <pre>
+     *     <uses-permission
+     *         android:name="android.permission.READ_PHONE_STATE"
+     *         android:maxSdkVersion="29" />
+     * </pre>
      *
      * @param context 上下文
      * @return IMEI或MEID，可能为空
@@ -180,7 +185,7 @@ public final class DeviceID {
                 && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) !=
                 PackageManager.PERMISSION_GRANTED) {
             OAIDLog.print("android.permission.READ_PHONE_STATE not granted");
-            // Android 6-9 需要申请电话权限才能获取设备唯一标识
+            // Android 6.0-9.0 需要申请电话权限才能获取设备唯一标识
             return "";
         }
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -294,10 +299,11 @@ public final class DeviceID {
     }
 
     /**
-     * 随机生成全局唯一标识并暂存到{@link SharedPreferences}。为保障该标识的Android10.0以下版本系统上的稳定性，
-     * 建议加入{@link Manifest.permission.WRITE_EXTERNAL_STORAGE}及{@link Manifest.permission.WRITE_SETTINGS}。
+     * 随机生成全局唯一标识并存到{@code SharedPreferences}、{@code ExternalStorage}及{@code SystemSettings}。
+     * 为保障在Android10以下版本上的稳定性，需要加入权限{@code WRITE_EXTERNAL_STORAGE}及{@code WRITE_SETTINGS}。
      * <pre>
      *     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+     *         android:maxSdkVersion="29"
      *         tools:ignore="ScopedStorage" />
      *     <uses-permission
      *         android:name="android.permission.WRITE_SETTINGS"
@@ -309,9 +315,16 @@ public final class DeviceID {
      */
     @NonNull
     public static String getGUID(@NonNull Context context) {
-        String uuid = "";
+        String uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
+        OAIDLog.print("Get uuid from system settings: " + uuid);
+        if (!TextUtils.isEmpty(uuid)) {
+            return uuid;
+        }
         File file = null;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+        boolean hasStoragePermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && hasStoragePermission &&
                 TextUtils.equals(Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED)) {
             BufferedReader reader = null;
             try {
@@ -321,7 +334,7 @@ public final class DeviceID {
                 }
                 reader = new BufferedReader(new FileReader(file));
                 uuid = reader.readLine();
-                OAIDLog.print("Get uuid from sdcard: " + uuid);
+                OAIDLog.print("Get uuid from external storage: " + uuid);
                 if (!TextUtils.isEmpty(uuid)) {
                     return uuid;
                 }
@@ -337,50 +350,45 @@ public final class DeviceID {
                 }
             }
         }
-        uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
-        OAIDLog.print("Get uuid from settings: " + uuid);
-        if (!TextUtils.isEmpty(uuid)) {
-            return uuid;
-        }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
         uuid = preferences.getString("uuid", "");
-        OAIDLog.print("Get uuid from preferences: " + uuid);
+        OAIDLog.print("Get uuid from shared preferences: " + uuid);
         if (!TextUtils.isEmpty(uuid)) {
             return uuid;
         }
         uuid = UUID.randomUUID().toString();
-        OAIDLog.print("Get uuid from random: " + uuid);
+        OAIDLog.print("Generate uuid by random: " + uuid);
         preferences.edit().putString("uuid", uuid).apply();
-        if (file != null) {
-            BufferedWriter writer = null;
+        OAIDLog.print("Save uuid to shared preferences: " + uuid);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
             try {
-                writer = new BufferedWriter(new FileWriter(file));
-                writer.write(uuid);
+                Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
+                OAIDLog.print("Save uuid to system settings: " + uuid);
             } catch (Throwable e) {
                 OAIDLog.print(e);
-            } finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                    }
-                }
             }
+        } else {
+            OAIDLog.print("android.permission.WRITE_SETTINGS not granted");
         }
+        if (file == null) {
+            return uuid;
+        }
+        BufferedWriter writer = null;
         try {
-            if (Settings.System.canWrite(context)) {
+            writer = new BufferedWriter(new FileWriter(file));
+            writer.write(uuid);
+            writer.flush();
+            OAIDLog.print("Save uuid to external storage: " + uuid);
+        } catch (Throwable e) {
+            OAIDLog.print(e);
+        } finally {
+            if (writer != null) {
                 try {
-                    Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
+                    writer.close();
                 } catch (Throwable e) {
                     OAIDLog.print(e);
                 }
-            } else {
-                OAIDLog.print("android.permission.WRITE_SETTINGS not granted");
             }
-        } catch (Throwable e) {
-            // Under Android 6.0, NoSuchMethodError: No static method canWrite...
-            OAIDLog.print(e);
         }
         return uuid;
     }
