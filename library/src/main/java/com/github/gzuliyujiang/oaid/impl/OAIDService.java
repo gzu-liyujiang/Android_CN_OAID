@@ -39,10 +39,10 @@ class OAIDService implements ServiceConnection {
     private final RemoteRunner runner;
 
     public static void bind(Context context, Intent intent, IGetter getter, RemoteRunner runner) {
-        new OAIDService(context, intent, getter, runner);
+        new OAIDService(context, getter, runner).bind(intent);
     }
 
-    private OAIDService(Context context, Intent intent, IGetter getter, RemoteRunner runner) {
+    private OAIDService(Context context, IGetter getter, RemoteRunner runner) {
         if (context instanceof Application) {
             this.context = context;
         } else {
@@ -50,6 +50,9 @@ class OAIDService implements ServiceConnection {
         }
         this.getter = getter;
         this.runner = runner;
+    }
+
+    private void bind(Intent intent) {
         try {
             boolean ret = context.bindService(intent, this, Context.BIND_AUTO_CREATE);
             if (!ret) {
