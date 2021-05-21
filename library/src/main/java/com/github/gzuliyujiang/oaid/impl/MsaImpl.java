@@ -50,9 +50,10 @@ class MsaImpl implements IOAID {
 
     @Override
     public void doGet(@NonNull final IGetter getter) {
-        startMsaKlService();
+        String pkg = "com.mdid.msa";
+        startMsaKlService(pkg);
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
-        intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
+        intent.setClassName(pkg, pkg + ".service.MsaIdService");
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
@@ -69,10 +70,10 @@ class MsaImpl implements IOAID {
         });
     }
 
-    private void startMsaKlService() {
+    private void startMsaKlService(String pkg) {
         try {
             Intent intent = new Intent("com.bun.msa.action.start.service");
-            intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaKlService");
+            intent.setClassName(pkg, pkg + ".service.MsaKlService");
             intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
             intent.putExtra("com.bun.msa.param.runinset", true);
             context.startService(intent);

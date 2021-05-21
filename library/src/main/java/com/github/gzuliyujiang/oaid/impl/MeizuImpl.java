@@ -51,13 +51,14 @@ class MeizuImpl implements IOAID {
     @Override
     public void doGet(@NonNull final IGetter getter) {
         Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
-        try (Cursor cursor = context.getContentResolver().query(uri, null, null, new String[]{"oaid"}, null)) {
+        try (Cursor cursor = context.getContentResolver().query(uri, null, null,
+                new String[]{"oaid"}, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
             String oaid = cursor.getString(cursor.getColumnIndex("value"));
-            OAIDLog.print("OAID query success: " + oaid);
             if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed");
             }
+            OAIDLog.print("OAID query success: " + oaid);
             getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
             OAIDLog.print(e);

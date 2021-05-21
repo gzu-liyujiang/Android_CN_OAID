@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.security.MessageDigest;
@@ -95,7 +96,7 @@ class OppoImpl implements IOAID {
     private String getSerId(IBinder service, String pkgName, String sign) throws Exception {
         IOpenID anInterface = IOpenID.Stub.asInterface(service);
         if (anInterface == null) {
-            throw new NullPointerException("IOpenID is null");
+            throw new OAIDException("IOpenID is null");
         }
         return anInterface.getSerID(pkgName, sign, "OUID");
     }

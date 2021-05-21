@@ -48,15 +48,15 @@ class VivoImpl implements IOAID {
     @Override
     public void doGet(@NonNull final IGetter getter) {
         Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
-        try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+        try (Cursor cursor = context.getContentResolver().query(uri, null, null,
+                null, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
             String oaid = cursor.getString(cursor.getColumnIndex("value"));
-            if (oaid != null && oaid.length() > 0) {
-                OAIDLog.print("OAID query success: " + oaid);
-                getter.onOAIDGetComplete(oaid);
-            } else {
+            if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed");
             }
+            OAIDLog.print("OAID query success: " + oaid);
+            getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);

@@ -55,17 +55,16 @@ class XiaomiImpl implements IOAID {
     @Override
     public void doGet(@NonNull final IGetter getter) {
         if (idProviderClass == null || idProviderImpl == null) {
-            getter.onOAIDGetError(new NullPointerException("Xiaomi IdProvider not exists"));
+            getter.onOAIDGetError(new OAIDException("Xiaomi IdProvider not exists"));
             return;
         }
         try {
             String oaid = getOAID();
-            if (oaid != null && oaid.length() > 0) {
-                OAIDLog.print("OAID query success: " + oaid);
-                getter.onOAIDGetComplete(oaid);
-            } else {
+            if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed");
             }
+            OAIDLog.print("OAID query success: " + oaid);
+            getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
