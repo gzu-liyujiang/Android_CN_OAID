@@ -274,27 +274,28 @@ public final class DeviceID {
      */
     @NonNull
     public static String getPseudoID() {
+        final int MODULUS = 10;
         StringBuilder sb = new StringBuilder();
-        sb.append(Build.BOARD.length() % 10);
+        sb.append(Build.BOARD.length() % MODULUS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sb.append(Arrays.deepToString(Build.SUPPORTED_ABIS).length() % 10);
+            sb.append(Arrays.deepToString(Build.SUPPORTED_ABIS).length() % MODULUS);
         } else {
             // noinspection deprecation
-            sb.append(Build.CPU_ABI.length() % 10);
+            sb.append(Build.CPU_ABI.length() % MODULUS);
         }
-        sb.append(Build.DEVICE.length() % 10);
-        sb.append(Build.DISPLAY.length() % 10);
-        sb.append(Build.HOST.length() % 10);
-        sb.append(Build.ID.length() % 10);
-        sb.append(Build.MANUFACTURER.length() % 10);
-        sb.append(Build.BRAND.length() % 10);
-        sb.append(Build.MODEL.length() % 10);
-        sb.append(Build.PRODUCT.length() % 10);
-        sb.append(Build.BOOTLOADER.length() % 10);
-        sb.append(Build.HARDWARE.length() % 10);
-        sb.append(Build.TAGS.length() % 10);
-        sb.append(Build.TYPE.length() % 10);
-        sb.append(Build.USER.length() % 10);
+        sb.append(Build.DEVICE.length() % MODULUS);
+        sb.append(Build.DISPLAY.length() % MODULUS);
+        sb.append(Build.HOST.length() % MODULUS);
+        sb.append(Build.ID.length() % MODULUS);
+        sb.append(Build.MANUFACTURER.length() % MODULUS);
+        sb.append(Build.BRAND.length() % MODULUS);
+        sb.append(Build.MODEL.length() % MODULUS);
+        sb.append(Build.PRODUCT.length() % MODULUS);
+        sb.append(Build.BOOTLOADER.length() % MODULUS);
+        sb.append(Build.HARDWARE.length() % MODULUS);
+        sb.append(Build.TAGS.length() % MODULUS);
+        sb.append(Build.TYPE.length() % MODULUS);
+        sb.append(Build.USER.length() % MODULUS);
         return sb.toString();
     }
 
