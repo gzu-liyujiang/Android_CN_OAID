@@ -155,8 +155,6 @@ public final class DeviceID implements IGetter {
      * @see Manifest.permission.READ_PHONE_STATE
      */
     @NonNull
-    @SuppressWarnings("deprecation")
-    @SuppressLint({"HardwareIds", "MissingPermission"})
     public static String getUniqueID(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Android 10+ 不允许获取 IMEI、MEID 之类的设备唯一标识
@@ -170,22 +168,24 @@ public final class DeviceID implements IGetter {
             // Android 6.0-9.0 需要申请电话权限才能获取设备唯一标识
             return "";
         }
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String deviceId = tm.getDeviceId();
-        if (!TextUtils.isEmpty(deviceId)) {
-            return deviceId;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        return getIMEI(context);
+    }
+
+    @NonNull
+    @SuppressWarnings("deprecation")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
+    private static String getIMEI(Context context) {
+        try {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             String imei = tm.getImei();
-            if (!TextUtils.isEmpty(imei)) {
-                return imei;
+            if (TextUtils.isEmpty(imei)) {
+                imei = tm.getMeid();
             }
-            String meid = tm.getMeid();
-            if (!TextUtils.isEmpty(meid)) {
-                return meid;
-            }
+            return imei;
+        } catch (Exception e) {
+            OAIDLog.print(e);
+            return "";
         }
-        return "";
     }
 
     /**
