@@ -17,11 +17,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.google.android.gms.ads.identifier.internal.IAdvertisingIdService;
@@ -60,7 +62,7 @@ class GmsImpl implements IOAID {
         intent.setPackage("com.google.android.gms");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Exception {
+            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
                 if (anInterface.isLimitAdTrackingEnabled(true)) {
                     // 实测在系统设置中停用了广告化功能也是能获取到广告标识符的

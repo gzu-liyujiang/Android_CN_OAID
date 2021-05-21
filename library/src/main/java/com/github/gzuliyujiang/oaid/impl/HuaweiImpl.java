@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.text.TextUtils;
 
@@ -89,7 +90,7 @@ class HuaweiImpl implements IOAID {
         intent.setPackage(packageName);
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Exception {
+            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
                 if (anInterface.isOaidTrackLimited()) {
                     // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0

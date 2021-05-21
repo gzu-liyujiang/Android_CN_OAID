@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 
@@ -57,7 +58,7 @@ class MsaImpl implements IOAID {
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Exception {
+            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new OAIDException("MsaIdInterface is null");

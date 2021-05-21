@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 
@@ -56,7 +57,7 @@ class LenovoImpl implements IOAID {
         intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Exception {
+            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new OAIDException("IDeviceidInterface is null");
