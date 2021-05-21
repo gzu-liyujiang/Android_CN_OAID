@@ -38,7 +38,7 @@ public final class OAIDRom {
             Method method = clazz.getMethod("get", new Class<?>[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
         } catch (Exception e) {
-            OAIDLog.print("System property invoke error: " + key);
+            OAIDLog.print("System property invoke error: " + e);
         }
         if (res == null) {
             res = "";
