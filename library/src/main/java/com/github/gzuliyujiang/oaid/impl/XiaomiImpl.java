@@ -71,7 +71,7 @@ class XiaomiImpl implements IOAID {
         }
     }
 
-    private String getOAID() throws Throwable {
+    private String getOAID() throws Exception {
         Method method = idProviderClass.getMethod("getOAID", Context.class);
         return (String) method.invoke(idProviderImpl, context);
     }

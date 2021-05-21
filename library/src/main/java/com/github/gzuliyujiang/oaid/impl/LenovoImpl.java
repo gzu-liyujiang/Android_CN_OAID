@@ -55,7 +55,7 @@ class LenovoImpl implements IOAID {
         intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Throwable {
+            public String runRemoteInterface(IBinder service) throws Exception {
                 IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new RuntimeException("IDeviceidInterface is null");

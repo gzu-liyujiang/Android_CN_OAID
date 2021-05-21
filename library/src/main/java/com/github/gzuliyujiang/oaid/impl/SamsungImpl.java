@@ -53,7 +53,7 @@ class SamsungImpl implements IOAID {
         intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Throwable {
+            public String runRemoteInterface(IBinder service) throws Exception {
                 IDeviceIdService anInterface = IDeviceIdService.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new RuntimeException("IDeviceIdService is null");

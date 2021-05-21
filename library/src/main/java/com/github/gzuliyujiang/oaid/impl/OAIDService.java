@@ -90,7 +90,7 @@ class OAIDService implements ServiceConnection {
     public interface RemoteRunner {
 
         @Nullable
-        String runRemoteInterface(IBinder binder) throws Throwable;
+        String runRemoteInterface(IBinder binder) throws Exception;
 
     }
 

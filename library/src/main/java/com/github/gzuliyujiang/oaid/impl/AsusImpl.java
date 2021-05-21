@@ -55,7 +55,7 @@ class AsusImpl implements IOAID {
         intent.setComponent(componentName);
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
             @Override
-            public String runRemoteInterface(IBinder service) throws Throwable {
+            public String runRemoteInterface(IBinder service) throws Exception {
                 IDidAidlInterface anInterface = IDidAidlInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new RuntimeException("IDidAidlInterface is null");
