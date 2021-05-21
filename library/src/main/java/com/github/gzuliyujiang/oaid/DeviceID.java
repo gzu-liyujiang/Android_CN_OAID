@@ -322,43 +322,30 @@ public final class DeviceID {
      */
     @NonNull
     public static String getGUID(@NonNull Context context) {
+        String uuid = getUuidFromSystemSettings(context);
+        if (TextUtils.isEmpty(uuid)) {
+            uuid = getUuidFromExternalStorage(context);
+        }
+        if (TextUtils.isEmpty(uuid)) {
+            uuid = getUuidFromSharedPreferences(context);
+        }
+        if (TextUtils.isEmpty(uuid)) {
+            uuid = UUID.randomUUID().toString();
+            OAIDLog.print("Generate uuid by random: " + uuid);
+            saveUuidToSharedPreferences(context, uuid);
+            saveUuidToSystemSettings(context, uuid);
+            saveUuidToExternalStorage(context, uuid);
+        }
+        return uuid;
+    }
+
+    private static String getUuidFromSystemSettings(Context context) {
         String uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
         OAIDLog.print("Get uuid from system settings: " + uuid);
-        if (!TextUtils.isEmpty(uuid)) {
-            return uuid;
-        }
-        boolean hasStoragePermission = false;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            hasStoragePermission = true;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            hasStoragePermission = false;
-        } else {
-            hasStoragePermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                    PackageManager.PERMISSION_GRANTED;
-        }
-        File file = null;
-        if (hasStoragePermission && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            file = new File(Environment.getExternalStorageDirectory(), "Android/.GUID_uuid");
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                uuid = reader.readLine();
-                OAIDLog.print("Get uuid from external storage: " + uuid);
-                if (!TextUtils.isEmpty(uuid)) {
-                    return uuid;
-                }
-            } catch (Exception e) {
-                OAIDLog.print(e);
-            }
-        }
-        SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
-        uuid = preferences.getString("uuid", "");
-        OAIDLog.print("Get uuid from shared preferences: " + uuid);
-        if (!TextUtils.isEmpty(uuid)) {
-            return uuid;
-        }
-        uuid = UUID.randomUUID().toString();
-        OAIDLog.print("Generate uuid by random: " + uuid);
-        preferences.edit().putString("uuid", uuid).apply();
-        OAIDLog.print("Save uuid to shared preferences: " + uuid);
+        return uuid;
+    }
+
+    private static void saveUuidToSystemSettings(Context context, String uuid) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
             try {
                 Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
@@ -369,8 +356,27 @@ public final class DeviceID {
         } else {
             OAIDLog.print("android.permission.WRITE_SETTINGS not granted");
         }
+    }
+
+    private static String getUuidFromExternalStorage(Context context) {
+        File file = getGuidFile(context);
         if (file == null) {
-            return uuid;
+            return "";
+        }
+        String uuid = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            uuid = reader.readLine();
+            OAIDLog.print("Get uuid from external storage: " + uuid);
+        } catch (Exception e) {
+            OAIDLog.print(e);
+        }
+        return uuid;
+    }
+
+    private static void saveUuidToExternalStorage(Context context, String uuid) {
+        File file = getGuidFile(context);
+        if (file == null) {
+            return;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             if (!file.exists()) {
@@ -382,6 +388,34 @@ public final class DeviceID {
         } catch (Exception e) {
             OAIDLog.print(e);
         }
+    }
+
+    private static File getGuidFile(Context context) {
+        boolean hasStoragePermission = false;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            hasStoragePermission = true;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            hasStoragePermission = false;
+        } else {
+            hasStoragePermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_GRANTED;
+        }
+        if (hasStoragePermission && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            return new File(Environment.getExternalStorageDirectory(), "Android/.GUID_uuid");
+        }
+        return null;
+    }
+
+    private static void saveUuidToSharedPreferences(Context context, String uuid) {
+        SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
+        preferences.edit().putString("uuid", uuid).apply();
+        OAIDLog.print("Save uuid to shared preferences: " + uuid);
+    }
+
+    private static String getUuidFromSharedPreferences(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
+        String uuid = preferences.getString("uuid", "");
+        OAIDLog.print("Get uuid from shared preferences: " + uuid);
         return uuid;
     }
 
