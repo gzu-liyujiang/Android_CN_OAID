@@ -105,7 +105,10 @@ public final class DeviceID {
      */
     @NonNull
     public static String getClientId() {
-        return clientId == null ? "" : clientId;
+        if (clientId == null) {
+            clientId = "";
+        }
+        return clientId;
     }
 
     /**
@@ -137,7 +140,10 @@ public final class DeviceID {
      */
     @NonNull
     public static String getOAID() {
-        return oaid == null ? "" : oaid;
+        if (oaid == null) {
+            oaid = "";
+        }
+        return oaid;
     }
 
     /**
@@ -216,10 +222,10 @@ public final class DeviceID {
     @SuppressLint("HardwareIds")
     public static String getAndroidID(@NonNull Context context) {
         String id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        if ("9774d56d682e549c".equals(id)) {
-            return "";
+        if (id == null || "9774d56d682e549c".equals(id)) {
+            id = "";
         }
-        return id == null ? "" : id;
+        return id;
     }
 
     /**
