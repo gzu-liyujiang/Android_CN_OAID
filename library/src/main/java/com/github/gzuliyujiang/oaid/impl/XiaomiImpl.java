@@ -22,6 +22,7 @@ import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -71,7 +72,7 @@ class XiaomiImpl implements IOAID {
         }
     }
 
-    private String getOAID() throws Exception {
+    private String getOAID() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method = idProviderClass.getMethod("getOAID", Context.class);
         return (String) method.invoke(idProviderImpl, context);
     }
