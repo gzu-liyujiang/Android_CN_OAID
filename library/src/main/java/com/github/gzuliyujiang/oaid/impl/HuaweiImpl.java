@@ -50,22 +50,23 @@ class HuaweiImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        boolean ret = false;
         try {
             PackageManager pm = context.getPackageManager();
-            packageName = "com.huawei.hwid";
-            if (pm.getPackageInfo(packageName, 0) != null) {
-                return true;
+            if (pm.getPackageInfo("com.huawei.hwid", 0) != null) {
+                packageName = "com.huawei.hwid";
+                ret = true;
+            } else if (pm.getPackageInfo("com.huawei.hwid.tv", 0) != null) {
+                packageName = "com.huawei.hwid.tv";
+                ret = true;
+            } else {
+                packageName = "com.huawei.hms";
+                ret = pm.getPackageInfo(packageName, 0) != null;
             }
-            packageName = "com.huawei.hwid.tv";
-            if (pm.getPackageInfo(packageName, 0) != null) {
-                return true;
-            }
-            packageName = "com.huawei.hms";
-            return pm.getPackageInfo(packageName, 0) != null;
         } catch (Exception e) {
             OAIDLog.print(e);
-            return false;
         }
+        return ret;
     }
 
     @Override
