@@ -68,27 +68,34 @@ public final class OAIDFactory {
     }
 
     private static IOAID createManufacturerImpl(Context context) {
-        IOAID ioaid = null;
         if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
-            ioaid = new LenovoImpl(context);
-        } else if (OAIDRom.isMeizu()) {
-            ioaid = new MeizuImpl(context);
-        } else if (OAIDRom.isNubia()) {
-            ioaid = new NubiaImpl(context);
-        } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
-            ioaid = new XiaomiImpl(context);
-        } else if (OAIDRom.isSamsung()) {
-            ioaid = new SamsungImpl(context);
-        } else if (OAIDRom.isVivo()) {
-            ioaid = new VivoImpl(context);
-        } else if (OAIDRom.isASUS()) {
-            ioaid = new AsusImpl(context);
-        } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
-            ioaid = new HuaweiImpl(context);
-        } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
-            ioaid = new OppoImpl(context);
+            return new LenovoImpl(context);
         }
-        return ioaid;
+        if (OAIDRom.isMeizu()) {
+            return new MeizuImpl(context);
+        }
+        if (OAIDRom.isNubia()) {
+            return new NubiaImpl(context);
+        }
+        if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
+            return new XiaomiImpl(context);
+        }
+        if (OAIDRom.isSamsung()) {
+            return new SamsungImpl(context);
+        }
+        if (OAIDRom.isVivo()) {
+            return new VivoImpl(context);
+        }
+        if (OAIDRom.isASUS()) {
+            return new AsusImpl(context);
+        }
+        if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
+            return new HuaweiImpl(context);
+        }
+        if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
+            return new OppoImpl(context);
+        }
+        return null;
     }
 
 }
