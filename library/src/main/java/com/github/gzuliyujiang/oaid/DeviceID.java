@@ -320,34 +320,26 @@ public final class DeviceID {
         if (!TextUtils.isEmpty(uuid)) {
             return uuid;
         }
+        boolean hasStoragePermission = false;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            hasStoragePermission = true;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            hasStoragePermission = false;
+        } else {
+            hasStoragePermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                    PackageManager.PERMISSION_GRANTED;
+        }
         File file = null;
-        boolean hasStoragePermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-                || context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && hasStoragePermission &&
-                TextUtils.equals(Environment.getExternalStorageState(), Environment.MEDIA_MOUNTED)) {
-            BufferedReader reader = null;
-            try {
-                file = new File(Environment.getExternalStorageDirectory(), "Android/.GUID_uuid");
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                reader = new BufferedReader(new FileReader(file));
+        if (hasStoragePermission && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            file = new File(Environment.getExternalStorageDirectory(), "Android/.GUID_uuid");
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 uuid = reader.readLine();
                 OAIDLog.print("Get uuid from external storage: " + uuid);
                 if (!TextUtils.isEmpty(uuid)) {
                     return uuid;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 OAIDLog.print(e);
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (Throwable e) {
-                        OAIDLog.print(e);
-                    }
-                }
             }
         }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
@@ -373,22 +365,15 @@ public final class DeviceID {
         if (file == null) {
             return uuid;
         }
-        BufferedWriter writer = null;
-        try {
-            writer = new BufferedWriter(new FileWriter(file));
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
             writer.write(uuid);
             writer.flush();
             OAIDLog.print("Save uuid to external storage: " + uuid);
         } catch (Throwable e) {
             OAIDLog.print(e);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (Throwable e) {
-                    OAIDLog.print(e);
-                }
-            }
         }
         return uuid;
     }
