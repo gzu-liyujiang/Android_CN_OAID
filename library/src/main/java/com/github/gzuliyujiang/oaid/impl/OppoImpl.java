@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import androidx.annotation.NonNull;
 
@@ -30,6 +31,7 @@ import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import repeackage.com.heytap.openid.IOpenID;
 
@@ -75,7 +77,8 @@ class OppoImpl implements IOAID {
     }
 
     @SuppressLint("PackageManagerGetSignatures")
-    private String realGetOUID(IBinder service) throws Exception {
+    private String realGetOUID(IBinder service) throws PackageManager.NameNotFoundException,
+            NoSuchAlgorithmException, RemoteException, OAIDException {
         String pkgName = context.getPackageName();
         if (sign == null) {
             Signature[] signatures = context.getPackageManager().getPackageInfo(pkgName,
@@ -93,7 +96,7 @@ class OppoImpl implements IOAID {
         return getSerId(service, pkgName, sign);
     }
 
-    private String getSerId(IBinder service, String pkgName, String sign) throws Exception {
+    private String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, OAIDException {
         IOpenID anInterface = IOpenID.Stub.asInterface(service);
         if (anInterface == null) {
             throw new OAIDException("IOpenID is null");
