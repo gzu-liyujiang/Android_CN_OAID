@@ -1,23 +1,8 @@
 # 更新日志
 
-## latest
+## latest - 2021/05/21
 
-- 代码质量提升（Powered by Gitee Scan）：
-```text
-Catch Exception instead of Throwable.
-Either log or rethrow this exception.
-Define and throw a dedicated exception instead of using a generic one.
-Change this "try" to a try-with-resources.
-Use the constant instead the magic number.
-Convert this usage of the ternary operator to an "if"/"else" structure.
-"if ... else if" constructs should end with "else" clauses.
-Refactor this code to not nest more than 3 if/for/while/switch/try statements.
-Refactor this method to reduce its Cognitive Complexity from xxx to the 15 allowed.
-Reduce this anonymous class number of lines from xxx to at most 20, or make it a named class.
-This block of commented-out lines of code should be removed.
-Split this xxx characters long line (which is greater than 120 authorized).
-Annotate the xxx interface with the @FunctionalInterface annotation.
-```
+- 代码质量提升（Powered by Gitee Scan）
 
 ## 4.1.2 - 2021/05/20
 
