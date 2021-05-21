@@ -47,11 +47,7 @@ public final class OAIDLog {
         if (!enable) {
             return;
         }
-        String logStr = log.toString();
-        //if (log instanceof Throwable) {
-        //    Log.getStackTraceString((Throwable) log);
-        //}
-        Log.d(TAG, logStr);
+        Log.d(TAG, log.toString());
     }
 
 }
