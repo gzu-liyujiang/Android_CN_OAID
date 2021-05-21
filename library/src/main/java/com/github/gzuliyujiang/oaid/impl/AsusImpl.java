@@ -42,7 +42,7 @@ class AsusImpl implements IOAID {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.asus.msa.SupplementaryDID", 0);
             return pi != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             return false;
         }

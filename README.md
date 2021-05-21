@@ -112,7 +112,7 @@ dependencies {
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Throwable error) {
+            public void onOAIDGetError(@NonNull Exception error) {
                 // 获取OAID/AAID失败
                 builder.append("OAID/AAID: 失败，").append(error);
                 tvDeviceIdResult.setText(builder);

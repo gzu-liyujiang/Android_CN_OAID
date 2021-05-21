@@ -73,7 +73,7 @@ class NubiaImpl implements IOAID {
             } else {
                 throw new RuntimeException("OAID query failed: " + bundle.getString("message"));
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }

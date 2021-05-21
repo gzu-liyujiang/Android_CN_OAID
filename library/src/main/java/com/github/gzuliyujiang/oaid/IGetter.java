@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+ * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -9,7 +9,6 @@
  * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
- *
  */
 package com.github.gzuliyujiang.oaid;
 
@@ -35,6 +34,6 @@ public interface IGetter {
      *
      * @param error 异常信息
      */
-    void onOAIDGetError(@NonNull Throwable error);
+    void onOAIDGetError(@NonNull Exception error);
 
 }

@@ -41,7 +41,7 @@ class XiaomiImpl implements IOAID {
         try {
             idProviderClass = Class.forName("com.android.id.impl.IdProviderImpl");
             idProviderImpl = idProviderClass.newInstance();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
         }
     }
@@ -65,7 +65,7 @@ class XiaomiImpl implements IOAID {
             } else {
                 throw new RuntimeException("OAID query failed");
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }

@@ -56,7 +56,7 @@ class VivoImpl implements IOAID {
             } else {
                 throw new RuntimeException("OAID query failed");
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }

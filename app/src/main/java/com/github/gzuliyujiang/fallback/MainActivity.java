@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Throwable error) {
+            public void onOAIDGetError(@NonNull Exception error) {
                 // 获取OAID/AAID失败
                 builder.append("OAID/AAID: ").append(error);
                 tvDeviceIdResult.setText(builder);

@@ -54,7 +54,7 @@ class OAIDService implements ServiceConnection {
                 throw new RuntimeException("Service binding failed");
             }
             OAIDLog.print("Service has been bound: " + intent);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             getter.onOAIDGetError(e);
         }
     }
@@ -69,14 +69,14 @@ class OAIDService implements ServiceConnection {
             }
             OAIDLog.print("OAID/AAID acquire success: " + oaid);
             getter.onOAIDGetComplete(oaid);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
         } finally {
             try {
                 context.unbindService(this);
                 OAIDLog.print("Service has been unbound: " + name.getClassName());
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 OAIDLog.print(e);
             }
         }

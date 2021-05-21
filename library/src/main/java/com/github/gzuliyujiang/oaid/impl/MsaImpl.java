@@ -41,7 +41,7 @@ class MsaImpl implements IOAID {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.mdid.msa", 0);
             return pi != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             return false;
         }
@@ -75,7 +75,7 @@ class MsaImpl implements IOAID {
             intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
             intent.putExtra("com.bun.msa.param.runinset", true);
             context.startService(intent);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
         }
     }

@@ -60,7 +60,7 @@ class HuaweiImpl implements IOAID {
             }
             packageName = "com.huawei.hms";
             return pm.getPackageInfo(packageName, 0) != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             return false;
         }
@@ -76,7 +76,7 @@ class HuaweiImpl implements IOAID {
                     getter.onOAIDGetComplete(oaid);
                     return;
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 OAIDLog.print(e);
             }
         }

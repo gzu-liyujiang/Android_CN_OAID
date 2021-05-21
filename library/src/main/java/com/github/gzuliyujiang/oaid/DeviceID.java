@@ -78,7 +78,7 @@ public final class DeviceID {
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Throwable error) {
+            public void onOAIDGetError(@NonNull Exception error) {
                 String id = DeviceID.getWidevineID();
                 if (!TextUtils.isEmpty(id)) {
                     clientId = id;
@@ -363,7 +363,7 @@ public final class DeviceID {
             try {
                 Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
                 OAIDLog.print("Save uuid to system settings: " + uuid);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 OAIDLog.print(e);
             }
         } else {
@@ -379,7 +379,7 @@ public final class DeviceID {
             writer.write(uuid);
             writer.flush();
             OAIDLog.print("Save uuid to external storage: " + uuid);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
         }
         return uuid;
@@ -402,7 +402,7 @@ public final class DeviceID {
                 sb.append(String.format("%02x", aByte));
             }
             return sb.toString();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return "";
         }
     }

@@ -41,7 +41,7 @@ class SamsungImpl implements IOAID {
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
             return pi != null;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             OAIDLog.print(e);
             return false;
         }
