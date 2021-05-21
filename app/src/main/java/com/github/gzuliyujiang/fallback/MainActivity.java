@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             resultLauncher.launch(Manifest.permission.READ_PHONE_STATE);
         } else if (id == R.id.btn_get_device_id_2) {
             tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientIdMD5()));
+        } else {
+            OAIDLog.print("\"if ... else if\" constructs should end with \"else\" clauses.");
         }
     }
 
