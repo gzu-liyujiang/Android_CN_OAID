@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
@@ -81,7 +82,7 @@ class HuaweiImpl implements IOAID {
             }
         }
         if (TextUtils.isEmpty(packageName) && !supported()) {
-            getter.onOAIDGetError(new RuntimeException("Huawei Advertising ID not available"));
+            getter.onOAIDGetError(new OAIDException("Huawei Advertising ID not available"));
             return;
         }
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
@@ -92,7 +93,7 @@ class HuaweiImpl implements IOAID {
                 OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
                 if (anInterface.isOaidTrackLimited()) {
                     // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
-                    throw new RuntimeException("User has disabled advertising identifier");
+                    throw new OAIDException("User has disabled advertising identifier");
                 }
                 return anInterface.getOaid();
             }

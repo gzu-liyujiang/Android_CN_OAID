@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.samsung.android.deviceidservice.IDeviceIdService;
@@ -56,7 +57,7 @@ class SamsungImpl implements IOAID {
             public String runRemoteInterface(IBinder service) throws Exception {
                 IDeviceIdService anInterface = IDeviceIdService.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new RuntimeException("IDeviceIdService is null");
+                    throw new OAIDException("IDeviceIdService is null");
                 }
                 return anInterface.getOAID();
             }

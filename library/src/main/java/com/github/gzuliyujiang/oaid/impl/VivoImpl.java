@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 import com.github.gzuliyujiang.oaid.OAIDRom;
 
@@ -54,7 +55,7 @@ class VivoImpl implements IOAID {
                 OAIDLog.print("OAID query success: " + oaid);
                 getter.onOAIDGetComplete(oaid);
             } else {
-                throw new RuntimeException("OAID query failed");
+                throw new OAIDException("OAID query failed");
             }
         } catch (Exception e) {
             OAIDLog.print(e);

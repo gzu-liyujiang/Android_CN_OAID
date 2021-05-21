@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import java.util.Objects;
@@ -55,7 +56,7 @@ class MeizuImpl implements IOAID {
             String oaid = cursor.getString(cursor.getColumnIndex("value"));
             OAIDLog.print("OAID query success: " + oaid);
             if (oaid == null || oaid.length() == 0) {
-                throw new RuntimeException("OAID query failed");
+                throw new OAIDException("OAID query failed");
             }
             getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {

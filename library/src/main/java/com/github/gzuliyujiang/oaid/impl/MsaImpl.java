@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.bun.lib.MsaIdInterface;
@@ -58,10 +59,10 @@ class MsaImpl implements IOAID {
             public String runRemoteInterface(IBinder service) throws Exception {
                 MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new RuntimeException("MsaIdInterface is null");
+                    throw new OAIDException("MsaIdInterface is null");
                 }
                 if (!anInterface.isSupported()) {
-                    throw new RuntimeException("MsaIdInterface#isSupported return false");
+                    throw new OAIDException("MsaIdInterface#isSupported return false");
                 }
                 return anInterface.getOAID();
             }

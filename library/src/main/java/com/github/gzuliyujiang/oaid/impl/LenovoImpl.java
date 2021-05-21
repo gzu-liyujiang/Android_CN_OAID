@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.zui.deviceidservice.IDeviceidInterface;
@@ -58,10 +59,10 @@ class LenovoImpl implements IOAID {
             public String runRemoteInterface(IBinder service) throws Exception {
                 IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new RuntimeException("IDeviceidInterface is null");
+                    throw new OAIDException("IDeviceidInterface is null");
                 }
                 if (!anInterface.isSupport()) {
-                    throw new RuntimeException("IDeviceidInterface#isSupport return false");
+                    throw new OAIDException("IDeviceidInterface#isSupport return false");
                 }
                 return anInterface.getOAID();
             }

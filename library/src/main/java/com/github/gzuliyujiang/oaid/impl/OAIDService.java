@@ -23,6 +23,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import com.github.gzuliyujiang.oaid.IGetter;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
@@ -51,7 +52,7 @@ class OAIDService implements ServiceConnection {
         try {
             boolean ret = context.bindService(intent, this, Context.BIND_AUTO_CREATE);
             if (!ret) {
-                throw new RuntimeException("Service binding failed");
+                throw new OAIDException("Service binding failed");
             }
             OAIDLog.print("Service has been bound: " + intent);
         } catch (Exception e) {
@@ -65,7 +66,7 @@ class OAIDService implements ServiceConnection {
         try {
             String oaid = runner.runRemoteInterface(service);
             if (oaid == null || oaid.length() == 0) {
-                throw new RuntimeException("OAID/AAID acquire failed");
+                throw new OAIDException("OAID/AAID acquire failed");
             }
             OAIDLog.print("OAID/AAID acquire success: " + oaid);
             getter.onOAIDGetComplete(oaid);

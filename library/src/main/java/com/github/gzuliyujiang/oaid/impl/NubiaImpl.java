@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
@@ -45,7 +46,7 @@ class NubiaImpl implements IOAID {
         if (!supported()) {
             String message = "Only supports Android 10.0 and above for Nubia";
             OAIDLog.print(message);
-            getter.onOAIDGetError(new RuntimeException(message));
+            getter.onOAIDGetError(new OAIDException(message));
             return;
         }
         String oaid = null;
@@ -62,7 +63,7 @@ class NubiaImpl implements IOAID {
                 }
             }
             if (bundle == null) {
-                throw new RuntimeException("OAID query failed: bundle is null");
+                throw new OAIDException("OAID query failed: bundle is null");
             }
             if (bundle.getInt("code", -1) == 0) {
                 oaid = bundle.getString("id");
@@ -71,7 +72,7 @@ class NubiaImpl implements IOAID {
                 OAIDLog.print("OAID query success: " + oaid);
                 getter.onOAIDGetComplete(oaid);
             } else {
-                throw new RuntimeException("OAID query failed: " + bundle.getString("message"));
+                throw new OAIDException("OAID query failed: " + bundle.getString("message"));
             }
         } catch (Exception e) {
             OAIDLog.print(e);

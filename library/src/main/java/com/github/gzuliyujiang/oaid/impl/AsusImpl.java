@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
+import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.asus.msa.SupplementaryDID.IDidAidlInterface;
@@ -58,10 +59,10 @@ class AsusImpl implements IOAID {
             public String runRemoteInterface(IBinder service) throws Exception {
                 IDidAidlInterface anInterface = IDidAidlInterface.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new RuntimeException("IDidAidlInterface is null");
+                    throw new OAIDException("IDidAidlInterface is null");
                 }
                 if (!anInterface.isSupport()) {
-                    throw new RuntimeException("IDidAidlInterface#isSupport return false");
+                    throw new OAIDException("IDidAidlInterface#isSupport return false");
                 }
                 return anInterface.getOAID();
             }
