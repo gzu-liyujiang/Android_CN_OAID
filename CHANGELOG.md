@@ -16,6 +16,7 @@ Refactor this method to reduce its Cognitive Complexity from xxx to the 15 allow
 Reduce this anonymous class number of lines from xxx to at most 20, or make it a named class.
 This block of commented-out lines of code should be removed.
 Split this xxx characters long line (which is greater than 120 authorized).
+Annotate the "RemoteRunner" interface with the @FunctionalInterface annotation.
 ```
 
 ## 4.1.2 - 2021/05/20

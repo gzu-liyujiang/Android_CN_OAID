@@ -89,9 +89,9 @@ class HuaweiImpl implements IOAID {
         }
         Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
         intent.setPackage(packageName);
-        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
                 if (anInterface.isOaidTrackLimited()) {
                     // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0

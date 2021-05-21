@@ -56,9 +56,9 @@ class MsaImpl implements IOAID {
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
         intent.setClassName(pkg, pkg + ".service.MsaIdService");
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
-        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 MsaIdInterface anInterface = MsaIdInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new OAIDException("MsaIdInterface is null");

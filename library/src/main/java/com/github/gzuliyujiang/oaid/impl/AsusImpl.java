@@ -56,9 +56,9 @@ class AsusImpl implements IOAID {
         String pkg = "com.asus.msa.SupplementaryDID";
         ComponentName componentName = new ComponentName(pkg, pkg + ".SupplementaryDIDService");
         intent.setComponent(componentName);
-        OAIDService.bind(context, intent, getter, new OAIDService.RemoteRunner() {
+        OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String runRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 IDidAidlInterface anInterface = IDidAidlInterface.Stub.asInterface(service);
                 if (anInterface == null) {
                     throw new OAIDException("IDidAidlInterface is null");

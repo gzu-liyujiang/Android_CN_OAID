@@ -36,20 +36,20 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 class OAIDService implements ServiceConnection {
     private final Context context;
     private final IGetter getter;
-    private final RemoteRunner runner;
+    private final RemoteCaller caller;
 
-    public static void bind(Context context, Intent intent, IGetter getter, RemoteRunner runner) {
-        new OAIDService(context, getter, runner).bind(intent);
+    public static void bind(Context context, Intent intent, IGetter getter, RemoteCaller caller) {
+        new OAIDService(context, getter, caller).bind(intent);
     }
 
-    private OAIDService(Context context, IGetter getter, RemoteRunner runner) {
+    private OAIDService(Context context, IGetter getter, RemoteCaller caller) {
         if (context instanceof Application) {
             this.context = context;
         } else {
             this.context = context.getApplicationContext();
         }
         this.getter = getter;
-        this.runner = runner;
+        this.caller = caller;
     }
 
     private void bind(Intent intent) {
@@ -68,7 +68,7 @@ class OAIDService implements ServiceConnection {
     public void onServiceConnected(ComponentName name, IBinder service) {
         OAIDLog.print("Service has been connected: " + name.getClassName());
         try {
-            String oaid = runner.runRemoteInterface(service);
+            String oaid = caller.callRemoteInterface(service);
             if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID/AAID acquire failed");
             }
@@ -92,10 +92,11 @@ class OAIDService implements ServiceConnection {
         OAIDLog.print("Service has been disconnected: " + name.getClassName());
     }
 
-    public interface RemoteRunner {
+    @FunctionalInterface
+    public interface RemoteCaller {
 
         @Nullable
-        String runRemoteInterface(IBinder binder) throws OAIDException, RemoteException;
+        String callRemoteInterface(IBinder binder) throws OAIDException, RemoteException;
 
     }
 
