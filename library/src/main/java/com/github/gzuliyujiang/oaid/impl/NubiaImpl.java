@@ -50,17 +50,17 @@ class NubiaImpl implements IOAID {
             return;
         }
         String oaid = null;
-        Bundle bundle = null;
         try {
             Uri uri = Uri.parse("content://cn.nubia.identity/identity");
             ContentProviderClient client = context.getContentResolver().acquireContentProviderClient(uri);
-            if (client != null) {
-                bundle = client.call("getOAID", null, null);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    client.close();
-                } else {
-                    client.release();
-                }
+            if (client == null) {
+                return;
+            }
+            Bundle bundle = client.call("getOAID", null, null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                client.close();
+            } else {
+                client.release();
             }
             if (bundle == null) {
                 throw new OAIDException("OAID query failed: bundle is null");
@@ -68,12 +68,11 @@ class NubiaImpl implements IOAID {
             if (bundle.getInt("code", -1) == 0) {
                 oaid = bundle.getString("id");
             }
-            if (oaid != null && oaid.length() > 0) {
-                OAIDLog.print("OAID query success: " + oaid);
-                getter.onOAIDGetComplete(oaid);
-            } else {
+            if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed: " + bundle.getString("message"));
             }
+            OAIDLog.print("OAID query success: " + oaid);
+            getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
             OAIDLog.print(e);
             getter.onOAIDGetError(e);
