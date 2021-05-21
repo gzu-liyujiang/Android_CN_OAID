@@ -43,25 +43,8 @@ public final class OAIDFactory {
         if (ioaid != null) {
             return ioaid;
         }
-        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
-            ioaid = new LenovoImpl(context);
-        } else if (OAIDRom.isMeizu()) {
-            ioaid = new MeizuImpl(context);
-        } else if (OAIDRom.isNubia()) {
-            ioaid = new NubiaImpl(context);
-        } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
-            ioaid = new XiaomiImpl(context);
-        } else if (OAIDRom.isSamsung()) {
-            ioaid = new SamsungImpl(context);
-        } else if (OAIDRom.isVivo()) {
-            ioaid = new VivoImpl(context);
-        } else if (OAIDRom.isASUS()) {
-            ioaid = new AsusImpl(context);
-        } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
-            ioaid = new HuaweiImpl(context);
-        } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
-            ioaid = new OppoImpl(context);
-        }
+        // 优先尝试各厂商自家提供的接口
+        ioaid = createManufacturerImpl(context);
         if (ioaid != null && ioaid.supported()) {
             OAIDLog.print("Manufacturer interface has been found: " + ioaid.getClass().getName());
             return ioaid;
@@ -81,6 +64,30 @@ public final class OAIDFactory {
         // 默认不支持
         ioaid = new DefaultImpl();
         OAIDLog.print("OAID/AAID was not supported: " + ioaid.getClass().getName());
+        return ioaid;
+    }
+
+    private static IOAID createManufacturerImpl(Context context) {
+        IOAID ioaid = null;
+        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
+            ioaid = new LenovoImpl(context);
+        } else if (OAIDRom.isMeizu()) {
+            ioaid = new MeizuImpl(context);
+        } else if (OAIDRom.isNubia()) {
+            ioaid = new NubiaImpl(context);
+        } else if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
+            ioaid = new XiaomiImpl(context);
+        } else if (OAIDRom.isSamsung()) {
+            ioaid = new SamsungImpl(context);
+        } else if (OAIDRom.isVivo()) {
+            ioaid = new VivoImpl(context);
+        } else if (OAIDRom.isASUS()) {
+            ioaid = new AsusImpl(context);
+        } else if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
+            ioaid = new HuaweiImpl(context);
+        } else if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
+            ioaid = new OppoImpl(context);
+        }
         return ioaid;
     }
 
