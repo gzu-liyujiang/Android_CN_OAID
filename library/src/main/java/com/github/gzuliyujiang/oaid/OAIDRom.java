@@ -35,7 +35,7 @@ public final class OAIDRom {
         String res = null;
         try {
             @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
-            Method method = clazz.getMethod("get", String.class, String.class);
+            Method method = clazz.getMethod("get", new Class<?>[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
         } catch (Exception e) {
             OAIDLog.print("System property invoke error: " + key);
