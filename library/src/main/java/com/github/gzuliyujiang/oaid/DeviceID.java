@@ -47,13 +47,10 @@ import java.util.UUID;
  * @since 2020/5/30
  */
 @SuppressWarnings("ALL")
-public final class DeviceID {
-    private static String clientId;
-    private static String oaid;
-
-    private DeviceID() {
-        super();
-    }
+public final class DeviceID implements IGetter {
+    private Application application;
+    private String clientId;
+    private String oaid;
 
     /**
      * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
@@ -63,38 +60,15 @@ public final class DeviceID {
      * @see Application#onCreate()
      */
     public static void register(final Application application) {
+        DeviceID instance = Holder.INSTANCE;
+        instance.application = application;
         String uniqueID = getUniqueID(application);
         if (!TextUtils.isEmpty(uniqueID)) {
-            clientId = uniqueID;
-            OAIDLog.print("Client id is IMEI/MEID");
+            instance.clientId = uniqueID;
+            OAIDLog.print("Client id is IMEI/MEID: " + instance.clientId);
             return;
         }
-        getOAID(application, new IGetter() {
-            @Override
-            public void onOAIDGetComplete(@NonNull String result) {
-                clientId = result;
-                oaid = result;
-                OAIDLog.print("Client id is OAID");
-            }
-
-            @Override
-            public void onOAIDGetError(@NonNull Exception error) {
-                String id = DeviceID.getWidevineID();
-                if (!TextUtils.isEmpty(id)) {
-                    clientId = id;
-                    OAIDLog.print("Client id is WidevineID");
-                    return;
-                }
-                id = getAndroidID(application);
-                if (!TextUtils.isEmpty(id)) {
-                    clientId = id;
-                    OAIDLog.print("Client id is AndroidID");
-                    return;
-                }
-                clientId = getGUID(application);
-                OAIDLog.print("Client id is GUID");
-            }
-        });
+        getOAID(application, instance);
     }
 
     /**
@@ -105,6 +79,7 @@ public final class DeviceID {
      */
     @NonNull
     public static String getClientId() {
+        String clientId = Holder.INSTANCE.clientId;
         if (clientId == null) {
             clientId = "";
         }
@@ -140,6 +115,7 @@ public final class DeviceID {
      */
     @NonNull
     public static String getOAID() {
+        String oaid = Holder.INSTANCE.oaid;
         if (oaid == null) {
             oaid = "";
         }
@@ -440,6 +416,39 @@ public final class DeviceID {
             OAIDLog.print(e);
             return "";
         }
+    }
+
+    private static class Holder {
+        static final DeviceID INSTANCE = new DeviceID();
+    }
+
+    private DeviceID() {
+        super();
+    }
+
+    @Override
+    public void onOAIDGetComplete(@NonNull String result) {
+        clientId = result;
+        oaid = result;
+        OAIDLog.print("Client id is OAID: " + clientId);
+    }
+
+    @Override
+    public void onOAIDGetError(@NonNull Exception error) {
+        String id = DeviceID.getWidevineID();
+        if (!TextUtils.isEmpty(id)) {
+            clientId = id;
+            OAIDLog.print("Client id is WidevineID: " + clientId);
+            return;
+        }
+        id = getAndroidID(application);
+        if (!TextUtils.isEmpty(id)) {
+            clientId = id;
+            OAIDLog.print("Client id is AndroidID: " + clientId);
+            return;
+        }
+        clientId = getGUID(application);
+        OAIDLog.print("Client id is GUID: " + clientId);
     }
 
 }
