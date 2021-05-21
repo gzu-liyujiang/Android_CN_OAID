@@ -437,6 +437,7 @@ public final class DeviceID {
             }
             return sb.toString();
         } catch (Exception e) {
+            OAIDLog.print(e);
             return "";
         }
     }
