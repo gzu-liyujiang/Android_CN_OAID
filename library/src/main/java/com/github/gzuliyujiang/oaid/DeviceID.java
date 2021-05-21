@@ -225,13 +225,8 @@ public final class DeviceID implements IGetter {
     @NonNull
     public static String getWidevineID() {
         try {
-            //Widevine介绍：https://baike.baidu.com/item/Widevine/3613955
-            //参阅 https://stackoverflow.com/questions/16369818/how-to-get-crypto-scheme-uuid
+            //See https://stackoverflow.com/questions/16369818/how-to-get-crypto-scheme-uuid
             //You can find some UUIDs in the https://github.com/google/ExoPlayer source code
-            //final UUID COMMON_PSSH_UUID = new UUID(0x1077EFECC0B24D02L, 0xACE33C1E52E2FB4BL);
-            //final UUID CLEARKEY_UUID = new UUID(0xE2719D58A985B3C9L, 0x781AB030AF78D30EL);
-            //final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
-            //final UUID PLAYREADY_UUID = new UUID(0x9A04F07998404286L, 0xAB92E65BE0885F95L);
             final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
             MediaDrm mediaDrm = new MediaDrm(WIDEVINE_UUID);
             byte[] widevineId = mediaDrm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID);
