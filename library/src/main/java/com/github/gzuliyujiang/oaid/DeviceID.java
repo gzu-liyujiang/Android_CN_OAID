@@ -330,23 +330,23 @@ public final class DeviceID implements IGetter {
     }
 
     private static String getUuidFromExternalStorage(Context context) {
-        File file = getGuidFile(context);
-        if (file == null) {
-            return "";
-        }
         String uuid = "";
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            uuid = reader.readLine();
-            OAIDLog.print("Get uuid from external storage: " + uuid);
-        } catch (Exception e) {
-            OAIDLog.print(e);
+        File file = getGuidFile(context);
+        if (file != null) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                uuid = reader.readLine();
+            } catch (Exception e) {
+                OAIDLog.print(e);
+            }
         }
+        OAIDLog.print("Get uuid from external storage: " + uuid);
         return uuid;
     }
 
     private static void saveUuidToExternalStorage(Context context, String uuid) {
         File file = getGuidFile(context);
         if (file == null) {
+            OAIDLog.print("UUID file in external storage is null");
             return;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -425,7 +425,7 @@ public final class DeviceID implements IGetter {
     public void onOAIDGetComplete(@NonNull String result) {
         clientId = result;
         oaid = result;
-        OAIDLog.print("Client id is OAID: " + clientId);
+        OAIDLog.print("Client id is OAID/AAID: " + clientId);
     }
 
     @Override
