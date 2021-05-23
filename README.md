@@ -26,7 +26,13 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:4.1.2'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:latest.version'
+}
+```
+或者：
+```groovy
+dependencies {
+    implementation 'com.gitee.li_yu_jiang:Android_CN_OAID:latest.version'
 }
 ```
 
