@@ -56,7 +56,7 @@ dependencies {
         tools:node="remove" />
 </manifest>
 ```
-或者通过下面这个覆盖本库的，允许 Android 10+ 加入相应的权限里声明的：
+若 Android 10+ 也页需要 `READ_PHONE_STATE` 及 `WRITE_EXTERNAL_STORAGE` 权限的话，可通过下面这个覆盖本库声明的：
 ```xml
     <uses-permission
         android:name="android.permission.READ_PHONE_STATE"
