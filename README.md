@@ -68,6 +68,7 @@ dependencies {
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:node="replace" />
 ```
+注：**Gradle Plugin 4.0.0 及以下版本编译失败解决方案**，参阅 [Missing 'package' key attribute on element package](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/26) 。
 
 ### 代码示例
 
