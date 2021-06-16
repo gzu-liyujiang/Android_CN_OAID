@@ -145,9 +145,7 @@ public final class DeviceID implements IGetter {
     /**
      * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI，Android 10+ 非系统应用则不再允许获取 IMEI。
      * <pre>
-     *     <uses-permission
-     *         android:name="android.permission.READ_PHONE_STATE"
-     *         android:maxSdkVersion="29" />
+     *     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
      * </pre>
      *
      * @param context 上下文
@@ -281,7 +279,6 @@ public final class DeviceID implements IGetter {
      * 为保障在Android10以下版本上的稳定性，需要加入权限{@code WRITE_EXTERNAL_STORAGE}及{@code WRITE_SETTINGS}。
      * <pre>
      *     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-     *         android:maxSdkVersion="29"
      *         tools:ignore="ScopedStorage" />
      *     <uses-permission
      *         android:name="android.permission.WRITE_SETTINGS"

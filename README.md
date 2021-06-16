@@ -56,19 +56,11 @@ dependencies {
         tools:node="remove" />
 </manifest>
 ```
-若 Android 10+ 也页需要 `READ_PHONE_STATE` 及 `WRITE_EXTERNAL_STORAGE` 权限的话，可通过下面这个覆盖本库声明的：
-```xml
-    <uses-permission
-        android:name="android.permission.READ_PHONE_STATE"
-        tools:node="replace" />
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        tools:node="replace" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:node="replace" />
-```
-注：**Gradle Plugin 4.0.0 及以下版本编译失败解决方案**，参阅 [Missing 'package' key attribute on element package](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/26) 。
+
+### 注意事项
+
+- **本库 4.1.1 至 4.1.3 之间的版本** ，若 Gradle 插件未指定 `targetSdkVersion 29+`，在 Android11+ 设备上可能会导致无法动态申请读写权限问题，参阅 [在权限里面加 maxSdkVersion 的用意](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25) 。
+- **Gradle Plugin 4.0.0 及以下版本编译失败解决方案**，参阅 [Missing 'package' key attribute on element package](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/26) 。
 
 ### 代码示例
 
@@ -216,6 +208,7 @@ dependencies {
 ### 不支持 OAID 或 AAID
 
 - 用户关闭广告标识符 ![](/screenshot/oaid_disabled.png)
+- 以下厂商或品牌手机已不支持：
 
 ```text
 锤子（Smartisan）、酷派（Yulong,Coolpad）、360（360）、奇酷（QiKu）、海信（Hisense）、金立（Gionee）、

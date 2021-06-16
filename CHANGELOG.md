@@ -1,5 +1,9 @@
 # 更新日志
 
+## 4.1.4 - 2021/06/16
+
+- 去除 `WRITE_EXTERNAL_STORAGE` 等相关权限的最大 SDK 限制，参阅 [issues#25](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25)；
+
 ## 4.1.3 - 2021/05/21
 
 - 代码质量提升（Powered by Gitee Scan）
