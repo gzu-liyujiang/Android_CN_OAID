@@ -15,8 +15,6 @@ package com.github.gzuliyujiang.oaid;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 /**
  * 调试日志工具类
  *
@@ -43,9 +41,12 @@ public final class OAIDLog {
      *
      * @param log 日志信息
      */
-    public static void print(@NonNull Object log) {
+    public static void print(Object log) {
         if (!enable) {
             return;
+        }
+        if (log == null) {
+            log = "<null>";
         }
         Log.d(TAG, log.toString());
     }

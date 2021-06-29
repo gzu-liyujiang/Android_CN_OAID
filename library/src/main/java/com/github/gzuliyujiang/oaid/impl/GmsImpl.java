@@ -19,8 +19,6 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -47,6 +45,9 @@ class GmsImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (context == null) {
+            return false;
+        }
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.android.vending", 0);
             return pi != null;
@@ -57,7 +58,10 @@ class GmsImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         Intent intent = new Intent("com.google.android.gms.ads.identifier.service.START");
         intent.setPackage("com.google.android.gms");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {

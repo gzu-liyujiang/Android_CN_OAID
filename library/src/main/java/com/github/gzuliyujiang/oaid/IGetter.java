@@ -12,8 +12,6 @@
  */
 package com.github.gzuliyujiang.oaid;
 
-import androidx.annotation.NonNull;
-
 /**
  * OAID获取回调
  *
@@ -27,13 +25,13 @@ public interface IGetter {
      *
      * @param result OAID
      */
-    void onOAIDGetComplete(@NonNull String result);
+    void onOAIDGetComplete(String result);
 
     /**
      * OAID获取失败（不正常或获取不到）
      *
      * @param error 异常信息
      */
-    void onOAIDGetError(@NonNull Exception error);
+    void onOAIDGetError(Exception error);
 
 }

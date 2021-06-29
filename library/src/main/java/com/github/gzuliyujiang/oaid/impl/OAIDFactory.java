@@ -16,9 +16,6 @@ package com.github.gzuliyujiang.oaid.impl;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RestrictTo;
-
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 import com.github.gzuliyujiang.oaid.OAIDRom;
@@ -27,7 +24,6 @@ import com.github.gzuliyujiang.oaid.OAIDRom;
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/4/28 20:32
  */
-@RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class OAIDFactory {
     private static IOAID ioaid;
 
@@ -35,8 +31,8 @@ public final class OAIDFactory {
         super();
     }
 
-    public static IOAID create(@NonNull Context context) {
-        if (!(context instanceof Application)) {
+    public static IOAID create(Context context) {
+        if (context != null && !(context instanceof Application)) {
             // See https://github.com/gzu-liyujiang/Android_CN_OAID/pull/23
             context = context.getApplicationContext();
         }

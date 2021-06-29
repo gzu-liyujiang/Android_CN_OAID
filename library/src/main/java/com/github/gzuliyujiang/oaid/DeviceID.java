@@ -26,8 +26,6 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.impl.OAIDFactory;
 
 import java.io.BufferedReader;
@@ -60,6 +58,9 @@ public final class DeviceID implements IGetter {
      * @see Application#onCreate()
      */
     public static void register(final Application application) {
+        if (application == null) {
+            return;
+        }
         DeviceID instance = Holder.INSTANCE;
         instance.application = application;
         String uniqueID = getUniqueID(application);
@@ -77,7 +78,6 @@ public final class DeviceID implements IGetter {
      * @return 客户端唯一标识，可能是IMEI、OAID、WidevineID、AndroidID或GUID中的一种
      * @see #register(Application)
      */
-    @NonNull
     public static String getClientId() {
         String clientId = Holder.INSTANCE.clientId;
         if (clientId == null) {
@@ -92,7 +92,6 @@ public final class DeviceID implements IGetter {
      * @see #getClientId()
      * @see #register(Application)
      */
-    @NonNull
     public static String getClientIdMD5() {
         return calculateHash(getClientId(), "MD5");
     }
@@ -103,7 +102,6 @@ public final class DeviceID implements IGetter {
      * @see #getClientId()
      * @see #register(Application)
      */
-    @NonNull
     public static String getClientIdSHA1() {
         return calculateHash(getClientId(), "SHA-1");
     }
@@ -113,7 +111,6 @@ public final class DeviceID implements IGetter {
      *
      * @see #register(Application)
      */
-    @NonNull
     public static String getOAID() {
         String oaid = Holder.INSTANCE.oaid;
         if (oaid == null) {
@@ -128,7 +125,7 @@ public final class DeviceID implements IGetter {
      * @param context 上下文
      * @param getter  回调
      */
-    public static void getOAID(@NonNull Context context, @NonNull IGetter getter) {
+    public static void getOAID(Context context, IGetter getter) {
         OAIDFactory.create(context).doGet(getter);
     }
 
@@ -138,7 +135,7 @@ public final class DeviceID implements IGetter {
      * @param context 上下文
      * @see #getOAID(Context, IGetter)
      */
-    public static boolean supportedOAID(@NonNull Context context) {
+    public static boolean supportedOAID(Context context) {
         return OAIDFactory.create(context).supported();
     }
 
@@ -152,11 +149,13 @@ public final class DeviceID implements IGetter {
      * @return IMEI或MEID，可能为空
      * @see Manifest.permission.READ_PHONE_STATE
      */
-    @NonNull
-    public static String getUniqueID(@NonNull Context context) {
+    public static String getUniqueID(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Android 10+ 不允许获取 IMEI、MEID 之类的设备唯一标识
             OAIDLog.print("IMEI/MEID not allowed on Android 10+");
+            return "";
+        }
+        if (context == null) {
             return "";
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -169,10 +168,12 @@ public final class DeviceID implements IGetter {
         return getIMEI(context);
     }
 
-    @NonNull
     @SuppressWarnings("deprecation")
     @SuppressLint({"HardwareIds", "MissingPermission"})
     private static String getIMEI(Context context) {
+        if (context == null) {
+            return "";
+        }
         try {
             TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             String imei = tm.getImei();
@@ -192,9 +193,11 @@ public final class DeviceID implements IGetter {
      * @param context 上下文
      * @return AndroidID，可能为空
      */
-    @NonNull
     @SuppressLint("HardwareIds")
-    public static String getAndroidID(@NonNull Context context) {
+    public static String getAndroidID(Context context) {
+        if (context == null) {
+            return "";
+        }
         String id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         if (id == null || "9774d56d682e549c".equals(id)) {
             id = "";
@@ -210,8 +213,7 @@ public final class DeviceID implements IGetter {
      * @deprecated 不需要传递上下文
      */
     @Deprecated
-    @NonNull
-    public static String getWidevineID(@NonNull Context context) {
+    public static String getWidevineID(Context context) {
         return getWidevineID();
     }
 
@@ -220,7 +222,6 @@ public final class DeviceID implements IGetter {
      *
      * @return WidevineID，可能为空
      */
-    @NonNull
     public static String getWidevineID() {
         try {
             //See https://stackoverflow.com/questions/16369818/how-to-get-crypto-scheme-uuid
@@ -247,7 +248,6 @@ public final class DeviceID implements IGetter {
      *
      * @return 伪造的设备标识，不会为空，但会有一定的概率出现重复
      */
-    @NonNull
     public static String getPseudoID() {
         final int MODULUS = 10;
         StringBuilder sb = new StringBuilder();
@@ -288,8 +288,7 @@ public final class DeviceID implements IGetter {
      * @return GUID，不会为空，但应用卸载后会丢失
      * @see android.provider.Settings#ACTION_MANAGE_WRITE_SETTINGS
      */
-    @NonNull
-    public static String getGUID(@NonNull Context context) {
+    public static String getGUID(Context context) {
         String uuid = getUuidFromSystemSettings(context);
         if (TextUtils.isEmpty(uuid)) {
             uuid = getUuidFromExternalStorage(context);
@@ -308,12 +307,18 @@ public final class DeviceID implements IGetter {
     }
 
     private static String getUuidFromSystemSettings(Context context) {
+        if (context == null) {
+            return "";
+        }
         String uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
         OAIDLog.print("Get uuid from system settings: " + uuid);
         return uuid;
     }
 
     private static void saveUuidToSystemSettings(Context context, String uuid) {
+        if (context == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
             try {
                 Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
@@ -327,6 +332,9 @@ public final class DeviceID implements IGetter {
     }
 
     private static String getUuidFromExternalStorage(Context context) {
+        if (context == null) {
+            return "";
+        }
         String uuid = "";
         File file = getGuidFile(context);
         if (file != null) {
@@ -341,6 +349,9 @@ public final class DeviceID implements IGetter {
     }
 
     private static void saveUuidToExternalStorage(Context context, String uuid) {
+        if (context == null) {
+            return;
+        }
         File file = getGuidFile(context);
         if (file == null) {
             OAIDLog.print("UUID file in external storage is null");
@@ -364,7 +375,7 @@ public final class DeviceID implements IGetter {
             hasStoragePermission = true;
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             hasStoragePermission = false;
-        } else {
+        } else if (context != null) {
             hasStoragePermission = context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_GRANTED;
         }
@@ -375,12 +386,18 @@ public final class DeviceID implements IGetter {
     }
 
     private static void saveUuidToSharedPreferences(Context context, String uuid) {
+        if (context == null) {
+            return;
+        }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
         preferences.edit().putString("uuid", uuid).apply();
         OAIDLog.print("Save uuid to shared preferences: " + uuid);
     }
 
     private static String getUuidFromSharedPreferences(Context context) {
+        if (context == null) {
+            return "";
+        }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
         String uuid = preferences.getString("uuid", "");
         OAIDLog.print("Get uuid from shared preferences: " + uuid);
@@ -391,7 +408,6 @@ public final class DeviceID implements IGetter {
      * 计算哈希值，算法可以是MD2、MD5、SHA-1、SHA-224、SHA-256、SHA-512等，支持的算法见
      * https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
      */
-    @NonNull
     public static String calculateHash(String str, String algorithm) {
         if (TextUtils.isEmpty(str)) {
             return "";
@@ -419,14 +435,17 @@ public final class DeviceID implements IGetter {
     }
 
     @Override
-    public void onOAIDGetComplete(@NonNull String result) {
+    public void onOAIDGetComplete(String result) {
+        if (result == null) {
+            result = "";
+        }
         clientId = result;
         oaid = result;
         OAIDLog.print("Client id is OAID/AAID: " + clientId);
     }
 
     @Override
-    public void onOAIDGetError(@NonNull Exception error) {
+    public void onOAIDGetError(Exception error) {
         String id = DeviceID.getWidevineID();
         if (!TextUtils.isEmpty(id)) {
             clientId = id;

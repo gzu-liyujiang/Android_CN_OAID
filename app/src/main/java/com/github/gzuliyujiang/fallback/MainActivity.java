@@ -24,7 +24,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
@@ -120,14 +119,14 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
-            public void onOAIDGetComplete(@NonNull String result) {
+            public void onOAIDGetComplete(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
                 builder.append("OAID/AAID: ").append(result);
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Exception error) {
+            public void onOAIDGetError(Exception error) {
                 // 获取OAID/AAID失败
                 builder.append("OAID/AAID: ").append(error);
                 tvDeviceIdResult.setText(builder);

@@ -21,8 +21,6 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import androidx.annotation.Nullable;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
@@ -95,7 +93,6 @@ class OAIDService implements ServiceConnection {
     @FunctionalInterface
     public interface RemoteCaller {
 
-        @Nullable
         String callRemoteInterface(IBinder binder) throws OAIDException, RemoteException;
 
     }

@@ -18,8 +18,6 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -40,6 +38,9 @@ class MsaImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (context == null) {
+            return false;
+        }
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.mdid.msa", 0);
             return pi != null;
@@ -50,7 +51,10 @@ class MsaImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         String pkg = "com.mdid.msa";
         startMsaKlService(pkg);
         Intent intent = new Intent("com.bun.msa.action.bindto.service");

@@ -23,8 +23,6 @@ import android.content.pm.Signature;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -55,6 +53,9 @@ class OppoImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (context == null) {
+            return false;
+        }
         try {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.heytap.openid", 0);
             return pi != null;
@@ -65,7 +66,10 @@ class OppoImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
         String pkg = "com.heytap.openid";
         intent.setComponent(new ComponentName(pkg, pkg + ".IdentifyService"));

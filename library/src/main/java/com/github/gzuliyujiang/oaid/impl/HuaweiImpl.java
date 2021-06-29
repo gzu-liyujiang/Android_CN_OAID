@@ -21,8 +21,6 @@ import android.os.RemoteException;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -50,6 +48,9 @@ class HuaweiImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (context == null) {
+            return false;
+        }
         boolean ret = false;
         try {
             PackageManager pm = context.getPackageManager();
@@ -70,7 +71,10 @@ class HuaweiImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
                 String oaid = Settings.Global.getString(context.getContentResolver(), "pps_oaid");

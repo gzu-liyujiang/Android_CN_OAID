@@ -15,8 +15,6 @@ package com.github.gzuliyujiang.oaid.impl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -54,7 +52,10 @@ class XiaomiImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         if (idProviderClass == null || idProviderImpl == null) {
             getter.onOAIDGetError(new OAIDException("Xiaomi IdProvider not exists"));
             return;

@@ -111,14 +111,14 @@ dependencies {
         // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
-            public void onOAIDGetComplete(@NonNull String result) {
+            public void onOAIDGetComplete(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
                 builder.append("OAID/AAID: ").append(result);
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
-            public void onOAIDGetError(@NonNull Exception error) {
+            public void onOAIDGetError(Exception error) {
                 // 获取OAID/AAID失败
                 builder.append("OAID/AAID: 失败，").append(error);
                 tvDeviceIdResult.setText(builder);
@@ -207,8 +207,11 @@ dependencies {
 
 ### 不支持 OAID 或 AAID
 
-- 用户关闭广告标识符 ![](/screenshot/oaid_disabled.png)
-- 以下厂商或品牌手机已不支持：
+- 用户关闭了广告标识符
+
+![](/screenshot/oaid_disabled.png)
+
+- 以下厂商或品牌手机已验证不支持：
 
 ```text
 锤子（Smartisan）、酷派（Yulong,Coolpad）、360（360）、奇酷（QiKu）、海信（Hisense）、金立（Gionee）、

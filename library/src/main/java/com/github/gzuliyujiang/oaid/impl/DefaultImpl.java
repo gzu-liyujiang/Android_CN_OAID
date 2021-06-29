@@ -12,8 +12,6 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -30,7 +28,10 @@ class DefaultImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (getter == null) {
+            return;
+        }
         getter.onOAIDGetError(new OAIDException("Unsupported"));
     }
 

@@ -17,8 +17,6 @@ import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -39,6 +37,9 @@ class MeizuImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (context == null) {
+            return false;
+        }
         try {
             ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
             return pi != null;
@@ -49,7 +50,10 @@ class MeizuImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null,
                 new String[]{"oaid"}, null)) {

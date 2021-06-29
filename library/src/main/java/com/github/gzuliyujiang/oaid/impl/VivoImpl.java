@@ -16,8 +16,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
@@ -46,7 +44,10 @@ class VivoImpl implements IOAID {
     }
 
     @Override
-    public void doGet(@NonNull final IGetter getter) {
+    public void doGet(final IGetter getter) {
+        if (context == null || getter == null) {
+            return;
+        }
         Uri uri = Uri.parse("content://com.vivo.vms.IdProvider/IdentifierId/OAID");
         try (Cursor cursor = context.getContentResolver().query(uri, null, null,
                 null, null)) {
