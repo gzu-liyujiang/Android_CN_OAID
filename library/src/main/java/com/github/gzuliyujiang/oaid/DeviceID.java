@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaDrm;
-import android.media.UnsupportedSchemeException;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
@@ -183,8 +182,11 @@ public final class DeviceID implements IGetter {
             return imei;
         } catch (Exception e) {
             OAIDLog.print(e);
-            return "";
+        } catch (Error e) {
+            // e.g. NoSuchMethodError: No virtual method getMeid()
+            OAIDLog.print(e);
         }
+        return "";
     }
 
     /**
@@ -237,7 +239,9 @@ public final class DeviceID implements IGetter {
                 sb.append(String.format("%02x", aByte));
             }
             return sb.toString();
-        } catch (UnsupportedSchemeException e) {
+        } catch (Exception e) {
+            OAIDLog.print(e);
+        } catch (Error e) {
             OAIDLog.print(e);
         }
         return "";
