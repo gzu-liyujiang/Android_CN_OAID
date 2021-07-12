@@ -440,8 +440,9 @@ public final class DeviceID implements IGetter {
 
     @Override
     public void onOAIDGetComplete(String result) {
-        if (result == null) {
-            result = "";
+        if (TextUtils.isEmpty(result)) {
+            onOAIDGetError(new OAIDException("OAID is empty"));
+            return;
         }
         clientId = result;
         oaid = result;
