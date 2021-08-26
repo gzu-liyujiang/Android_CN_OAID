@@ -190,7 +190,7 @@ dependencies {
 - 联想手机 ![lenovo](/screenshot/oaid_lenovo.png)
 - 一加手机 ![oneplus](/screenshot/oaid_oneplus.png)
 - 华硕手机 ![asus](/screenshot/oaid_asus.png)
-- 努比亚机 ![nubia](/screenshot/oaid_nubia.png)
+- 努比亚机  `待验证`
 - 酷派手机  `待验证`
 - 酷赛手机  `待验证`
 - 卓易手机  `待验证`
