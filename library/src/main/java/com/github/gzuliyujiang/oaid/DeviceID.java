@@ -40,7 +40,6 @@ import java.util.UUID;
  * 设备标识符工具类
  *
  * @author 大定府羡民（1032694760@qq.com）
- * @version 3.0.0
  * @since 2020/5/30
  */
 @SuppressWarnings("ALL")

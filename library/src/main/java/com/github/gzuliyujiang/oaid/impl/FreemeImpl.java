@@ -10,6 +10,7 @@
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
+
 package com.github.gzuliyujiang.oaid.impl;
 
 import android.content.Context;
@@ -23,16 +24,16 @@ import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
-import repeackage.com.samsung.android.deviceidservice.IDeviceIdService;
+import repeackage.com.android.creator.IdsSupplier;
 
 /**
- * @author 大定府羡民（1032694760@qq.com）
- * @since 2020/5/30
+ * @author 贵州山野羡民（1032694760@qq.com）
+ * @since 2021/8/26 17:09
  */
-class SamsungImpl implements IOAID {
+public class FreemeImpl implements IOAID {
     private final Context context;
 
-    public SamsungImpl(Context context) {
+    public FreemeImpl(Context context) {
         this.context = context;
     }
 
@@ -42,7 +43,7 @@ class SamsungImpl implements IOAID {
             return false;
         }
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.android.creator", 0);
             return pi != null;
         } catch (Exception e) {
             OAIDLog.print(e);
@@ -55,14 +56,14 @@ class SamsungImpl implements IOAID {
         if (context == null || getter == null) {
             return;
         }
-        Intent intent = new Intent();
-        intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
+        Intent intent = new Intent("android.service.action.msa");
+        intent.setPackage("com.android.creator");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
             public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
-                IDeviceIdService anInterface = IDeviceIdService.Stub.asInterface(service);
+                IdsSupplier anInterface = IdsSupplier.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new OAIDException("IDeviceIdService is null");
+                    throw new OAIDException("IdsSupplier is null");
                 }
                 return anInterface.getOAID();
             }

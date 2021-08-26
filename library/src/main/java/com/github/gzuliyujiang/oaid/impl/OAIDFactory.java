@@ -78,6 +78,15 @@ public final class OAIDFactory {
         if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
             return new OppoImpl(context);
         }
+        if (OAIDRom.isCoolpad(context)) {
+            return new CoolpadImpl(context);
+        }
+        if (OAIDRom.isCoosea()) {
+            return new CooseaImpl(context);
+        }
+        if (OAIDRom.isFreeme()) {
+            return new FreemeImpl(context);
+        }
         return null;
     }
 

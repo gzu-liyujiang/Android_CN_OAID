@@ -10,30 +10,30 @@
  * PURPOSE.
  * See the Mulan PSL v2 for more details.
  */
+
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.os.IBinder;
-import android.os.RemoteException;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
-import repeackage.com.samsung.android.deviceidservice.IDeviceIdService;
+import java.util.Objects;
 
 /**
- * @author 大定府羡民（1032694760@qq.com）
- * @since 2020/5/30
+ * @author 贵州山野羡民（1032694760@qq.com）
+ * @since 2021/8/26 16:22
  */
-class SamsungImpl implements IOAID {
+public class CooseaImpl implements IOAID {
     private final Context context;
+    private final KeyguardManager keyguardManager;
 
-    public SamsungImpl(Context context) {
+    public CooseaImpl(Context context) {
         this.context = context;
+        this.keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
     }
 
     @Override
@@ -41,9 +41,12 @@ class SamsungImpl implements IOAID {
         if (context == null) {
             return false;
         }
+        if (keyguardManager == null) {
+            return false;
+        }
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
-            return pi != null;
+            Object obj = keyguardManager.getClass().getDeclaredMethod("isSupported").invoke(keyguardManager);
+            return (Boolean) Objects.requireNonNull(obj);
         } catch (Exception e) {
             OAIDLog.print(e);
             return false;
@@ -55,18 +58,21 @@ class SamsungImpl implements IOAID {
         if (context == null || getter == null) {
             return;
         }
-        Intent intent = new Intent();
-        intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
-        OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
-            @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
-                IDeviceIdService anInterface = IDeviceIdService.Stub.asInterface(service);
-                if (anInterface == null) {
-                    throw new OAIDException("IDeviceIdService is null");
-                }
-                return anInterface.getOAID();
+        if (keyguardManager == null) {
+            getter.onOAIDGetError(new OAIDException("KeyguardManager not found"));
+            return;
+        }
+        try {
+            Object obj = keyguardManager.getClass().getDeclaredMethod("obtainOaid").invoke(keyguardManager);
+            if (obj == null) {
+                throw new OAIDException("OAID obtain failed");
             }
-        });
+            String oaid = obj.toString();
+            OAIDLog.print("OAID obtain success: " + oaid);
+            getter.onOAIDGetComplete(oaid);
+        } catch (Exception e) {
+            OAIDLog.print(e);
+        }
     }
 
 }

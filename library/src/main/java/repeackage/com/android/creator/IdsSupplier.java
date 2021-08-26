@@ -14,45 +14,43 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
  */
-package repeackage.com.bun.lib;
+package repeackage.com.android.creator;
 
 /**
  * 本文件代码根据以下AIDL生成，只改包名以便解决和移动安全联盟的SDK冲突问题：
  * <pre>
- *     // MsaIdInterface.aidl
- *     package com.bun.lib;
+ *     // IdsSupplier.aidl
+ *     package com.android.creator;
  *
- *     interface MsaIdInterface {
+ *     interface IdsSupplier {
  *
- *         boolean isSupported();
+ *        boolean isSupported();
  *
- *         boolean isDataArrived();
+ *        String getUDID(String str);
  *
- *         String getOAID();
+ *        String getOAID();
  *
- *         String getVAID();
+ *        String getVAID();
  *
- *         String getAAID();
- *
- *         void shutDown();
+ *         String getAAID(String str);
  *
  *     }
  * </pre>
  */
 @SuppressWarnings("All")
-public interface MsaIdInterface extends android.os.IInterface {
+public interface IdsSupplier extends android.os.IInterface {
     /**
-     * Default implementation for MsaIdInterface.
+     * Default implementation for IdsSupplier.
      */
-    public static class Default implements MsaIdInterface {
+    public static class Default implements IdsSupplier {
         @Override
         public boolean isSupported() throws android.os.RemoteException {
             return false;
         }
 
         @Override
-        public boolean isDataArrived() throws android.os.RemoteException {
-            return false;
+        public java.lang.String getUDID(java.lang.String str) throws android.os.RemoteException {
+            return null;
         }
 
         @Override
@@ -66,12 +64,8 @@ public interface MsaIdInterface extends android.os.IInterface {
         }
 
         @Override
-        public java.lang.String getAAID() throws android.os.RemoteException {
+        public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException {
             return null;
-        }
-
-        @Override
-        public void shutDown() throws android.os.RemoteException {
         }
 
         @Override
@@ -83,8 +77,8 @@ public interface MsaIdInterface extends android.os.IInterface {
     /**
      * Local-side IPC implementation stub class.
      */
-    public static abstract class Stub extends android.os.Binder implements MsaIdInterface {
-        private static final java.lang.String DESCRIPTOR = "com.bun.lib.MsaIdInterface";
+    public static abstract class Stub extends android.os.Binder implements IdsSupplier {
+        private static final java.lang.String DESCRIPTOR = "com.android.creator.IdsSupplier";
 
         /**
          * Construct the stub at attach it to the interface.
@@ -94,18 +88,18 @@ public interface MsaIdInterface extends android.os.IInterface {
         }
 
         /**
-         * Cast an IBinder object into an repeackage.com.bun.lib.MsaIdInterface interface,
+         * Cast an IBinder object into an repeackage.com.android.creator.IdsSupplier interface,
          * generating a proxy if needed.
          */
-        public static MsaIdInterface asInterface(android.os.IBinder obj) {
+        public static IdsSupplier asInterface(android.os.IBinder obj) {
             if ((obj == null)) {
                 return null;
             }
             android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-            if (((iin != null) && (iin instanceof MsaIdInterface))) {
-                return ((MsaIdInterface) iin);
+            if (((iin != null) && (iin instanceof IdsSupplier))) {
+                return ((IdsSupplier) iin);
             }
-            return new MsaIdInterface.Stub.Proxy(obj);
+            return new IdsSupplier.Stub.Proxy(obj);
         }
 
         @Override
@@ -128,11 +122,13 @@ public interface MsaIdInterface extends android.os.IInterface {
                     reply.writeInt(((_result) ? (1) : (0)));
                     return true;
                 }
-                case TRANSACTION_isDataArrived: {
+                case TRANSACTION_getUDID: {
                     data.enforceInterface(descriptor);
-                    boolean _result = this.isDataArrived();
+                    java.lang.String _arg0;
+                    _arg0 = data.readString();
+                    java.lang.String _result = this.getUDID(_arg0);
                     reply.writeNoException();
-                    reply.writeInt(((_result) ? (1) : (0)));
+                    reply.writeString(_result);
                     return true;
                 }
                 case TRANSACTION_getOAID: {
@@ -151,15 +147,11 @@ public interface MsaIdInterface extends android.os.IInterface {
                 }
                 case TRANSACTION_getAAID: {
                     data.enforceInterface(descriptor);
-                    java.lang.String _result = this.getAAID();
+                    java.lang.String _arg0;
+                    _arg0 = data.readString();
+                    java.lang.String _result = this.getAAID(_arg0);
                     reply.writeNoException();
                     reply.writeString(_result);
-                    return true;
-                }
-                case TRANSACTION_shutDown: {
-                    data.enforceInterface(descriptor);
-                    this.shutDown();
-                    reply.writeNoException();
                     return true;
                 }
                 default: {
@@ -168,7 +160,7 @@ public interface MsaIdInterface extends android.os.IInterface {
             }
         }
 
-        private static class Proxy implements MsaIdInterface {
+        private static class Proxy implements IdsSupplier {
             private android.os.IBinder mRemote;
 
             Proxy(android.os.IBinder remote) {
@@ -205,18 +197,19 @@ public interface MsaIdInterface extends android.os.IInterface {
             }
 
             @Override
-            public boolean isDataArrived() throws android.os.RemoteException {
+            public java.lang.String getUDID(java.lang.String str) throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
-                boolean _result;
+                java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_isDataArrived, _data, _reply, 0);
+                    _data.writeString(str);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_getUDID, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().isDataArrived();
+                        return getDefaultImpl().getUDID(str);
                     }
                     _reply.readException();
-                    _result = (0 != _reply.readInt());
+                    _result = _reply.readString();
                 } finally {
                     _reply.recycle();
                     _data.recycle();
@@ -265,15 +258,16 @@ public interface MsaIdInterface extends android.os.IInterface {
             }
 
             @Override
-            public java.lang.String getAAID() throws android.os.RemoteException {
+            public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException {
                 android.os.Parcel _data = android.os.Parcel.obtain();
                 android.os.Parcel _reply = android.os.Parcel.obtain();
                 java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
+                    _data.writeString(str);
                     boolean _status = mRemote.transact(Stub.TRANSACTION_getAAID, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
-                        return getDefaultImpl().getAAID();
+                        return getDefaultImpl().getAAID(str);
                     }
                     _reply.readException();
                     _result = _reply.readString();
@@ -284,35 +278,16 @@ public interface MsaIdInterface extends android.os.IInterface {
                 return _result;
             }
 
-            @Override
-            public void shutDown() throws android.os.RemoteException {
-                android.os.Parcel _data = android.os.Parcel.obtain();
-                android.os.Parcel _reply = android.os.Parcel.obtain();
-                try {
-                    _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_shutDown, _data, _reply, 0);
-                    if (!_status && getDefaultImpl() != null) {
-                        getDefaultImpl().shutDown();
-                        return;
-                    }
-                    _reply.readException();
-                } finally {
-                    _reply.recycle();
-                    _data.recycle();
-                }
-            }
-
-            public static MsaIdInterface sDefaultImpl;
+            public static IdsSupplier sDefaultImpl;
         }
 
         static final int TRANSACTION_isSupported = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-        static final int TRANSACTION_isDataArrived = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_getUDID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
         static final int TRANSACTION_getOAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
         static final int TRANSACTION_getVAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
         static final int TRANSACTION_getAAID = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-        static final int TRANSACTION_shutDown = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
 
-        public static boolean setDefaultImpl(MsaIdInterface impl) {
+        public static boolean setDefaultImpl(IdsSupplier impl) {
             // Only one user of this interface can use this function
             // at a time. This is a heuristic to detect if two different
             // users in the same process use this function.
@@ -326,20 +301,18 @@ public interface MsaIdInterface extends android.os.IInterface {
             return false;
         }
 
-        public static MsaIdInterface getDefaultImpl() {
+        public static IdsSupplier getDefaultImpl() {
             return Stub.Proxy.sDefaultImpl;
         }
     }
 
     public boolean isSupported() throws android.os.RemoteException;
 
-    public boolean isDataArrived() throws android.os.RemoteException;
+    public java.lang.String getUDID(java.lang.String str) throws android.os.RemoteException;
 
     public java.lang.String getOAID() throws android.os.RemoteException;
 
     public java.lang.String getVAID() throws android.os.RemoteException;
 
-    public java.lang.String getAAID() throws android.os.RemoteException;
-
-    public void shutDown() throws android.os.RemoteException;
+    public java.lang.String getAAID(java.lang.String str) throws android.os.RemoteException;
 }

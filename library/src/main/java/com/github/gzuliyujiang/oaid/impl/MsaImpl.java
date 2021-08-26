@@ -15,6 +15,7 @@ package com.github.gzuliyujiang.oaid.impl;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -55,10 +56,9 @@ class MsaImpl implements IOAID {
         if (context == null || getter == null) {
             return;
         }
-        String pkg = "com.mdid.msa";
-        startMsaKlService(pkg);
+        startMsaKlService();
         Intent intent = new Intent("com.bun.msa.action.bindto.service");
-        intent.setClassName(pkg, pkg + ".service.MsaIdService");
+        intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaIdService");
         intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
@@ -75,13 +75,16 @@ class MsaImpl implements IOAID {
         });
     }
 
-    private void startMsaKlService(String pkg) {
+    private void startMsaKlService() {
         try {
             Intent intent = new Intent("com.bun.msa.action.start.service");
-            intent.setClassName(pkg, pkg + ".service.MsaKlService");
+            intent.setClassName("com.mdid.msa", "com.mdid.msa.service.MsaKlService");
             intent.putExtra("com.bun.msa.param.pkgname", context.getPackageName());
-            intent.putExtra("com.bun.msa.param.runinset", true);
-            context.startService(intent);
+            if (Build.VERSION.SDK_INT < 26) {
+                context.startService(intent);
+            } else {
+                context.startForegroundService(intent);
+            }
         } catch (Exception e) {
             OAIDLog.print(e);
         }

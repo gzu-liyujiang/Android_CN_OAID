@@ -13,6 +13,7 @@
 package com.github.gzuliyujiang.oaid;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 
@@ -143,14 +144,27 @@ public final class OAIDRom {
 
     public static boolean isFreeme() {
         // 卓易手机
-        return Build.MANUFACTURER.equalsIgnoreCase("FREEMEOS") ||
-                !TextUtils.isEmpty(sysProperty("ro.build.freeme.label", ""));
+        return !TextUtils.isEmpty(sysProperty("ro.build.freeme.label", ""));
+    }
+
+    public static boolean isCoolpad(Context context) {
+        // 酷派手机
+        try {
+            context.getPackageManager().getPackageInfo("com.coolpad.deviceidsupport", 0);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isCoosea() {
+        // 酷赛手机
+        return sysProperty("ro.odm.manufacturer", "").equalsIgnoreCase("PRIZE");
     }
 
     public static boolean isSSUI() {
         // 这是啥玩意的手机或系统？百度及谷歌都搜不到相关资料
-        return Build.MANUFACTURER.equalsIgnoreCase("SSUI") ||
-                !TextUtils.isEmpty(sysProperty("ro.ssui.product", ""));
+        return !TextUtils.isEmpty(sysProperty("ro.ssui.product", ""));
     }
 
 }

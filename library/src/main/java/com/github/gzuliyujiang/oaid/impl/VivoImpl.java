@@ -15,6 +15,7 @@ package com.github.gzuliyujiang.oaid.impl;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -40,6 +41,9 @@ class VivoImpl implements IOAID {
 
     @Override
     public boolean supported() {
+        if (Build.VERSION.SDK_INT < 28) {
+            return false;
+        }
         return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
     }
 

@@ -57,8 +57,7 @@ class AsusImpl implements IOAID {
             return;
         }
         Intent intent = new Intent("com.asus.msa.action.ACCESS_DID");
-        String pkg = "com.asus.msa.SupplementaryDID";
-        ComponentName componentName = new ComponentName(pkg, pkg + ".SupplementaryDIDService");
+        ComponentName componentName = new ComponentName("com.asus.msa.SupplementaryDID", "com.asus.msa.SupplementaryDID.SupplementaryDIDService");
         intent.setComponent(componentName);
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override

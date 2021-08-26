@@ -71,8 +71,7 @@ class OppoImpl implements IOAID {
             return;
         }
         Intent intent = new Intent("action.com.heytap.openid.OPEN_ID_SERVICE");
-        String pkg = "com.heytap.openid";
-        intent.setComponent(new ComponentName(pkg, pkg + ".IdentifyService"));
+        intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
             public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {

@@ -11,3 +11,7 @@
 -keep interface repeackage.com.samsung.android.deviceidservice.** { *; }
 -keep class repeackage.com.zui.deviceidservice.** { *; }
 -keep interface repeackage.com.zui.deviceidservice.** { *; }
+-keep class repeackage.com.coolpad.deviceidsupport.** { *; }
+-keep interface repeackage.com.coolpad.deviceidsupport.** { *; }
+-keep class repeackage.com.android.creator.** { *; }
+-keep interface repeackage.com.android.creator.** { *; }
