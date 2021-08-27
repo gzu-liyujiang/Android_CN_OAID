@@ -119,8 +119,10 @@ dependencies {
 - 用法二：预先获取设备标识符（**建议不要和用法一同时存在**）
 
 ```text
-    // 在 Application#onCreate 里调用预取。注意：如果不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
-    DeviceID.register(this);
+    // 在 Application#onCreate 里调用预取。注意：若最终用户未同意隐私政策，或者不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
+    if (eulaAgreed) {
+        DeviceID.register(this);
+    }
     // 在需要用到设备标识的地方获取
     // 客户端标识原始值：DeviceID.getClientId()
     // 客户端标识统一格式为MD5：DeviceID.getClientIdMD5()

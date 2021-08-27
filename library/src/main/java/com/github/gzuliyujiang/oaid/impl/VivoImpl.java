@@ -41,7 +41,7 @@ class VivoImpl implements IOAID {
 
     @Override
     public boolean supported() {
-        if (Build.VERSION.SDK_INT < 28) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return false;
         }
         return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1");

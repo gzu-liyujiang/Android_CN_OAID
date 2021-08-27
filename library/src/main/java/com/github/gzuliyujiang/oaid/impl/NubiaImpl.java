@@ -12,6 +12,7 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.annotation.SuppressLint;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.net.Uri;
@@ -34,6 +35,7 @@ class NubiaImpl implements IOAID {
         this.context = context;
     }
 
+    @SuppressLint("AnnotateVersionCheck")
     @Override
     public boolean supported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;

@@ -50,7 +50,7 @@ public final class DeviceID implements IGetter {
 
     /**
      * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
-     * !!注意!!：如果不需要用到{@link #getClientId()}及{@link #getOAID()}，请不要调用这个方法
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID()}，请不要调用这个方法
      *
      * @param application 全局上下文
      * @see Application#onCreate()

@@ -26,22 +26,28 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
  * @since 2020/5/20
  */
 public class DemoApp extends Application {
+    private boolean eulaAgreed = false;
 
     static {
-        OAIDLog.enable();
+        if (BuildConfig.DEBUG) {
+            OAIDLog.enable();
+        }
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+        eulaAgreed = true;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // 注意：如果不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
-        DeviceID.register(this);
+        // 注意：若最终用户未同意隐私政策，或者不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
+        if (eulaAgreed) {
+            DeviceID.register(this);
+        }
     }
 
 }

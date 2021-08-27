@@ -7,8 +7,7 @@
 
 ## 4.2.1 - 2021/06/30
 
-- [issues#30](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/30) NoSuchMethodError: No
-  virtual method getMeid()；
+- [issues#30](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/30) NoSuchMethodError: No  virtual method getMeid()；
 
 ## 4.2.0 - 2021/06/29
 
