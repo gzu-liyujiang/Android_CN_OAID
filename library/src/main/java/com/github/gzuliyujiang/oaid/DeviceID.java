@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * 设备标识符工具类
+ * 设备标识符工具类，建议使用{@link DeviceIdentifier}代替
  *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
@@ -55,7 +55,7 @@ public final class DeviceID implements IGetter {
      * @param application 全局上下文
      * @see Application#onCreate()
      */
-    public static void register(final Application application) {
+    public static void register(Application application) {
         if (application == null) {
             return;
         }
@@ -204,18 +204,6 @@ public final class DeviceID implements IGetter {
             id = "";
         }
         return id;
-    }
-
-    /**
-     * 获取数字版权管理设备ID
-     *
-     * @param context 上下文
-     * @return WidevineID，可能为空
-     * @deprecated 不需要传递上下文
-     */
-    @Deprecated
-    public static String getWidevineID(Context context) {
-        return getWidevineID();
     }
 
     /**

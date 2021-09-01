@@ -27,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.gzuliyujiang.oaid.DeviceID;
+import com.github.gzuliyujiang.oaid.DeviceIdentifier;
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             }
             resultLauncher.launch(Manifest.permission.READ_PHONE_STATE);
         } else if (id == R.id.btn_get_device_id_2) {
-            tvDeviceIdResult.setText(String.format("DeviceID: %s", DeviceID.getClientIdMD5()));
+            tvDeviceIdResult.setText(String.format("ClientId: %s", DeviceIdentifier.getClientId()));
         } else {
             OAIDLog.print("\"if ... else if\" constructs should end with \"else\" clauses.");
         }
@@ -78,18 +79,18 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
 
     private void obtainDeviceId() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("UniqueID: ");
+        builder.append("IMEI: ");
         // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
-        String uniqueID = DeviceID.getUniqueID(this);
-        if (TextUtils.isEmpty(uniqueID)) {
+        String imei = DeviceIdentifier.getIMEI(this);
+        if (TextUtils.isEmpty(imei)) {
             builder.append("DID/IMEI/MEID获取失败");
         } else {
-            builder.append(uniqueID);
+            builder.append(imei);
         }
         builder.append("\n");
         builder.append("AndroidID: ");
         // 获取安卓ID，可能为空
-        String androidID = DeviceID.getAndroidID(this);
+        String androidID = DeviceIdentifier.getAndroidID(this);
         if (TextUtils.isEmpty(androidID)) {
             builder.append("AndroidID获取失败");
         } else {
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         builder.append("\n");
         builder.append("WidevineID: ");
         // 获取数字版权管理ID，可能为空
-        String widevineID = DeviceID.getWidevineID();
+        String widevineID = DeviceIdentifier.getWidevineID();
         if (TextUtils.isEmpty(widevineID)) {
             builder.append("WidevineID获取失败");
         } else {
@@ -107,14 +108,18 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         builder.append("\n");
         builder.append("PseudoID: ");
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
-        builder.append(DeviceID.getPseudoID());
+        builder.append(DeviceIdentifier.getPseudoID());
         builder.append("\n");
         builder.append("GUID: ");
         // 获取GUID，随机生成，不会为空
-        builder.append(DeviceID.getGUID(this));
+        builder.append(DeviceIdentifier.getGUID(this));
         builder.append("\n");
         // 是否支持OAID/AAID
         builder.append("supported: ").append(DeviceID.supportedOAID(this));
+        builder.append("\n");
+        builder.append("OAID: ");
+        // 获取OAID，同步调用，第一次可能为空
+        builder.append(DeviceIdentifier.getOAID(this));
         builder.append("\n");
         // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {

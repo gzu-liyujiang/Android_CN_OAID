@@ -18,7 +18,7 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
-import com.github.gzuliyujiang.oaid.DeviceID;
+import com.github.gzuliyujiang.oaid.DeviceIdentifier;
 import com.github.gzuliyujiang.oaid.OAIDLog;
 
 /**
@@ -26,7 +26,7 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
  * @since 2020/5/20
  */
 public class DemoApp extends Application {
-    private boolean eulaAgreed = false;
+    private boolean privacyPolicyAgreed = false;
 
     static {
         if (BuildConfig.DEBUG) {
@@ -38,15 +38,15 @@ public class DemoApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-        eulaAgreed = true;
+        privacyPolicyAgreed = true;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        // 注意：若最终用户未同意隐私政策，或者不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
-        if (eulaAgreed) {
-            DeviceID.register(this);
+        //注意APP合规性，若最终用户未同意隐私政策则不要调用
+        if (privacyPolicyAgreed) {
+            DeviceIdentifier.register(this);
         }
     }
 

@@ -1,5 +1,9 @@
 # 更新日志
 
+## 4.2.3 - 2021/09/01
+
+- 新增`DeviceIdentifier`代替`DeviceID`，用于解决APP合规性检测机构检测到的频繁读取设备信息问题；
+
 ## 4.2.2 - 2021/08/26
 
 - 增加对酷派（CoolOS）、酷赛（Prize）、卓易（Freeme）的支持，参阅 [Issues#31](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/31) ；
@@ -11,8 +15,7 @@
 
 ## 4.2.0 - 2021/06/29
 
-- 移除 AndroidX annotation 库的依赖以便兼容 Support v4/v7
-  项目，参阅 [note_5547665](https://gitee.com/li_yu_jiang/Android_CN_OAID#note_5547665)；
+- 移除 AndroidX annotation 库的依赖以便兼容 Support v4/v7 项目，参阅 [note_5547665](https://gitee.com/li_yu_jiang/Android_CN_OAID#note_5547665)；
 
 ## 4.1.4 - 2021/06/16
 

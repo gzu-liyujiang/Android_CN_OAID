@@ -56,79 +56,45 @@ dependencies {
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
 
-- 用法一：实时获取设备标识符
-
+- 第一步：
 ```text
-        final StringBuilder builder = new StringBuilder();
-        builder.append("UniqueID: ");
-        // 获取设备唯一标识，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
-        String uniqueID = DeviceID.getUniqueID(this);
-        if (TextUtils.isEmpty(uniqueID)) {
-            builder.append("DID/IMEI/MEID获取失败");
-        } else {
-            builder.append(uniqueID);
+    // 在`Application#onCreate`里初始化，注意APP合规性，若最终用户未同意隐私政策则不要调用
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (privacyPolicyAgreed) {
+            DeviceIdentifier.register(this);
         }
-        builder.append("\n");
-        builder.append("AndroidID: ");
+    }
+```
+- 第二步：
+```text
+         // 获取IMEI，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
+        DeviceIdentifier.getIMEI(this);
         // 获取安卓ID，可能为空
-        String androidID = DeviceID.getAndroidID(this);
-        if (TextUtils.isEmpty(androidID)) {
-            builder.append("AndroidID获取失败");
-        } else {
-            builder.append(androidID);
-        }
-        builder.append("\n");
-        builder.append("WidevineID: ");
+        DeviceIdentifier.getAndroidID(this);
         // 获取数字版权管理ID，可能为空
-        String widevineID = DeviceID.getWidevineID(this);
-        if (TextUtils.isEmpty(widevineID)) {
-            builder.append("WidevineID获取失败");
-        } else {
-            builder.append(widevineID);
-        }
-        builder.append("\n");
-        builder.append("PseudoID: ");
+        DeviceIdentifier.getWidevineID();
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
-        builder.append(DeviceID.getPseudoID());
-        builder.append("\n");
-        builder.append("GUID: ");
+        DeviceIdentifier.getPseudoID()；
         // 获取GUID，随机生成，不会为空
-        builder.append(DeviceID.getGUID(this));
-        builder.append("\n");
+        DeviceIdentifier.getGUID(this);
         // 是否支持OAID/AAID
-        builder.append("supported:").append(DeviceID.supportedOAID(this));
-        builder.append("\n");
+        DeviceID.supportedOAID(this);
+        // 获取OAID/AAID，同步调用
+        DeviceIdentifier.getOAID(this);
         // 获取OAID/AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
             public void onOAIDGetComplete(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-                builder.append("OAID/AAID: ").append(result);
-                tvDeviceIdResult.setText(builder);
             }
 
             @Override
             public void onOAIDGetError(Exception error) {
                 // 获取OAID/AAID失败
-                builder.append("OAID/AAID: 失败，").append(error);
-                tvDeviceIdResult.setText(builder);
             }
         });
-```
-
-- 用法二：预先获取设备标识符（**建议不要和用法一同时存在**）
-
-```text
-    // 在 Application#onCreate 里调用预取。注意：若最终用户未同意隐私政策，或者不需要调用`getClientId()`及`getOAID()`，请不要调用这个方法
-    if (eulaAgreed) {
-        DeviceID.register(this);
-    }
-    // 在需要用到设备标识的地方获取
-    // 客户端标识原始值：DeviceID.getClientId()
-    // 客户端标识统一格式为MD5：DeviceID.getClientIdMD5()
-    // 客户端标识统一格式为SHA1：DeviceID.getClientIdSHA1()
-    // 开放匿名设备标识原始值：DeviceID.getOAID()
-  tvDeviceIdResult.setText(String.format("ClientID: %s", DeviceID.getClientIdMD5()));
 ```
 
 ## 混淆规则
