@@ -15,6 +15,7 @@ package com.github.gzuliyujiang.oaid;
 
 import android.app.Application;
 import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * 设备标识符工具类。
@@ -51,9 +52,9 @@ public final class DeviceIdentifier {
     }
 
     public static String getClientId() {
-        if (clientId == null) {
+        if (TextUtils.isEmpty(clientId)) {
             synchronized (DeviceIdentifier.class) {
-                if (clientId == null) {
+                if (TextUtils.isEmpty(clientId)) {
                     clientId = DeviceID.getClientIdMD5();
                 }
             }
@@ -79,9 +80,9 @@ public final class DeviceIdentifier {
     }
 
     public static String getOAID(Context context) {
-        if (oaid == null) {
+        if (TextUtils.isEmpty(oaid)) {
             synchronized (DeviceIdentifier.class) {
-                if (oaid == null) {
+                if (TextUtils.isEmpty(oaid)) {
                     oaid = DeviceID.getOAID();
                     if (oaid == null || oaid.length() == 0) {
                         DeviceID.getOAID(context, new IGetter() {
