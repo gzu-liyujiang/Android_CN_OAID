@@ -118,6 +118,8 @@ dependencies {
 -keep interface repeackage.com.coolpad.deviceidsupport.** { *; }
 -keep class repeackage.com.android.creator.** { *; }
 -keep interface repeackage.com.android.creator.** { *; }
+-keep class repeackage.com.google.android.gms.ads.identifier.internal.** { ; }
+-keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
 ```
 
 ## 支持情况
