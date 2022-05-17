@@ -1,4 +1,4 @@
-# 本库模块专用的混淆规则
+# 本库模块专用的混淆规则（注：“repeackage”拼写是历史遗留问题）
 -keep class repeackage.com.uodis.opendevice.aidl.** { *; }
 -keep interface repeackage.com.uodis.opendevice.aidl.** { *; }
 -keep class repeackage.com.asus.msa.SupplementaryDID.** { *; }
@@ -15,3 +15,5 @@
 -keep interface repeackage.com.coolpad.deviceidsupport.** { *; }
 -keep class repeackage.com.android.creator.** { *; }
 -keep interface repeackage.com.android.creator.** { *; }
+-keep class repeackage.com.google.android.gms.ads.identifier.internal.** { ; }
+-keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
