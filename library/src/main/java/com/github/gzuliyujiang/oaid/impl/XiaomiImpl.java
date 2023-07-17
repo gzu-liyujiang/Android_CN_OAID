@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * 参阅 http://f4.market.xiaomi.com/download/MiPass/058fc4374ac89aea6dedd9dc03c60a5498241e0dd/DeviceId.jar
+ * 参阅 <a href="http://f4.market.xiaomi.com/download/MiPass/058fc4374ac89aea6dedd9dc03c60a5498241e0dd/DeviceId.jar">DeviceId.jar</a>
  * 即 com.miui.deviceid.IdentifierManager
  *
  * @author 大定府羡民（1032694760@qq.com）

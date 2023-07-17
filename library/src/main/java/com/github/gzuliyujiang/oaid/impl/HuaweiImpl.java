@@ -75,6 +75,7 @@ class HuaweiImpl implements IOAID {
             }
             getter.onOAIDGetComplete(info.getId());
         } catch (IOException e) {
+            OAIDLog.print(e);
             getter.onOAIDGetError(e);
         }
     }
