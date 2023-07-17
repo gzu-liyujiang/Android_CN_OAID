@@ -15,5 +15,5 @@ apply from: "${rootDir}/gradle/library.gradle"
 apply from: "${rootDir}/gradle/publish.gradle"
 
 dependencies {
-    implementation "com.huawei.hms:ads-identifier:3.4.62.300"
+    api "com.huawei.hms:ads-identifier:3.4.62.300"
 }
