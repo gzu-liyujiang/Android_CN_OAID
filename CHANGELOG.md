@@ -1,6 +1,6 @@
 # 更新日志
 
-## 4.2.5 - 2023/07/17
+## 4.2.5.1 - 2023/07/17
 
 - 华为手机OAID获取适配，参阅 [Issues#66](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/66) 。
 
