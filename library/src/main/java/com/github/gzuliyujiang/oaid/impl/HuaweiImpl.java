@@ -13,34 +13,24 @@
 package com.github.gzuliyujiang.oaid.impl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.provider.Settings;
-import android.text.TextUtils;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
 import com.github.gzuliyujiang.oaid.OAIDException;
 import com.github.gzuliyujiang.oaid.OAIDLog;
+import com.huawei.hms.ads.identifier.AdvertisingIdClient;
 
-import repeackage.com.uodis.opendevice.aidl.OpenDeviceIdentifierService;
+import java.io.IOException;
 
 /**
- * 参阅华为官方 HUAWEI Ads SDK。
- * <prev>
- * implementation `com.huawei.hms:ads-identifier:3.4.39.302`
- * AdvertisingIdClient.getAdvertisingIdInfo(context).getId()
- * </pre> *
+ * 参阅华为官方 <a href="https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-integrating-sdk-0000001056460552">HUAWEI Ads SDK</a>。
  *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
 class HuaweiImpl implements IOAID {
     private final Context context;
-    private String packageName;
 
     public HuaweiImpl(Context context) {
         this.context = context;
@@ -55,14 +45,11 @@ class HuaweiImpl implements IOAID {
         try {
             PackageManager pm = context.getPackageManager();
             if (pm.getPackageInfo("com.huawei.hwid", 0) != null) {
-                packageName = "com.huawei.hwid";
                 ret = true;
             } else if (pm.getPackageInfo("com.huawei.hwid.tv", 0) != null) {
-                packageName = "com.huawei.hwid.tv";
                 ret = true;
             } else {
-                packageName = "com.huawei.hms";
-                ret = pm.getPackageInfo(packageName, 0) != null;
+                ret = pm.getPackageInfo("com.huawei.hms", 0) != null;
             }
         } catch (Exception e) {
             OAIDLog.print(e);
@@ -75,35 +62,21 @@ class HuaweiImpl implements IOAID {
         if (context == null || getter == null) {
             return;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                String oaid = Settings.Global.getString(context.getContentResolver(), "pps_oaid");
-                if (!TextUtils.isEmpty(oaid)) {
-                    OAIDLog.print("Get oaid from global settings: " + oaid);
-                    getter.onOAIDGetComplete(oaid);
-                    return;
-                }
-            } catch (Exception e) {
-                OAIDLog.print(e);
+        try {
+            AdvertisingIdClient.Info info = AdvertisingIdClient.getAdvertisingIdInfo(context);
+            if (info == null) {
+                getter.onOAIDGetError(new OAIDException("Advertising identifier info is null"));
+                return;
             }
-        }
-        if (TextUtils.isEmpty(packageName) && !supported()) {
-            getter.onOAIDGetError(new OAIDException("Huawei Advertising ID not available"));
-            return;
-        }
-        Intent intent = new Intent("com.uodis.opendevice.OPENIDS_SERVICE");
-        intent.setPackage(packageName);
-        OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
-            @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
-                OpenDeviceIdentifierService anInterface = OpenDeviceIdentifierService.Stub.asInterface(service);
-                if (anInterface.isOaidTrackLimited()) {
-                    // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
-                    throw new OAIDException("User has disabled advertising identifier");
-                }
-                return anInterface.getOaid();
+            if (info.isLimitAdTrackingEnabled()) {
+                // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
+                getter.onOAIDGetError(new OAIDException("User has disabled advertising identifier"));
+                return;
             }
-        });
+            getter.onOAIDGetComplete(info.getId());
+        } catch (IOException e) {
+            getter.onOAIDGetError(e);
+        }
     }
 
 }
