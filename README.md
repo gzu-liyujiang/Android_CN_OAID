@@ -8,6 +8,7 @@
 
 - GitHub：`https://github.com/gzu-liyujiang/Android_CN_OAID`
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
+- Demo：[https://github.com/gzu-liyujiang/Android_CN_OAID/blob/master/demo.apk](/demo.apk)
 
 ## 接入指引
 
@@ -193,6 +194,8 @@ dependencies {
 ![disabled](/screenshot/oaid_disabled.png)
 
 - 以下厂商或品牌手机截止`2021年8月26日`已验证尚不支持：
+
+![nonsupport](/screenshot/oaid_wsa.png)
 
 ```text
 锤子（Smartisan）、360（360）、奇酷（QiKu）、海信（Hisense）、金立（Gionee）、
