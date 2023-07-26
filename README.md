@@ -43,6 +43,15 @@ dependencies {
     implementation 'com.github.gzu-liyujiang:Android_CN_OAID:<version>'
 }
 ```
+**4.2.5.1 版本以后直接使用了华为官方广告标识服务SDK，与移动安全联盟 SDK 共存** 的话可参考如下配置（PS：暂时没太多经历逆向华为的SDK重构包名来共存）：
+```groovy
+dependencies {
+    implementation('com.github.gzu-liyujiang:Android_CN_OAID:<version>') {
+        // 排除掉本项目依赖的华为官方广告标识服务SDK，也即是使用移动安全联盟SDK依赖的华为官方广告标识服务SDK
+        exclude group: 'com.huawei.hms', module: 'ads-identifier' 
+    }
+}
+```
 
 自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`、`WRITE_SETTINGS`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。 为**
 遵循最小必要原则**保护用户隐私，若项目中没用到 IMEI 及 GUID，那么可酌情在 `AndroidManifest.xml` 中加入如下代码移除相关权限：
