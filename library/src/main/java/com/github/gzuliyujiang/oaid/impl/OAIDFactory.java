@@ -76,7 +76,13 @@ public final class OAIDFactory {
             return new HuaweiImpl(context);
         }
         if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
-            return new OppoImpl(context);
+            OppoImpl oppo = new OppoImpl(context);
+            if(oppo.supported()) {
+                return oppo;
+            }
+            else {
+                return new OppoExtImpl(context);
+            }
         }
         if (OAIDRom.isCoolpad(context)) {
             return new CoolpadImpl(context);

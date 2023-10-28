@@ -87,7 +87,7 @@ class OppoImpl implements IOAID {
     }
 
     @SuppressLint("PackageManagerGetSignatures")
-    private String realGetOUID(IBinder service) throws PackageManager.NameNotFoundException,
+    protected String realGetOUID(IBinder service) throws PackageManager.NameNotFoundException,
             NoSuchAlgorithmException, RemoteException, OAIDException {
         String pkgName = context.getPackageName();
         if (sign == null) {
@@ -106,7 +106,7 @@ class OppoImpl implements IOAID {
         return getSerId(service, pkgName, sign);
     }
 
-    private String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, OAIDException {
+    protected String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, OAIDException {
         IOpenID anInterface = IOpenID.Stub.asInterface(service);
         if (anInterface == null) {
             throw new OAIDException("IOpenID is null");
