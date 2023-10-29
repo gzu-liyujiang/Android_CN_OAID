@@ -56,6 +56,18 @@ public final class DeviceID implements IGetter {
      * @see Application#onCreate()
      */
     public static void register(Application application) {
+        register(application, null);
+    }
+
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID()}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @param callback 注册完成回调
+     * @see Application#onCreate()
+     */
+    public static void register(Application application, IRegisterCallback callback) {
         if (application == null) {
             return;
         }
@@ -65,9 +77,28 @@ public final class DeviceID implements IGetter {
         if (!TextUtils.isEmpty(uniqueID)) {
             instance.clientId = uniqueID;
             OAIDLog.print("Client id is IMEI/MEID: " + instance.clientId);
+            if (callback != null) {
+                callback.onComplete();
+            }
             return;
         }
-        getOAID(application, instance);
+        getOAID(application, new IGetter() {
+            @Override
+            public void onOAIDGetComplete(String result) {
+                instance.onOAIDGetComplete(result);
+                if (callback != null) {
+                    callback.onComplete();
+                }
+            }
+
+            @Override
+            public void onOAIDGetError(Exception error) {
+                instance.onOAIDGetError(error);
+                if (callback != null) {
+                    callback.onComplete();
+                }
+            }
+        });
     }
 
     /**

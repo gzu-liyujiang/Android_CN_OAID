@@ -40,12 +40,16 @@ public final class DeviceIdentifier {
     }
 
     public static void register(Application application) {
-        if (registered) {
+        register(application, null);
+    }
+
+    public static void register(Application application, IRegisterCallback callback) {
+        if (registered || application == null) {
             return;
         }
         synchronized (DeviceIdentifier.class) {
             if (!registered) {
-                DeviceID.register(application);
+                DeviceID.register(application, callback);
                 registered = true;
             }
         }
