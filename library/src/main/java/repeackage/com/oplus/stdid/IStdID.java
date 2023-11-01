@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
+ * Copyright (c) 2016-present. 贵州纳雍穿青人李裕江 and All Contributors.
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -16,6 +16,10 @@ package repeackage.com.oplus.stdid;
 
 import repeackage.com.heytap.openid.IOpenID;
 
+/**
+ * @author luoyesiqiu
+ * @since 2023/10/28 09:13
+ */
 public interface IStdID extends IOpenID {
     public static abstract class Stub extends IOpenID.Stub {
         private static final java.lang.String DESCRIPTOR = "com.oplus.stdid.IStdID";

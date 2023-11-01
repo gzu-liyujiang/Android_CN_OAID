@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-present 贵州纳雍穿青人李裕江<1032694760@qq.com>
+ * Copyright (c) 2016-present. 贵州纳雍穿青人李裕江 and All Contributors.
  *
  * The software is licensed under the Mulan PSL v2.
  * You can use this software according to the terms and conditions of the Mulan PSL v2.
@@ -26,6 +26,10 @@ import com.github.gzuliyujiang.oaid.OAIDLog;
 
 import repeackage.com.oplus.stdid.IStdID;
 
+/**
+ * @author luoyesiqiu
+ * @since 2023/10/28 09:13
+ */
 public class OppoExtImpl extends OppoImpl{
     private final static String ACTION = "action.com.oplus.stdid.ID_SERVICE";
     private final static String PACKAGE_NAME = "com.coloros.mcs";
