@@ -17,14 +17,10 @@
 **/*.iws
 **/build
 **/local.properties
-!**/.idea/codeStyles/**
-!**/.idea/copyright/**
-**/.idea/caches
-**/.idea/libraries
-**/.idea/modules
-**/.idea/runConfigurations
-**/.idea/*.xml
-**/.idea/.name
+**/.idea/*
+!**/.idea/.name
+!**/.idea/codeStyles
+!**/.idea/copyright
 
 # Android related
 **/android/**/gradle-wrapper.jar

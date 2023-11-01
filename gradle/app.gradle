@@ -46,16 +46,6 @@ android {
             //是否打一个包含全部架构的包
             universalApk false
         }
-        //分辨率分包
-        density {
-            // 是否开启
-            enable false
-        }
-        //语言分包
-        language {
-            // 是否开启
-            enable = false
-        }
     }
 
     defaultConfig {

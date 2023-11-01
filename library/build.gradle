@@ -14,6 +14,10 @@
 apply from: "${rootDir}/gradle/library.gradle"
 apply from: "${rootDir}/gradle/publish.gradle"
 
+android {
+    namespace 'com.github.gzuliyujiang.oaid'
+}
+
 dependencies {
     api "com.huawei.hms:ads-identifier:3.4.62.300"
 }

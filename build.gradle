@@ -16,28 +16,26 @@ buildscript {
     apply from: "${rootDir}/gradle/config.gradle"
     apply from: "${rootDir}/gradle/dependency.gradle"
     repositories {
-        maven { url 'https://maven.aliyun.com/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repositories/public' }
         maven { url 'https://maven.aliyun.com/repositories/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven { url 'https://repo1.maven.org/maven2/' }
         maven {url 'https://developer.huawei.com/repo/'}
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:8.1.2'
     }
 }
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repositories/public' }
         maven { url 'https://maven.aliyun.com/repositories/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven { url "https://www.jitpack.io" }
-        maven { url 'https://repo1.maven.org/maven2/' }
+        maven { url "https://jitpack.io" }
         maven {url 'https://developer.huawei.com/repo/'}
     }
 }
