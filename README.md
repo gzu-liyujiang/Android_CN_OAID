@@ -1,10 +1,14 @@
+[//]: # (@formatter:off)
+
 # Android_CN_OAID
 
 ![Release APK](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Release%20APK/badge.svg)
 ![Gradle Package](https://github.com/gzu-liyujiang/Android_CN_OAID/workflows/Gradle%20Package/badge.svg)
 
-安卓设备唯一标识解决方案，可作为移动安全联盟统一 SDK （miit_mdid_xxx.aar）的替代方案。**注意，这个项目的初衷主要是针对个人开发者的APP，个人开发者使用不了 MSA 的SDK，企业的APP应该去用 MSA 的 SDK**。本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID
-（安卓广告标识）的便携接口，另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
+安卓设备唯一标识解决方案，可作为移动安全联盟统一 SDK （miit_mdid_xxx.aar）的替代方案。
+**注意，这个项目的初衷主要是针对个人开发者的APP，个人开发者使用不了 MSA 的SDK，企业的APP应该去用 MSA 的 SDK**。
+本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID（安卓广告标识）的便携接口，
+另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
 
 - GitHub：`https://github.com/gzu-liyujiang/Android_CN_OAID`
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
@@ -18,66 +22,69 @@
 ### 依赖配置
 
 如果你的项目 Gradle 配置是在 7.0 以下，需要在 build.gradle 文件中加入：
+
 ```groovy
 allprojects {
     repositories {
-        // JitPack 远程仓库：https://jitpack.io
+        // JitPack 远程仓库
         maven { url 'https://jitpack.io' }
     }
 }
 ```
 如果你的 Gradle 配置是 7.0 及以上，则需要在 settings.gradle 文件中加入：
+
 ```groovy
 dependencyResolutionManagement {
     repositories {
-        // JitPack 远程仓库：https://jitpack.io
+        // JitPack 远程仓库
         maven { url 'https://jitpack.io' }
     }
 }
 ```
 
-**4.0.0 以前的版本** 不建议再使用，请尽快升级到最新版本。**4.0.0 版本以后重新调整了与移动安全联盟 SDK 共存的方案** ，直接使用如下依赖即可：
+然后直接使用如下依赖即可：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 
 ```groovy
 dependencies {
-    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:<version>'
+    implementation 'com.github.gzu-liyujiang:Android_CN_OAID:最新版本号'
 }
 ```
-**4.2.5.1 版本以后直接使用了华为官方广告标识服务SDK，与移动安全联盟 SDK 共存** 的话可参考如下配置（PS：暂时没太多经历逆向华为的SDK重构包名来共存）：
+
+### 注意事项
+
+- **4.2.5.1 版本以后直接使用了华为官方广告标识服务SDK，与移动安全联盟 SDK 共存** 的话可参考如下配置（PS：暂时没太多经历逆向华为的SDK重构包名来共存）：
+
 ```groovy
 dependencies {
     implementation('com.github.gzu-liyujiang:Android_CN_OAID:<version>') {
-        // 排除掉本项目依赖的华为官方广告标识服务SDK，也即是使用移动安全联盟SDK依赖的华为官方广告标识服务SDK
+        // 如果使用了移动安全联盟SDK，共存的话需排除掉本项目依赖的华为官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为的SDK
+        // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
+        // repositories { maven {url 'https://developer.huawei.com/repo/'} }
+        // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
         exclude group: 'com.huawei.hms', module: 'ads-identifier' 
     }
 }
 ```
 
-自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`、`WRITE_SETTINGS`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。 为**
-遵循最小必要原则**保护用户隐私，若项目中没用到 IMEI 及 GUID，那么可酌情在 `AndroidManifest.xml` 中加入如下代码移除相关权限：
+- 自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`、`WRITE_SETTINGS`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。 
+- 为**遵循最小必要原则**保护用户隐私，若项目中没用到 IMEI 及 GUID，那么可酌情在 `AndroidManifest.xml` 中加入如下代码移除相关权限：
 
 ```xml
-
 <manifest>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:node="remove" />
 </manifest>
 ```
 
-### 注意事项
-
-- **本库 4.1.1 至 4.1.3 之间的版本** ，若 Gradle 插件未指定 `targetSdkVersion 29+`，在 Android11+
-  设备上可能会导致无法动态申请读写权限问题，参阅 [在权限里面加 maxSdkVersion 的用意](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25)
-  。
-- **Gradle Plugin 4.0.0 及以下版本编译失败解决方案**
-  ，参阅 [Missing 'package' key attribute on element package](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/26)
-  。
+- **本库 4.1.1 至 4.1.3 之间的版本** ，若 Gradle 插件未指定 `targetSdkVersion 29+`，在 Android11+ 设备上可能会导致无法动态申请读写权限问题，参阅 [在权限里面加 maxSdkVersion 的用意](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25) 。
+- **Gradle Plugin 4.0.0 及以下版本编译失败解决方案** ，参阅 [Missing 'package' key attribute on element package](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/26) 。
 
 ### 代码示例
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
 
 - 第一步：
+
 ```text
     // 在`Application#onCreate`里初始化，注意APP合规性，若最终用户未同意隐私政策则不要调用
     @Override
@@ -89,6 +96,7 @@ dependencies {
     }
 ```
 - 第二步：
+
 ```text
          // 获取IMEI，只支持Android 10之前的系统，需要READ_PHONE_STATE权限，可能为空
         DeviceIdentifier.getIMEI(this);
@@ -141,6 +149,8 @@ dependencies {
 -keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
 -keep class com.huawei.hms.ads.** {*; }
 -keep interface com.huawei.hms.ads.** {*; }
+-keep class repeackage.com.oplus.stdid.** {*; }
+-keep interface repeackage.com.oplus.stdid.** {*; }
 ```
 
 ## 支持情况
@@ -214,7 +224,8 @@ dependencies {
 
 ## 参考资料
 
-OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符）， 华为称之为 Open Advertising  ID （开放广告标识符），谷歌称之为 Android Advertising ID （安卓广告标识符）。
+OAID 是移动智能终端补充设备标识体系中的一员，官方定义为 Open Anonymous Device Identifier（开放匿名设备标识符），
+华为称之为 Open Advertising  ID （开放广告标识符），谷歌称之为 Android Advertising ID （安卓广告标识符）。
 
 - 逆向分析还原的 [手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl) 。
 - [移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （from `http://www.msa-alliance.cn` ）。
@@ -242,7 +253,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 ## 许可协议
 
 ```text
-Copyright (c) 2019-2021 gzu-liyujiang <1032694760@qq.com>
+Copyright (c) 2016-present. gzu-liyujiang<1032694760@qq.com> and All Contributors.
 
 The software is licensed under the Mulan PSL v2.
 You can use this software according to the terms and conditions of the Mulan PSL v2.

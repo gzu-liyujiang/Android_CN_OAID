@@ -19,3 +19,5 @@
 -keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
 -keep class com.huawei.hms.ads.** {*; }
 -keep interface com.huawei.hms.ads.** {*; }
+-keep class repeackage.com.oplus.stdid.** {*; }
+-keep interface repeackage.com.oplus.stdid.** {*; }

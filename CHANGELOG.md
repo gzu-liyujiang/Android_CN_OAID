@@ -1,5 +1,10 @@
 # 更新日志
 
+## 4.2.6 - 2023/11/01
+
+- PR#70 支持老版的OPPO手机获取OAID。
+- PR#71 通过注册方式预取OAID开放回调接口。
+
 ## 4.2.5.1 - 2023/07/17
 
 - 华为手机OAID获取适配，参阅 [Issues#66](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/66) 。
