@@ -31,7 +31,7 @@ allprojects {
     }
 }
 ```
-如果你的 Gradle 配置是 7.0 及以上，则需要在 settings.gradle 文件中加入：
+如果你的 Gradle 配置是 7.0 及以上，可能需要在 settings.gradle 文件中加入：
 
 ```groovy
 dependencyResolutionManagement {
@@ -50,13 +50,21 @@ dependencies {
 }
 ```
 
+除了依赖从 Github 拉取代码构建的包外，也可以依赖从码云构建的包：
+
+```groovy
+dependencies {
+    implementation 'com.gitee.li_yu_jiang:Android_CN_OAID:最新版本号'
+}
+```
+
 ### 注意事项
 
 - **4.2.5.1 版本以后直接使用了华为官方广告标识服务SDK，与移动安全联盟 SDK 共存** 的话可参考如下配置（PS：暂时没太多经历逆向华为的SDK重构包名来共存）：
 
 ```groovy
 dependencies {
-    implementation('com.github.gzu-liyujiang:Android_CN_OAID:<version>') {
+    implementation('com.github.gzu-liyujiang:Android_CN_OAID:最新版本号') {
         // 如果使用了移动安全联盟SDK，共存的话需排除掉本项目依赖的华为官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为的SDK
         // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
         // repositories { maven {url 'https://developer.huawei.com/repo/'} }
