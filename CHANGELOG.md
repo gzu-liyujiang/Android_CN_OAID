@@ -1,5 +1,15 @@
 # 更新日志
 
+## 4.2.6.3 - 2023/11/12
+
+- 华为高版本获取OAID可能发生ANR： [Issues#63](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/63) [Issues#72](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/72)。
+- 增加一些文档注释及一些易用的方法。
+
+## 4.2.6.2 - 2023/11/02
+
+- 更新演示的安装包到v4.2.6。
+- 更新 JavaDoc 到 4.2.6。
+
 ## 4.2.6 - 2023/11/01
 
 - PR#70 支持老版的OPPO手机获取OAID。
