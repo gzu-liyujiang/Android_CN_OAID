@@ -54,9 +54,9 @@ android {
 
     compileOptions {
         encoding 'UTF-8'
-        // Gradle 7+ 要求 JDK 11+，JDK 1.8 开始支持 lambda 表达式
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        // JDK 1.8 开始支持 lambda 表达式
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     packagingOptions {
