@@ -14,6 +14,8 @@ package com.github.gzuliyujiang.oaid.impl;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.github.gzuliyujiang.oaid.IGetter;
 import com.github.gzuliyujiang.oaid.IOAID;
@@ -32,6 +34,7 @@ import java.util.concurrent.Executors;
  */
 class HuaweiImpl implements IOAID {
     private final Context context;
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public HuaweiImpl(Context context) {
         this.context = context;
@@ -63,28 +66,50 @@ class HuaweiImpl implements IOAID {
         if (context == null || getter == null) {
             return;
         }
-        // 获取OAID信息（SDK方式）
-        // 参阅 https://developer.huawei.com/consumer/cn/doc/HMSCore-Guides/identifier-service-obtaining-oaid-sdk-0000001050064988
-        // 华为官方开发者文档提到“调用getAdvertisingIdInfo接口，获取OAID信息，不要在主线程中调用该方法。”
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                try {
-                    AdvertisingIdClient.Info info = AdvertisingIdClient.getAdvertisingIdInfo(context);
-                    if (info == null) {
-                        getter.onOAIDGetError(new OAIDException("Advertising identifier info is null"));
-                        return;
-                    }
-                    if (info.isLimitAdTrackingEnabled()) {
-                        // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
-                        getter.onOAIDGetError(new OAIDException("User has disabled advertising identifier"));
-                        return;
-                    }
-                    getter.onOAIDGetComplete(info.getId());
-                } catch (IOException e) {
-                    OAIDLog.print(e);
-                    getter.onOAIDGetError(e);
-                }
+                runOnSubThread(getter);
+            }
+        });
+    }
+
+    private void runOnSubThread(IGetter getter) {
+        try {
+            // 获取OAID信息（SDK方式）
+            // 参阅 https://developer.huawei.com/consumer/cn/doc/HMSCore-Guides/identifier-service-obtaining-oaid-sdk-0000001050064988
+            // 华为官方开发者文档提到“调用getAdvertisingIdInfo接口，获取OAID信息，不要在主线程中调用该方法。”
+            final AdvertisingIdClient.Info info = AdvertisingIdClient.getAdvertisingIdInfo(context);
+            if (info == null) {
+                postOnMainThread(getter, new OAIDException("Advertising identifier info is null"));
+                return;
+            }
+            if (info.isLimitAdTrackingEnabled()) {
+                // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
+                postOnMainThread(getter, new OAIDException("User has disabled advertising identifier"));
+                return;
+            }
+            postOnMainThread(getter, info.getId());
+        } catch (IOException e) {
+            OAIDLog.print(e);
+            postOnMainThread(getter, new OAIDException(e));
+        }
+    }
+
+    private void postOnMainThread(final IGetter getter, final String oaid) {
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                getter.onOAIDGetComplete(oaid);
+            }
+        });
+    }
+
+    private void postOnMainThread(final IGetter getter, final OAIDException e) {
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                getter.onOAIDGetError(e);
             }
         });
     }

@@ -304,7 +304,9 @@ public final class DeviceID {
      * 获取数字版权管理设备ID
      *
      * @return WidevineID，可能为空
+     * @deprecated 很鸡肋，不推荐使用了，因为在某些手机上调用会莫名其妙的造成闪退或卡死，还难以排查到原因
      */
+    @Deprecated
     public static String getWidevineID() {
         try {
             //See https://stackoverflow.com/questions/16369818/how-to-get-crypto-scheme-uuid

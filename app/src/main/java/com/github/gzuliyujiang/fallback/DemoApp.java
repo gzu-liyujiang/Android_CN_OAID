@@ -57,7 +57,7 @@ public class DemoApp extends Application {
         //注意APP合规性，若最终用户未同意隐私政策则不要调用
         if (privacyPolicyAgreed) {
             //DeviceIdentifier.register(this);
-            DeviceIdentifier.register(this, true, new IRegisterCallback() {
+            DeviceIdentifier.register(this, false, new IRegisterCallback() {
                 @Override
                 public void onComplete(String clientId, Exception error) {
                     // do something
