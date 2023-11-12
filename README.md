@@ -110,7 +110,7 @@ dependencies {
         DeviceIdentifier.getIMEI(this);
         // 获取安卓ID，可能为空
         DeviceIdentifier.getAndroidID(this);
-        // 获取数字版权管理ID，可能为空
+        // 获取数字版权管理ID，可能为空。很鸡肋，在某些手机上还可能造成卡死或闪退，自4.2.7版本后已弃用
         DeviceIdentifier.getWidevineID();
         // 获取伪造ID，根据硬件信息生成，不会为空，有大概率会重复
         DeviceIdentifier.getPseudoID()；

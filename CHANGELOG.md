@@ -1,9 +1,10 @@
 # 更新日志
 
-## 4.2.6.3 - 2023/11/12
+## 4.2.7 - 2023/11/12
 
-- 华为高版本获取OAID可能发生ANR： [Issues#63](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/63) [Issues#72](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/72)。
+- 修复华为高版本手机可能的闪退或卡死问题： [Issues#63](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/63) [Issues#72](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/72)。
 - 增加一些文档注释及一些易用的方法。
+- 更新演示的安装包到v4.2.7。
 
 ## 4.2.6.2 - 2023/11/02
 
