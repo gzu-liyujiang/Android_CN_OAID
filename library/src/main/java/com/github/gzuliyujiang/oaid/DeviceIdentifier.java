@@ -39,10 +39,24 @@ public final class DeviceIdentifier {
         super();
     }
 
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @see Application#onCreate()
+     */
     public static void register(Application application) {
         register(application, null);
     }
 
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @see Application#onCreate()
+     */
     public static void register(Application application, IRegisterCallback callback) {
         if (registered || application == null) {
             return;
@@ -55,6 +69,12 @@ public final class DeviceIdentifier {
         }
     }
 
+    /**
+     * 使用该方法获取客户端唯一标识，需要先在{@link Application}里调用{@link #register(Application)}预取
+     *
+     * @return 客户端唯一标识，可能是IMEI、OAID、WidevineID、AndroidID或GUID中的一种
+     * @see #register(Application)
+     */
     public static String getClientId() {
         if (TextUtils.isEmpty(clientId)) {
             synchronized (DeviceIdentifier.class) {
@@ -69,6 +89,15 @@ public final class DeviceIdentifier {
         return clientId;
     }
 
+    /**
+     * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI，Android 10+ 非系统应用则不再允许获取 IMEI。
+     * <pre>
+     *     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+     * </pre>
+     *
+     * @param context 上下文
+     * @return IMEI或MEID，可能为空
+     */
     public static String getIMEI(Context context) {
         if (imei == null) {
             synchronized (DeviceIdentifier.class) {
@@ -83,6 +112,11 @@ public final class DeviceIdentifier {
         return imei;
     }
 
+    /**
+     * 使用该方法获取OAID，需要先在{@link Application#onCreate()}里调用{@link #register(Application)}预取
+     *
+     * @see #register(Application)
+     */
     public static String getOAID(Context context) {
         if (TextUtils.isEmpty(oaid)) {
             synchronized (DeviceIdentifier.class) {
@@ -110,6 +144,12 @@ public final class DeviceIdentifier {
         return oaid;
     }
 
+    /**
+     * 获取AndroidID
+     *
+     * @param context 上下文
+     * @return AndroidID，可能为空
+     */
     public static String getAndroidID(Context context) {
         if (androidId == null) {
             synchronized (DeviceIdentifier.class) {
@@ -124,6 +164,11 @@ public final class DeviceIdentifier {
         return androidId;
     }
 
+    /**
+     * 获取数字版权管理设备ID
+     *
+     * @return WidevineID，可能为空
+     */
     public static String getWidevineID() {
         if (widevineId == null) {
             synchronized (DeviceIdentifier.class) {
@@ -138,6 +183,11 @@ public final class DeviceIdentifier {
         return widevineId;
     }
 
+    /**
+     * 通过取出ROM版本、制造商、CPU型号以及其他硬件信息来伪造设备标识
+     *
+     * @return 伪造的设备标识，不会为空，但会有一定的概率出现重复
+     */
     public static String getPseudoID() {
         if (pseudoId == null) {
             synchronized (DeviceIdentifier.class) {
@@ -152,6 +202,20 @@ public final class DeviceIdentifier {
         return pseudoId;
     }
 
+    /**
+     * 随机生成全局唯一标识并存到{@code SharedPreferences}、{@code ExternalStorage}及{@code SystemSettings}。
+     * 为保障在Android10以下版本上的稳定性，需要加入权限{@code WRITE_EXTERNAL_STORAGE}及{@code WRITE_SETTINGS}。
+     * <pre>
+     *     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+     *         tools:ignore="ScopedStorage" />
+     *     <uses-permission
+     *         android:name="android.permission.WRITE_SETTINGS"
+     *         tools:ignore="ProtectedPermissions" />
+     * </pre>
+     *
+     * @return GUID，不会为空，但应用卸载后会丢失
+     * @see android.provider.Settings#ACTION_MANAGE_WRITE_SETTINGS
+     */
     public static String getGUID(Context context) {
         if (guid == null) {
             synchronized (DeviceIdentifier.class) {
