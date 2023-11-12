@@ -43,68 +43,131 @@ import java.util.UUID;
  * @since 2020/5/30
  */
 @SuppressWarnings("ALL")
-public final class DeviceID implements IGetter {
+public final class DeviceID {
     private Application application;
+    private boolean tryWidevine;
     private String clientId;
     private String oaid;
 
     /**
-     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
-     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID()}，请不要调用这个方法
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
      *
      * @param application 全局上下文
      * @see Application#onCreate()
      */
     public static void register(Application application) {
-        register(application, null);
+        register(application, false, null);
     }
 
     /**
-     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
-     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID()}，请不要调用这个方法
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
      *
      * @param application 全局上下文
-     * @param callback 注册完成回调
+     * @param tryWidevine 是否尝试WidevineID，由于兼容问题，IMEI/MEID及OAID获取失败后默认不尝试获取WidevineID
+     * @see Application#onCreate()
+     */
+    public static void register(Application application, boolean tryWidevine) {
+        register(application, tryWidevine, null);
+    }
+
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @param callback    注册完成回调
      * @see Application#onCreate()
      */
     public static void register(Application application, IRegisterCallback callback) {
+        register(application, false, null);
+    }
+
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @param tryWidevine 是否尝试WidevineID，由于兼容问题，IMEI/MEID及OAID获取失败后默认不尝试获取WidevineID
+     * @param callback    注册完成回调
+     * @see Application#onCreate()
+     */
+    public static void register(Application application, boolean tryWidevine, IRegisterCallback callback) {
         if (application == null) {
-            return;
-        }
-        DeviceID instance = Holder.INSTANCE;
-        instance.application = application;
-        String uniqueID = getUniqueID(application);
-        if (!TextUtils.isEmpty(uniqueID)) {
-            instance.clientId = uniqueID;
-            OAIDLog.print("Client id is IMEI/MEID: " + instance.clientId);
             if (callback != null) {
-                callback.onComplete();
+                callback.onComplete("", new RuntimeException("application is nulll"));
             }
             return;
         }
+        Holder.INSTANCE.application = application;
+        Holder.INSTANCE.tryWidevine = tryWidevine;
+        String uniqueID = getUniqueID(application);
+        if (!TextUtils.isEmpty(uniqueID)) {
+            Holder.INSTANCE.clientId = uniqueID;
+            OAIDLog.print("Client id is IMEI/MEID: " + Holder.INSTANCE.clientId);
+            if (callback != null) {
+                callback.onComplete(uniqueID, null);
+            }
+            return;
+        }
+        getOAIDOrOtherId(application, tryWidevine, callback);
+    }
+
+    private static void getOAIDOrOtherId(Application application, boolean tryWidevine, IRegisterCallback callback) {
         getOAID(application, new IGetter() {
             @Override
             public void onOAIDGetComplete(String result) {
-                instance.onOAIDGetComplete(result);
-                if (callback != null) {
-                    callback.onComplete();
+                if (TextUtils.isEmpty(result)) {
+                    onOAIDGetError(new OAIDException("OAID is empty"));
+                    return;
                 }
+                Holder.INSTANCE.clientId = result;
+                Holder.INSTANCE.oaid = result;
+                OAIDLog.print("Client id is OAID/AAID: " + result);
             }
 
             @Override
             public void onOAIDGetError(Exception error) {
-                instance.onOAIDGetError(error);
-                if (callback != null) {
-                    callback.onComplete();
-                }
+                getOtherId(error, application, tryWidevine, callback);
             }
         });
+    }
+
+    private static void getOtherId(Exception error, Application application, boolean tryWidevine, IRegisterCallback callback) {
+        String id = "";
+        if (tryWidevine) {
+            id = DeviceID.getWidevineID();
+            if (!TextUtils.isEmpty(id)) {
+                Holder.INSTANCE.clientId = id;
+                OAIDLog.print("Client id is WidevineID: " + id);
+                if (callback != null) {
+                    callback.onComplete(id, error);
+                }
+                return;
+            }
+        }
+        id = getAndroidID(application);
+        if (!TextUtils.isEmpty(id)) {
+            Holder.INSTANCE.clientId = id;
+            OAIDLog.print("Client id is AndroidID: " + id);
+            if (callback != null) {
+                callback.onComplete(id, error);
+            }
+            return;
+        }
+        id = getGUID(application);
+        Holder.INSTANCE.clientId = id;
+        OAIDLog.print("Client id is GUID: " + id);
+        if (callback != null) {
+            callback.onComplete(id, error);
+        }
     }
 
     /**
      * 使用该方法获取客户端唯一标识，需要先在{@link Application}里调用{@link #register(Application)}预取
      *
-     * @return 客户端唯一标识，可能是IMEI、OAID、WidevineID、AndroidID或GUID中的一种
+     * @return 客户端唯一标识，可能是IMEI/MEID、OAID/AAID、AndroidID或GUID中的一种
      * @see #register(Application)
      */
     public static String getClientId() {
@@ -116,7 +179,7 @@ public final class DeviceID implements IGetter {
     }
 
     /**
-     * 获取预取的客户端唯一标识的MD5值
+     * 获取预取的客户端唯一标识，可能是IMEI/MEID、OAID/AAID、AndroidID或GUID中的一种，的MD5值
      *
      * @see #getClientId()
      * @see #register(Application)
@@ -257,9 +320,7 @@ public final class DeviceID implements IGetter {
                 sb.append(String.format("%02x", aByte));
             }
             return sb.toString();
-        } catch (Exception e) {
-            OAIDLog.print(e);
-        } catch (Error e) {
+        } catch (Throwable e) {
             OAIDLog.print(e);
         }
         return "";
@@ -454,35 +515,6 @@ public final class DeviceID implements IGetter {
 
     private DeviceID() {
         super();
-    }
-
-    @Override
-    public void onOAIDGetComplete(String result) {
-        if (TextUtils.isEmpty(result)) {
-            onOAIDGetError(new OAIDException("OAID is empty"));
-            return;
-        }
-        clientId = result;
-        oaid = result;
-        OAIDLog.print("Client id is OAID/AAID: " + clientId);
-    }
-
-    @Override
-    public void onOAIDGetError(Exception error) {
-        String id = DeviceID.getWidevineID();
-        if (!TextUtils.isEmpty(id)) {
-            clientId = id;
-            OAIDLog.print("Client id is WidevineID: " + clientId);
-            return;
-        }
-        id = getAndroidID(application);
-        if (!TextUtils.isEmpty(id)) {
-            clientId = id;
-            OAIDLog.print("Client id is AndroidID: " + clientId);
-            return;
-        }
-        clientId = getGUID(application);
-        OAIDLog.print("Client id is GUID: " + clientId);
     }
 
 }

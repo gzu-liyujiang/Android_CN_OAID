@@ -15,8 +15,24 @@ package com.github.gzuliyujiang.oaid;
 
 /**
  * @author Mankin
+ * @noinspection unused
  * @since 2023/10/30 00:20
  */
 public interface IRegisterCallback {
-    void onComplete();
+    /**
+     * @deprecated 使用{@link #onComplete(String)}代替
+     */
+    @Deprecated
+    default void onComplete() {
+        onComplete("", null);
+    }
+
+    /**
+     * 启动时注册完成回调，
+     *
+     * @param clientId 客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * @param error    OAID获取失败时的异常信息
+     */
+    default void onComplete(String clientId, Exception error) {
+    }
 }

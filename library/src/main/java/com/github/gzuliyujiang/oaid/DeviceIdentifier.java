@@ -40,7 +40,7 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
      * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
      *
      * @param application 全局上下文
@@ -51,19 +51,45 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID、AndroidID、GUID。
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
      * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
      *
      * @param application 全局上下文
+     * @param tryWidevine 是否尝试WidevineID，由于兼容问题，IMEI/MEID及OAID获取失败后默认不尝试获取WidevineID
+     * @see Application#onCreate()
+     */
+    public static void register(Application application, boolean tryWidevine) {
+        register(application, tryWidevine, null);
+    }
+
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @param callback    注册完成回调
      * @see Application#onCreate()
      */
     public static void register(Application application, IRegisterCallback callback) {
+        register(application, false, callback);
+    }
+
+    /**
+     * 在应用启动时预取客户端标识及OAID，客户端标识按优先级尝试获取IMEI/MEID、OAID/AAID、AndroidID、GUID。
+     * !!注意!!：若最终用户未同意隐私政策，或者不需要用到{@link #getClientId()}及{@link #getOAID}，请不要调用这个方法
+     *
+     * @param application 全局上下文
+     * @param tryWidevine 是否尝试WidevineID，由于兼容问题，IMEI/MEID及OAID获取失败后默认不尝试获取WidevineID
+     * @param callback    注册完成回调
+     * @see Application#onCreate()
+     */
+    public static void register(Application application, boolean tryWidevine, IRegisterCallback callback) {
         if (registered || application == null) {
             return;
         }
         synchronized (DeviceIdentifier.class) {
             if (!registered) {
-                DeviceID.register(application, callback);
+                DeviceID.register(application, tryWidevine, callback);
                 registered = true;
             }
         }
@@ -72,14 +98,28 @@ public final class DeviceIdentifier {
     /**
      * 使用该方法获取客户端唯一标识，需要先在{@link Application}里调用{@link #register(Application)}预取
      *
-     * @return 客户端唯一标识，可能是IMEI、OAID、WidevineID、AndroidID或GUID中的一种
+     * @return 客户端唯一标识的MD5值，可能是IMEI/MEID、OAID/AAID、AndroidID或GUID中的一种
      * @see #register(Application)
      */
     public static String getClientId() {
+        return getClientId(false);
+    }
+
+    /**
+     * 使用该方法获取客户端唯一标识，需要先在{@link Application}里调用{@link #register(Application)}预取
+     *
+     * @param returnRaw 返回的是否是原始值
+     * @return 客户端唯一标识，可能是IMEI/MEID、OAID/AAID、AndroidID或GUID中的一种
+     * @see #register(Application)
+     * @see DeviceID#getClientId()
+     * @see DeviceID#getClientIdMD5()
+     * @see DeviceID#getClientIdSHA1()
+     */
+    public static String getClientId(boolean returnRaw) {
         if (TextUtils.isEmpty(clientId)) {
             synchronized (DeviceIdentifier.class) {
                 if (TextUtils.isEmpty(clientId)) {
-                    clientId = DeviceID.getClientIdMD5();
+                    clientId = returnRaw ? DeviceID.getClientId() : DeviceID.getClientIdMD5();
                 }
             }
         }
@@ -90,7 +130,7 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI，Android 10+ 非系统应用则不再允许获取 IMEI。
+     * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI/MEID，Android 10+ 非系统应用则不再允许获取 IMEI。
      * <pre>
      *     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
      * </pre>
@@ -113,7 +153,7 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 使用该方法获取OAID，需要先在{@link Application#onCreate()}里调用{@link #register(Application)}预取
+     * 使用该方法获取OAID/AAID，需要先在{@link Application#onCreate()}里调用{@link #register(Application)}预取
      *
      * @see #register(Application)
      */
