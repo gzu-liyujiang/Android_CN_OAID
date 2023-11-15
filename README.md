@@ -91,7 +91,7 @@ dependencies {
 
 获取多个可能的设备标识，结合服务端引入[拜占庭容错方案](https://juejin.cn/post/6844903952148856839#heading-11)得到可靠的稳定的设备唯一标识：
 
-- 第一步：
+- 第一步（可选的，用于调用 getClientId() 预取 OAID ）：
 
 ```text
     // 在`Application#onCreate`里初始化，注意APP合规性，若最终用户未同意隐私政策则不要调用
@@ -272,3 +272,7 @@ IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT F
 PURPOSE.
 See the Mulan PSL v2 for more details.
 ```
+## IDE 推荐
+
+支持开源，除了 Intellij IDEA Community / PyCharm  Community 和 EAP 版本可免费使用，也可通过 [申请开源开发许可证](https://www.jetbrains.com/shop/eform/opensource) 来免费使用正版的 [JetBrains 全家桶开发工具](https://www.jetbrains.com.cn/products/)，尤其是 Intellij IDEA Ultimate 版本很强大。
+
