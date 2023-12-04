@@ -240,6 +240,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
+- 荣耀 [广告标识服务](https://developer.hihonor.com/cn/kitdoc?category=%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1&kitId=11030&navigation=guides&docId=update-instructions.md&token=) 。
 - 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
 - 魅族 [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
 - 维沃 [移动智能终端补充设备标识服务](https://dev.vivo.com.cn/documentCenter/doc/253) 。
