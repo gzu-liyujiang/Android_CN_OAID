@@ -11,6 +11,7 @@
 另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
 
 - 震惊：从没想过之前的参考资料之一 https://github.com/2tu/msa 会被 MSA 举报，作为行业技术标准还兴搞技术垄断，要使用 MSA 的 SDK 真是一言难尽啊，参见 https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md 。
+- 声明：本库虽然曾经逆向分析过 miit_mdid_xxx.aar ，但代码完全是原创的，是基于第三方厂商的接口进行加工的，和 MSA 的 SDK 没有直接联系，不存在 `2tu/msa` 之类的侵权问题。
 
 - GitHub：`https://github.com/gzu-liyujiang/Android_CN_OAID`
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
