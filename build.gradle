@@ -21,10 +21,9 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.android.tools.build:gradle:8.2.0'
     }
 }
 
@@ -32,24 +31,26 @@ allprojects {
     repositories {
         maven { url 'https://maven.aliyun.com/repositories/public' }
         maven { url 'https://maven.aliyun.com/repositories/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.huawei.com/repo' }
+        maven { url 'https://developer.hihonor.com/repo' }
     }
 }
 
 subprojects {
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            //增加一些编译选项
-            //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                //增加一些编译选项
+                //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+            }
         }
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     println("********** clean build **********")
     println("delete project dir: " + rootProject.buildDir)
     rootProject.buildDir.deleteDir()
