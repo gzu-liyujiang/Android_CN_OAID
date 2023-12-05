@@ -21,4 +21,6 @@ android {
 dependencies {
     // 华为的最新版本广告标识服务SDK，参阅 https://developer.huawei.com/consumer/cn/doc/HMSCore-Guides/identifier-service-version-change-history-0000001050066927
     api "com.huawei.hms:ads-identifier:3.4.62.300"
+    // 荣耀的最新版本广告标识服务SDK，参阅 https://developer.hihonor.com/cn/kitdoc?kitId=11030&navigation=guides&docId=intergrate.md
+    api 'com.hihonor.mcs:ads-identifier:1.0.2.301'
 }

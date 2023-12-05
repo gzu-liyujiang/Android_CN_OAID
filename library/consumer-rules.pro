@@ -17,7 +17,9 @@
 -keep interface repeackage.com.android.creator.** { *; }
 -keep class repeackage.com.google.android.gms.ads.identifier.internal.** { *; }
 -keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
--keep class com.huawei.hms.ads.** {*; }
--keep interface com.huawei.hms.ads.** {*; }
 -keep class repeackage.com.oplus.stdid.** {*; }
 -keep interface repeackage.com.oplus.stdid.** {*; }
+-keep class com.huawei.hms.ads.** {*; }
+-keep interface com.huawei.hms.ads.** {*; }
+-keep class com.hihonor.ads.** {*; }
+-keep interface com.hihonor.ads.** {*; }

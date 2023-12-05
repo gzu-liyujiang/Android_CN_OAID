@@ -72,15 +72,21 @@ public final class OAIDFactory {
         if (OAIDRom.isASUS()) {
             return new AsusImpl(context);
         }
+        if (OAIDRom.isHonor()) {
+            HonorImpl honorImpl = new HonorImpl(context);
+            if (honorImpl.supported()) {
+                // 支持的话（Magic UI 4.0,5.0,6.0及MagicOS 7.0或以上）直接使用荣耀的实现，否则尝试华为的实现
+                return honorImpl;
+            }
+        }
         if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
             return new HuaweiImpl(context);
         }
         if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {
             OppoImpl oppo = new OppoImpl(context);
-            if(oppo.supported()) {
+            if (oppo.supported()) {
                 return oppo;
-            }
-            else {
+            } else {
                 return new OppoExtImpl(context);
             }
         }

@@ -139,6 +139,9 @@ dependencies {
 本库自带`consumer-rules.pro`如下混淆规则，不混淆厂商的相关接口及类。若通过远程依赖的方式引用，则无需进行额外配置：
 
 ```proguard
+# 本库模块专用的混淆规则（注：“repeackage”拼写是历史遗留问题）
+-keep class repeackage.com.uodis.opendevice.aidl.** { *; }
+-keep interface repeackage.com.uodis.opendevice.aidl.** { *; }
 -keep class repeackage.com.asus.msa.SupplementaryDID.** { *; }
 -keep interface repeackage.com.asus.msa.SupplementaryDID.** { *; }
 -keep class repeackage.com.bun.lib.** { *; }
@@ -155,30 +158,33 @@ dependencies {
 -keep interface repeackage.com.android.creator.** { *; }
 -keep class repeackage.com.google.android.gms.ads.identifier.internal.** { *; }
 -keep interface repeackage.com.google.android.gms.ads.identifier.internal.* { *; }
--keep class com.huawei.hms.ads.** {*; }
--keep interface com.huawei.hms.ads.** {*; }
 -keep class repeackage.com.oplus.stdid.** {*; }
 -keep interface repeackage.com.oplus.stdid.** {*; }
+-keep class com.huawei.hms.ads.** {*; }
+-keep interface com.huawei.hms.ads.** {*; }
+-keep class com.hihonor.ads.** {*; }
+-keep interface com.hihonor.ads.** {*; }
 ```
 
 ## 支持情况
 
-| 厂商或品牌                        | 系统或框架                                              |
-| --------------------------------- | ------------------------------------------------------- |
-| 华为（Huawei、Honor）             | HMS Core 2.6.2+ 、Google Play Service 4.0+              |
-| 小米（XiaoMi、Redmi、BlackShark） | MIUI 10.2+、Google Play Service 4.0+                    |
-| 维沃（VIVO、IQOO）                | Funtouch OS 9+、OriginOS 1.0+、Google Play Service 4.0+ |
-| 欧珀（OPPO、Realme）              | ColorOS 7.0+、Google Play Service 4.0+                  |
-| 三星（Samsung）                   | Android 10+、Google Play Service 4.0+                   |
-| 联想（Lenovo）                    | ZUI 11.4+、Google Play Service 4.0+                     |
-| 华硕（ASUS）                      | Android 10+、Google Play Service 4.0+                   |
-| 魅族（Meizu）                     | Android 10+、Google Play Service 4.0+                   |
-| 一加（OnePlus）                   | Android 10+、Google Play Service 4.0+                   |
-| 努比亚（Nubia）                   | Android 10+、Google Play Service 4.0+                   |
-| 酷派（Coolpad）                   | CoolOS、Google Play Service 4.0+                        |
-| 酷赛（Coosea ）                   | Android 10+、Google Play Service 4.0+                   |
-| 卓易（Droi ）                     | Freeme OS、Google Play Service 4.0+                     |
-| 其他（ZTE、HTC、Motorola、……）    | SSUI、Google Play Service 4.0+                          |
+| 厂商或品牌                       | 系统或框架                                                 |
+|-----------------------------|-------------------------------------------------------|
+| 华为（Huawei）                  | HMS Core 2.6.2+、Google Play Service 4.0+              |
+| 荣耀（Honor）                   | Magic UI 4/5/6、MagicOS 7.0+、Google Play Service 4.0+  |
+| 小米（XiaoMi、Redmi、BlackShark） | MIUI 10.2+、Google Play Service 4.0+                   |
+| 维沃（VIVO、IQOO）               | Funtouch OS 9+、OriginOS 1.0+、Google Play Service 4.0+ |
+| 欧珀（OPPO、Realme）             | ColorOS 7.0+、Google Play Service 4.0+                 |
+| 三星（Samsung）                 | Android 10+、Google Play Service 4.0+                  |
+| 联想（Lenovo）                  | ZUI 11.4+、Google Play Service 4.0+                    |
+| 华硕（ASUS）                    | Android 10+、Google Play Service 4.0+                  |
+| 魅族（Meizu）                   | Android 10+、Google Play Service 4.0+                  |
+| 一加（OnePlus）                 | Android 10+、Google Play Service 4.0+                  |
+| 努比亚（Nubia）                  | Android 10+、Google Play Service 4.0+                  |
+| 酷派（Coolpad）                 | CoolOS、Google Play Service 4.0+                       |
+| 酷赛（Coosea ）                 | Android 10+、Google Play Service 4.0+                  |
+| 卓易（Droi ）                   | Freeme OS、Google Play Service 4.0+                    |
+| 其他（ZTE、HTC、Motorola、……）     | SSUI、Google Play Service 4.0+                         |
 
 > 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码以及逆向分析参考移动安全联盟的 SDK、HUAWEI Ads SDK、小米 DeviceId.jar、Google Play Services SDK 等。
 
@@ -240,7 +246,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
-- 荣耀 [广告标识服务](https://developer.hihonor.com/cn/kitdoc?category=%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1&kitId=11030&navigation=guides&docId=update-instructions.md&token=) 。
+- 荣耀 [广告标识服务](https://developer.hihonor.com/cn/kitdoc?kitId=11030&navigation=guides&docId=update-instructions.md&token=) 。
 - 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
 - 魅族 [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
 - 维沃 [移动智能终端补充设备标识服务](https://dev.vivo.com.cn/documentCenter/doc/253) 。
@@ -253,9 +259,10 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 ## 远程真机
 
 - 免费 [华为远程真机云调试](https://developer.huawei.com/consumer/cn/agconnect/cloud-adjust) 。
+- 免费 [荣耀远程真机云调试](https://developer.hihonor.com/cn/doc/guides/100194) 。
 - 免费 [小米云测平台远程真机租用](https://testit.miui.com/remote) 。
-- 免费 [VIVO 云测平台远程真机](https://vcl.vivo.com.cn/#/machine/picking) 。
-- 免费 [OPPO 云测平台远程真机](https://open.oppomobile.com/cloudmachine/device/list-plus) 。
+- 免费 [维沃云测平台远程真机](https://vcl.vivo.com.cn/#/machine/picking) 。
+- 免费 [欧珀云测平台远程真机](https://open.oppomobile.com/cloudmachine/device/list-plus) 。
 - 免费 [三星远程开发测试平台真机调试](http://samsung.smarterapps.cn/index.php?app=home&mod=Index&act=samsung) 。
 - 新人试用 ~~腾讯 WeTest 云真机调试、阿里 EMAS 移动测试远程真机、百度 MTC 远程真机调试、Testin 远程真机测试、AllTesting 真机测试~~ 。
 

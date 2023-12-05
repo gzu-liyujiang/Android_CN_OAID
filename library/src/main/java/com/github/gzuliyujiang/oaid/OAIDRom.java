@@ -59,6 +59,11 @@ public final class OAIDRom {
         return !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
     }
 
+    public static boolean isHonor() {
+        // 荣耀手机
+        return Build.BRAND.equalsIgnoreCase("HONOR");
+    }
+
     public static boolean isOppo() {
         // 欧珀手机、真我手机
         return Build.MANUFACTURER.equalsIgnoreCase("OPPO") ||
