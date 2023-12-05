@@ -8,10 +8,10 @@
 安卓设备唯一标识解决方案，可作为移动安全联盟统一 SDK （miit_mdid_xxx.aar）的替代方案。
 **注意，这个项目的初衷主要是针对个人开发者的APP，个人开发者没资格使用 MSA 的 SDK，企业的APP应该去申请使用 MSA 的 SDK**。
 本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID（安卓广告标识）的便携接口，
-另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
+另外也提供了 IMEI/MEID、AndroidID、PseudoID、GUID 等常见的设备标识的获取方法。
 
-- 震惊：从没想过之前的参考资料之一 https://github.com/2tu/msa 会被 MSA 举报，作为行业技术标准还兴搞技术垄断，要使用 MSA 的 SDK 真是一言难尽啊，参见 https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md 。
-- 声明：本库虽然曾经逆向分析过 miit_mdid_xxx.aar ，但代码完全是原创的，是基于第三方厂商的接口进行加工的，和 MSA 的 SDK 没有直接联系，不存在 `2tu/msa` 之类的侵权问题。
+- 震惊：从没想过之前的参考资料之一 https://github.com/2tu/msa 会被 MSA 举报，作为行业技术标准还兴搞技术垄断，要传播使用 MSA 的 SDK 真是一言难尽啊，参见 https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md 。
+- 声明：本库虽然曾经逆向分析过 MSA 的 SDK ，但代码完全是原创的，是基于[北京数字联盟公开的代码](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)并结合第三方厂商公开或未公开的接口进行加工的，和 MSA 的 SDK 没有直接联系，不存在 `2tu/msa` 之类的侵权问题。根据北京数字联盟的声明，“……标准法的第二十二条规定：……禁止利用标准实施妨碍商品、服务自由流通等排除、限制市场竞争的行为。作为商用 ID 服务商，良性竞争能够让我们的产品变得更好……”，详见[请问该库商用有法律风险吗？](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/50)
 
 - GitHub：`https://github.com/gzu-liyujiang/Android_CN_OAID`
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
@@ -249,7 +249,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 华为称之为 Open Advertising  ID （开放广告标识符），谷歌称之为 Android Advertising ID （安卓广告标识符）。
 
 - 逆向分析还原的 [手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl) 。
-- [2tu/msa 提供的移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （download from `https://www.msa-alliance.cn/col.jsp?id=120` 这个存储库因版权问题被MSA举报了，已提示“Repository unavailable due to DMCA takedown.”，参见 [DMCA 2023-09-21-msa](https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md) ，作为行业技术标准，居然还兴搞技术垄断，要传播使用 MSA 的 SDK 太难了）。
+- [2tu/msa 提供的移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （download from `https://www.msa-alliance.cn/col.jsp?id=120` 这个存储库因版权问题被MSA举报了，参见 [DMCA 2023-09-21-msa](https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md) 。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
