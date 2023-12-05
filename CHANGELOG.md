@@ -1,6 +1,6 @@
 # 更新日志
 
-## 881892f7b6 - 2023/12/05
+## 4.2.8 - 2023/12/05
 
 - 支持通过荣耀官方广告标识服务SDK获取OAID [Issues#73](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/73)；
 

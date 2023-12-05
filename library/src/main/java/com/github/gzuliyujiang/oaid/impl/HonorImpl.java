@@ -43,6 +43,7 @@ class HonorImpl implements IOAID {
         if (context == null) {
             return false;
         }
+        // 核心标识：com.hihonor.id 或 com.hihonor.id.HnOaIdService
         return AdvertisingIdClient.isAdvertisingIdAvailable(context);
     }
 
