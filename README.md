@@ -246,7 +246,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 华为称之为 Open Advertising  ID （开放广告标识符），谷歌称之为 Android Advertising ID （安卓广告标识符）。
 
 - 逆向分析还原的 [手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl) 。
-- [2tu/msa 提供的移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （download from `https://www.msa-alliance.cn/col.jsp?id=120` 这个存储库可能因版权问题被MSA举报了吧，已提示“Repository unavailable due to DMCA takedown.”）。
+- [2tu/msa 提供的移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （download from `https://www.msa-alliance.cn/col.jsp?id=120` 这个存储库因版权问题被MSA举报了，已提示“Repository unavailable due to DMCA takedown.”，参见 [DMCA 2023-09-21-msa](https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md) ，作为行业技术标准，居然还兴搞技术垄断，要传播使用 MSA 的 SDK 太难了）。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
