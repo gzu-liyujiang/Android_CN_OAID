@@ -10,6 +10,8 @@
 本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID（安卓广告标识）的便携接口，
 另外也提供了 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等常见的设备标识的获取方法。
 
+- 震惊：从没想过之前的参考资料之一 https://github.com/2tu/msa 会被 MSA 举报，作为行业技术标准还兴搞技术垄断，要使用 MSA 的 SDK 真是一言难尽啊，参见 https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md 。
+
 - GitHub：`https://github.com/gzu-liyujiang/Android_CN_OAID`
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
 - Demo：[https://github.com/gzu-liyujiang/Android_CN_OAID/blob/master/demo.apk](/demo.apk)
