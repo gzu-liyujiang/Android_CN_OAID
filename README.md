@@ -67,9 +67,13 @@ dependencies {
     implementation('com.github.gzu-liyujiang:Android_CN_OAID:最新版本号') {
         // 如果使用了移动安全联盟SDK，共存的话需排除掉本项目依赖的华为官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为的SDK
         // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
-        // repositories { maven {url 'https://developer.huawei.com/repo/'} }
+        // repositories { maven { url 'https://developer.huawei.com/repo' } }
         // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
         exclude group: 'com.huawei.hms', module: 'ads-identifier' 
+        // 荣耀方广告标识服务SDK同理：      
+        // repositories { maven { url 'https://developer.hihonor.com/repo' } }
+        // runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
+        exclude group: 'com.hihonor.mcs', module: 'ads-identifier'
     }
 }
 ```
