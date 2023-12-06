@@ -24,6 +24,7 @@ import android.text.TextUtils;
  *
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/9/1 10:06
+ * @noinspection unused
  */
 public final class DeviceIdentifier {
     private static volatile boolean registered = false;

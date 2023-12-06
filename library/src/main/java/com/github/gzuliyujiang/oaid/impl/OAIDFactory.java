@@ -73,10 +73,10 @@ public final class OAIDFactory {
             return new AsusImpl(context);
         }
         if (OAIDRom.isHonor()) {
-            HonorImpl honorImpl = new HonorImpl(context);
-            if (honorImpl.supported()) {
+            HonorImpl honor = new HonorImpl(context);
+            if (honor.supported()) {
                 // 支持的话（Magic UI 4.0,5.0,6.0及MagicOS 7.0或以上）直接使用荣耀的实现，否则尝试华为的实现
-                return honorImpl;
+                return honor;
             }
         }
         if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
@@ -86,9 +86,8 @@ public final class OAIDFactory {
             OppoImpl oppo = new OppoImpl(context);
             if (oppo.supported()) {
                 return oppo;
-            } else {
-                return new OppoExtImpl(context);
             }
+            return new OppoExtImpl(context);
         }
         if (OAIDRom.isCoolpad(context)) {
             return new CoolpadImpl(context);

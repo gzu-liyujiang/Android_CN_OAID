@@ -218,7 +218,9 @@ public final class DeviceID {
      * @param getter  回调
      */
     public static void getOAID(Context context, IGetter getter) {
-        OAIDFactory.create(context).doGet(getter);
+        IOAID ioaid = OAIDFactory.create(context);
+        OAIDLog.print("OAID implements class: " + ioaid.getClass().getName());
+        ioaid.doGet(getter);
     }
 
     /**

@@ -48,7 +48,7 @@ public final class OAIDLog {
         if (log == null) {
             log = "<null>";
         }
-        Log.d(TAG, log.toString());
+        Log.i(TAG, log.toString());
     }
 
 }
