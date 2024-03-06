@@ -172,4 +172,8 @@ public final class OAIDRom {
         return !TextUtils.isEmpty(sysProperty("ro.ssui.product", ""));
     }
 
+    public static boolean is360OS() {
+        // 360OS手机
+        return !TextUtils.isEmpty(sysProperty("ro.build.uiversion", ""));
+    }
 }

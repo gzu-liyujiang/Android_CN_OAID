@@ -98,6 +98,9 @@ public final class OAIDFactory {
         if (OAIDRom.isFreeme()) {
             return new FreemeImpl(context);
         }
+        if (OAIDRom.is360OS()) {
+            return new QikuImpl(context);
+        }
         return null;
     }
 
