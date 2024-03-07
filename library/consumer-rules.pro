@@ -23,3 +23,5 @@
 -keep interface com.huawei.hms.ads.** {*; }
 -keep class com.hihonor.ads.** {*; }
 -keep interface com.hihonor.ads.** {*; }
+-keep class repeackage.com.qiku.id.** { *; }
+-keep interface repeackage.com.qiku.id.** { *; }
