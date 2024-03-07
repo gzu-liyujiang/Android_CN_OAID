@@ -48,6 +48,8 @@
         <package android:name="com.asus.msa.SupplementaryDID" />
         <!-- lenovo -->
         <package android:name="com.zui.deviceidservice" />
+        <!-- 360OS -->
+        <package android:name="com.qiku.id" />
     </queries>
 
 </manifest>
