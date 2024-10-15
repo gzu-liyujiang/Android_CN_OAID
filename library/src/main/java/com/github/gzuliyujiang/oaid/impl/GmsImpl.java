@@ -69,8 +69,9 @@ class GmsImpl implements IOAID {
             public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
                 IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
                 if (anInterface.isLimitAdTrackingEnabled(true)) {
-                    // 实测在系统设置中停用了广告化功能也是能获取到广告标识符的
                     OAIDLog.print("User has disabled advertising identifier");
+                    // 从2022年开始，当isLimitAdTrackingEnabled()为true时，无论应用的目标SDK级别如何，getId()的返回值都是00000000-0000-0000-0000-000000000000
+                    throw new OAIDException("AAID acquire failed");
                 }
                 return anInterface.getId();
             }
