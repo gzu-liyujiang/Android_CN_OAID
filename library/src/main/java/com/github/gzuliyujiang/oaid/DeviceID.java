@@ -81,7 +81,7 @@ public final class DeviceID {
      * @see Application#onCreate()
      */
     public static void register(Application application, IRegisterCallback callback) {
-        register(application, false, null);
+        register(application, false, callback);
     }
 
     /**
