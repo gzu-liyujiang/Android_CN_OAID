@@ -18,6 +18,11 @@ android {
     namespace 'com.github.gzuliyujiang.oaid'
 }
 
+repositories {
+    maven { url 'https://developer.huawei.com/repo' }
+    maven { url 'https://developer.hihonor.com/repo' }
+}
+
 dependencies {
     // 华为的最新版本广告标识服务SDK，参阅 https://developer.huawei.com/consumer/cn/doc/HMSCore-Guides/identifier-service-version-change-history-0000001050066927
     api "com.huawei.hms:ads-identifier:3.4.62.300"

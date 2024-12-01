@@ -16,8 +16,9 @@ buildscript {
     apply from: "${rootDir}/gradle/config.gradle"
     apply from: "${rootDir}/gradle/dependency.gradle"
     repositories {
-        maven { url 'https://maven.aliyun.com/repositories/public' }
-        maven { url 'https://maven.aliyun.com/repositories/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
@@ -29,8 +30,9 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repositories/public' }
-        maven { url 'https://maven.aliyun.com/repositories/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
