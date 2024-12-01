@@ -12,6 +12,7 @@
  */
 package com.github.gzuliyujiang.oaid.impl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
@@ -58,6 +59,7 @@ class MeizuImpl implements IOAID {
         try (Cursor cursor = context.getContentResolver().query(uri, null, null,
                 new String[]{"oaid"}, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
+            @SuppressLint("Range")
             String oaid = cursor.getString(cursor.getColumnIndex("value"));
             if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed");
