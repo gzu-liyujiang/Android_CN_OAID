@@ -74,11 +74,11 @@ dependencies {
         // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
         // repositories { maven { url 'https://developer.huawei.com/repo' } }
         // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
-        exclude group: 'com.huawei.hms', module: 'ads-identifier' 
+        //exclude group: 'com.huawei.hms', module: 'ads-identifier' 
         // 荣耀官方广告标识服务SDK同理：      
         // repositories { maven { url 'https://developer.hihonor.com/repo' } }
         // runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
-        exclude group: 'com.hihonor.mcs', module: 'ads-identifier'
+        //exclude group: 'com.hihonor.mcs', module: 'ads-identifier'
     }
 }
 ```
