@@ -70,7 +70,7 @@ dependencies {
 ```groovy
 dependencies {
     implementation('com.github.gzu-liyujiang:Android_CN_OAID:最新版本号') {
-        // 如果使用了移动安全联盟SDK，共存的话需排除掉本项目依赖的华为/荣耀官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为/荣耀的SDK
+        // 如果使用了较新版本的移动安全联盟SDK，共存的话可能需要排除掉本项目依赖的华为/荣耀官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为/荣耀的SDK
         // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
         // repositories { maven { url 'https://developer.huawei.com/repo' } }
         // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
