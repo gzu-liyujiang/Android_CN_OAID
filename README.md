@@ -70,17 +70,19 @@ dependencies {
 ```groovy
 dependencies {
     implementation('com.github.gzu-liyujiang:Android_CN_OAID:最新版本号') {
-        // 如果使用了较新版本的移动安全联盟SDK，共存的话可能需要排除掉本项目依赖的华为/荣耀官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为/荣耀的SDK
-        // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
-        // repositories { maven { url 'https://developer.huawei.com/repo' } }
-        // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
-        //exclude group: 'com.huawei.hms', module: 'ads-identifier' 
+        // 如果使用了较新版本的移动安全联盟SDK，共存的话可能需要排除掉本项目依赖的华为官方广告标识服务SDK，因为移动安全联盟SDK也依赖了华为的SDK
+        //exclude group: 'com.huawei.hms', module: 'ads-identifier'
         // 荣耀官方广告标识服务SDK同理：      
-        // repositories { maven { url 'https://developer.hihonor.com/repo' } }
-        // runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
         //exclude group: 'com.hihonor.mcs', module: 'ads-identifier'
     }
 }
+
+       // 如果华为官方广告标识服务SDK下载失败或编译报错的话，可考虑在 build.gradle 中增加以下配置：
+        // repositories { maven { url 'https://developer.huawei.com/repo' } }
+        // runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
+        // 荣耀官方广告标识服务SDK同理：      
+        // repositories { maven { url 'https://developer.hihonor.com/repo' } }
+        // runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
 ```
 
 - 自 **4.1.1** 开始默认加入了 `READ_PHONE_STATE`、`WRITE_SETTINGS`及`WRITE_EXTERNAL_STORAGE` 权限以便适配低版本安卓系统。 
