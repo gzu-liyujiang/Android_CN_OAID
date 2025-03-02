@@ -105,6 +105,10 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         // 获取GUID，随机生成，不会为空
         builder.append(DeviceIdentifier.getGUID(this));
         builder.append("\n");
+        builder.append("CanvasFingerprint: ");
+        // 获取帆布指纹，不会为空，具有一定的唯一性，但不能完全保证全球唯一。
+        builder.append(DeviceIdentifier.getCanvasFingerprint());
+        builder.append("\n");
         // 是否支持OAID/AAID
         builder.append("supported: ").append(DeviceID.supportedOAID(this));
         builder.append("\n");
@@ -128,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
                 tvDeviceIdResult.setText(builder);
             }
         });
-        builder.append("CanvasFingerprint: ");
-        // 获取帆布指纹，不会为空，具有一定的唯一性，但不能完全保证全球唯一。
-        builder.append(DeviceIdentifier.getCanvasFingerprint());
-        builder.append("\n");
     }
 
     private String obtainDeviceInfo() {
