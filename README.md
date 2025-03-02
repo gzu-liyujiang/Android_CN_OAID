@@ -19,7 +19,7 @@
 
 ## 接入指引
 
-最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
+最新版本：[4.2.12](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 （[更新日志](/CHANGELOG.md) | [JavaDoc](https://gzu-liyujiang.github.io/Android_CN_OAID/)）
 
 ### 依赖配置
