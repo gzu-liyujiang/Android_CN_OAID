@@ -18,6 +18,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.media.MediaDrm;
 import android.os.Build;
 import android.os.Environment;
@@ -514,6 +519,29 @@ public final class DeviceID {
             OAIDLog.print(e);
             return "";
         }
+    }
+
+    /**
+     * 获取画布指纹。原理：不同设备的硬件以及浏览器实现会导致画布渲染结果存在细微差异。
+     */
+    public static String getCanvasFingerprint() {
+        int width = 200;
+        int height = 100;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.WHITE);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(18);
+        paint.setTypeface(Typeface.SERIF);
+        canvas.drawText("羡民@李裕江", 10, 50, paint);
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+        StringBuilder pixelData = new StringBuilder();
+        for (int pixel : pixels) {
+            pixelData.append(pixel);
+        }
+        return calculateHash(pixelData.toString(), "SHA-1");
     }
 
     private static class Holder {

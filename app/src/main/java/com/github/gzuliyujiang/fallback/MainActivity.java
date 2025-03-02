@@ -117,17 +117,21 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             @Override
             public void onOAIDGetComplete(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
-                builder.append("OAID/AAID: ").append(result);
+                builder.append("OAID/AAID: ").append(result).append("\n");
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
             public void onOAIDGetError(Exception error) {
                 // 获取OAID/AAID失败
-                builder.append("OAID/AAID: ").append(error);
+                builder.append("OAID/AAID: ").append(error).append("\n");
                 tvDeviceIdResult.setText(builder);
             }
         });
+        builder.append("CanvasFingerprint: ");
+        // 获取帆布指纹，不会为空，具有一定的唯一性，但不能完全保证全球唯一。
+        builder.append(DeviceIdentifier.getCanvasFingerprint());
+        builder.append("\n");
     }
 
     private String obtainDeviceInfo() {

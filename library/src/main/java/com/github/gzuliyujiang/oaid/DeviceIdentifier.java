@@ -35,6 +35,7 @@ public final class DeviceIdentifier {
     private static volatile String widevineId = null;
     private static volatile String pseudoId = null;
     private static volatile String guid = null;
+    private static volatile String canvasFingerprint = null;
 
     private DeviceIdentifier() {
         super();
@@ -272,6 +273,23 @@ public final class DeviceIdentifier {
             guid = "";
         }
         return guid;
+    }
+
+    /**
+     * 获取画布指纹。具有一定的唯一性，但不能完全保证全球唯一。
+     */
+    public static String getCanvasFingerprint() {
+        if (canvasFingerprint == null) {
+            synchronized (DeviceIdentifier.class) {
+                if (canvasFingerprint == null) {
+                    canvasFingerprint = DeviceID.getCanvasFingerprint();
+                }
+            }
+        }
+        if (canvasFingerprint == null) {
+            canvasFingerprint = "";
+        }
+        return canvasFingerprint;
     }
 
 }

@@ -17,8 +17,6 @@
 - 码云(GitEE)：`https://gitee.com/li_yu_jiang/Android_CN_OAID`
 - Demo：[https://github.com/gzu-liyujiang/Android_CN_OAID/blob/master/demo.apk](/demo.apk)
 
-【抱歉！各位小伙伴，从2022年开始我已经没做安卓开发了，项目虽然已经趋于稳定，不过需要大家参与维护，多提PullRequest，我目前已经没法贡献代码了】
-
 ## 接入指引
 
 最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
@@ -143,6 +141,8 @@ dependencies {
                 // 获取OAID/AAID失败
             }
         });
+        // 获取画布指纹
+        DeviceIdentifier.getCanvasFingerprint();
 ```
 
 ## 混淆规则
