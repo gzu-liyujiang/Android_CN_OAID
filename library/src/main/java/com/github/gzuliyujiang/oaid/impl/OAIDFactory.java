@@ -72,7 +72,7 @@ public final class OAIDFactory {
         if (OAIDRom.isASUS()) {
             return new AsusImpl(context);
         }
-        if (OAIDRom.isHonor()) {
+        if (OAIDRom.isHonor() && !OAIDRom.isEmui()) {
             HonorImpl honor = new HonorImpl(context);
             if (honor.supported()) {
                 // 支持的话（Magic UI 4.0,5.0,6.0及MagicOS 7.0或以上）直接使用荣耀的实现，否则尝试华为的实现
