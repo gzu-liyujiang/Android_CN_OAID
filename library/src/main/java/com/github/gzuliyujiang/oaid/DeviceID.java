@@ -318,11 +318,12 @@ public final class DeviceID {
      */
     @Deprecated
     public static String getWidevineID() {
+        MediaDrm mediaDrm = null;
         try {
             //See https://stackoverflow.com/questions/16369818/how-to-get-crypto-scheme-uuid
             //You can find some UUIDs in the https://github.com/google/ExoPlayer source code
             final UUID WIDEVINE_UUID = new UUID(0xEDEF8BA979D64ACEL, 0xA3C827DCD51D21EDL);
-            MediaDrm mediaDrm = new MediaDrm(WIDEVINE_UUID);
+            mediaDrm = new MediaDrm(WIDEVINE_UUID);
             byte[] widevineId = mediaDrm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID);
             if (widevineId == null) {
                 return "";
@@ -334,6 +335,11 @@ public final class DeviceID {
             return sb.toString();
         } catch (Throwable e) {
             OAIDLog.print(e);
+        } finally {
+            if (mediaDrm != null) {
+                //mediaDrm.close();
+                mediaDrm.release();
+            }
         }
         return "";
     }
