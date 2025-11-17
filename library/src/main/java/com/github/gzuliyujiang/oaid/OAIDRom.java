@@ -99,8 +99,7 @@ public final class OAIDRom {
         // 小米手机、红米手机
         return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
                 Build.BRAND.equalsIgnoreCase("XIAOMI") ||
-                Build.BRAND.equalsIgnoreCase("REDMI") ||
-                isMiui();
+                Build.BRAND.equalsIgnoreCase("REDMI");
     }
 
     public static boolean isBlackShark() {

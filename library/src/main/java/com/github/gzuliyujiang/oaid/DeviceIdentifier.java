@@ -23,8 +23,8 @@ import android.text.TextUtils;
  * 双检查锁机制实现单例模式缓存一下标识符，解决APP合规性检测机构检测到的频繁读取设备信息问题
  *
  * @author 贵州山野羡民（1032694760@qq.com）
- * @noinspection unused
- * , DeprecatedIsStillUsed @since 2021/9/1 10:06
+ * @noinspection unused, DeprecatedIsStillUsed
+ * @since 2021/9/1 10:06
  */
 public final class DeviceIdentifier {
     private static volatile boolean registered = false;
