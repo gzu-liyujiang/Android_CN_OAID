@@ -38,7 +38,7 @@ public final class OAIDRom {
             @SuppressLint("PrivateApi") Class<?> clazz = Class.forName("android.os.SystemProperties");
             Method method = clazz.getMethod("get", new Class<?>[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             OAIDLog.print("System property invoke error: " + e);
         }
         if (res == null) {
@@ -50,18 +50,34 @@ public final class OAIDRom {
     public static boolean isHuawei() {
         // 华为手机、荣耀手机
         return Build.MANUFACTURER.equalsIgnoreCase("HUAWEI") ||
-                Build.BRAND.equalsIgnoreCase("HUAWEI") ||
-                Build.BRAND.equalsIgnoreCase("HONOR");
-    }
-
-    public static boolean isEmui() {
-        // 除了华为手机，其他手机也可能刷了EMUI
-        return !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
+                Build.BRAND.equalsIgnoreCase("HUAWEI");
     }
 
     public static boolean isHonor() {
         // 荣耀手机
         return Build.BRAND.equalsIgnoreCase("HONOR");
+    }
+
+    public static boolean isHarmonyOS() {
+        // 鸿濛系统手机
+        try {
+            // HarmonyOS版本号可读取`hw_sc.build.platform.version`
+            Class<?> clazz = Class.forName("com.huawei.system.BuildEx");
+            Object osBrand = clazz.getMethod("getOsBrand", new Class[0]).invoke(clazz, new Object[0]);
+            return osBrand != null && osBrand.toString().length() > 0;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    public static boolean isEmui() {
+        // 除了华为品牌，其他品牌也可能刷了EMUI
+        return !TextUtils.isEmpty(sysProperty("ro.build.version.emui", ""));
+    }
+
+    public static boolean isMagicUI() {
+        // 除了华为品牌，其他品牌也可能刷了MagicUI
+        return !TextUtils.isEmpty(sysProperty("ro.build.version.magic", ""));
     }
 
     public static boolean isOppo() {
@@ -83,12 +99,8 @@ public final class OAIDRom {
         // 小米手机、红米手机
         return Build.MANUFACTURER.equalsIgnoreCase("XIAOMI") ||
                 Build.BRAND.equalsIgnoreCase("XIAOMI") ||
-                Build.BRAND.equalsIgnoreCase("REDMI");
-    }
-
-    public static boolean isMiui() {
-        // 除了小米手机，其他手机也可能刷了MIUI
-        return !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
+                Build.BRAND.equalsIgnoreCase("REDMI") ||
+                isMiui();
     }
 
     public static boolean isBlackShark() {
@@ -97,8 +109,13 @@ public final class OAIDRom {
                 Build.BRAND.equalsIgnoreCase("BLACKSHARK");
     }
 
+    public static boolean isMiui() {
+        // 除了小米品牌，其他品牌也可能刷了MIUI
+        return !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
+    }
+
     public static boolean isOnePlus() {
-        // 一加手机
+        // 一加手机。HydrogenOS版本号可读取`ro.rom.version`，ColorOS版本号可读取`ro.build.version.oplusrom`
         return Build.MANUFACTURER.equalsIgnoreCase("ONEPLUS") ||
                 Build.BRAND.equalsIgnoreCase("ONEPLUS");
     }
@@ -168,7 +185,7 @@ public final class OAIDRom {
         try {
             context.getPackageManager().getPackageInfo("com.coolpad.deviceidsupport", 0);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return false;
         }
     }

@@ -60,7 +60,7 @@ public final class OAIDFactory {
         if (OAIDRom.isNubia()) {
             return new NubiaImpl(context);
         }
-        if (OAIDRom.isXiaomi() || OAIDRom.isMiui() || OAIDRom.isBlackShark()) {
+        if (OAIDRom.isXiaomi() || OAIDRom.isBlackShark() || OAIDRom.isMiui()) {
             return new XiaomiImpl(context);
         }
         if (OAIDRom.isSamsung()) {
@@ -79,7 +79,7 @@ public final class OAIDFactory {
                 return honor;
             }
         }
-        if (OAIDRom.isHuawei() || OAIDRom.isEmui()) {
+        if (OAIDRom.isHuawei() || OAIDRom.isHonor() || OAIDRom.isHarmonyOS() || OAIDRom.isEmui() || OAIDRom.isMagicUI()) {
             return new HuaweiImpl(context);
         }
         if (OAIDRom.isOppo() || OAIDRom.isOnePlus()) {

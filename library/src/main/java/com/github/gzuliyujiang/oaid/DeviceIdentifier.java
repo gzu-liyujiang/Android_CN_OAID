@@ -23,8 +23,8 @@ import android.text.TextUtils;
  * 双检查锁机制实现单例模式缓存一下标识符，解决APP合规性检测机构检测到的频繁读取设备信息问题
  *
  * @author 贵州山野羡民（1032694760@qq.com）
- * @since 2021/9/1 10:06
  * @noinspection unused
+ * , DeprecatedIsStillUsed @since 2021/9/1 10:06
  */
 public final class DeviceIdentifier {
     private static volatile boolean registered = false;
@@ -139,7 +139,10 @@ public final class DeviceIdentifier {
      *
      * @param context 上下文
      * @return IMEI或MEID，可能为空
+     * @noinspection deprecation
+     * @deprecated Android 10+ 无法获取，不推荐使用了
      */
+    @Deprecated
     public static String getIMEI(Context context) {
         if (imei == null) {
             synchronized (DeviceIdentifier.class) {
@@ -155,7 +158,7 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 使用该方法获取OAID/AAID，需要先在{@link Application#onCreate()}里调用{@link #register(Application)}预取
+     * 【推荐使用】使用该方法获取OAID/AAID，需要先在{@link Application#onCreate()}里调用{@link #register(Application)}预取
      *
      * @see #register(Application)
      */
@@ -207,12 +210,10 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 获取数字版权管理设备ID
+     * 获取数字版权管理设备ID。不推荐使用，因为在某些手机上调用会莫名其妙的造成闪退或卡死，还难以排查到原因
      *
      * @return WidevineID，可能为空
-     * @deprecated 很鸡肋，不推荐使用了，因为在某些手机上调用会莫名其妙的造成闪退或卡死，还难以排查到原因
      */
-    @Deprecated
     public static String getWidevineID() {
         if (widevineId == null) {
             synchronized (DeviceIdentifier.class) {
@@ -276,7 +277,7 @@ public final class DeviceIdentifier {
     }
 
     /**
-     * 获取画布指纹。具有一定的唯一性，但不能完全保证全球唯一。
+     * 【推荐使用】获取画布指纹。具有一定的唯一性，但不能完全保证全球唯一。
      */
     public static String getCanvasFingerprint() {
         if (canvasFingerprint == null) {

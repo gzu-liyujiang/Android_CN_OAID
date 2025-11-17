@@ -250,7 +250,9 @@ public final class DeviceID {
      * @param context 上下文
      * @return IMEI或MEID，可能为空
      * @see Manifest.permission.READ_PHONE_STATE
+     * @deprecated Android 10+ 无法获取，不推荐使用了
      */
+    @Deprecated
     public static String getUniqueID(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Android 10+ 不允许获取 IMEI、MEID 之类的设备唯一标识

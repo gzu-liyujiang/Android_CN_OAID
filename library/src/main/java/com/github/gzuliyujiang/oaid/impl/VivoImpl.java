@@ -44,7 +44,8 @@ class VivoImpl implements IOAID {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return false;
         }
-        return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1");
+        return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1")
+                || OAIDRom.sysProperty("persist.sys.identifierid", "0").equals("1");
     }
 
     @Override
@@ -56,7 +57,8 @@ class VivoImpl implements IOAID {
         try (Cursor cursor = context.getContentResolver().query(uri, null, null,
                 null, null)) {
             Objects.requireNonNull(cursor).moveToFirst();
-            String oaid = cursor.getString(cursor.getColumnIndex("value"));
+            int columnIndex = cursor.getColumnIndex("value");
+            String oaid = cursor.getString(columnIndex);
             if (oaid == null || oaid.length() == 0) {
                 throw new OAIDException("OAID query failed");
             }

@@ -30,12 +30,13 @@ import repeackage.com.oplus.stdid.IStdID;
  * @author luoyesiqiu
  * @since 2023/10/28 09:13
  */
-public class OppoExtImpl extends OppoImpl{
+public class OppoExtImpl extends OppoImpl {
     private final static String ACTION = "action.com.oplus.stdid.ID_SERVICE";
     private final static String PACKAGE_NAME = "com.coloros.mcs";
     private final static String CLASS_NAME = "com.oplus.stdid.IdentifyService";
 
     private final Context context;
+
     public OppoExtImpl(Context context) {
         super(context);
         this.context = context;
@@ -83,4 +84,5 @@ public class OppoExtImpl extends OppoImpl{
         }
         return anInterface.getSerID(pkgName, sign, "OUID");
     }
+
 }

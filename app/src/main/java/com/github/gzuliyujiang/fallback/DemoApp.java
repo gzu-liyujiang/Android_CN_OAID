@@ -46,6 +46,7 @@ public class DemoApp extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+        //假设用户已经同意过隐私政策
         privacyPolicyAgreed = true;
     }
 
