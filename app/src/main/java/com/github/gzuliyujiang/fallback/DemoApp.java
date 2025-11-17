@@ -31,14 +31,6 @@ public class DemoApp extends Application {
 
     static {
         // 开启日志打印，默认是关闭的，启动本应用会打印如下类似的日志：
-        // IMEI/MEID not allowed on Android 10+
-        // android.content.pm.PackageManager$NameNotFoundException: com.mdid.msa
-        // Google Play Service has been found: com.github.gzuliyujiang.oaid.impl.GmsImpl
-        // Service has been bound: Intent { act=com.google.android.gms.ads.identifier.service.START pkg=com.google.android.gms }
-        // Service has been connected: com.google.android.gms.ads.identifier.service.AdvertisingIdService
-        // OAID/AAID acquire success: 3f398576-c70a-455c-95ab-1fe35a9ae175
-        // Client id is OAID/AAID: 3f398576-c70a-455c-95ab-1fe35a9ae175
-        // Service has been unbound: com.google.android.gms.ads.identifier.service.AdvertisingIdService
         OAIDLog.enable();
     }
 

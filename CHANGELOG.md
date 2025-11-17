@@ -1,5 +1,9 @@
 # 更新日志
 
+## 4.2.15 - 2025/11/18
+
+- [支持小米国际版获取AAID](https://gitee.com/li_yu_jiang/Android_CN_OAID/issues/IC34Q2)。
+
 ## 4.2.14 - 2025/11/18
 
 - 修复摩托罗拉手机获取OAID失败问题，感谢 @ancely 的贡献。
@@ -32,11 +36,13 @@
 
 ## 4.2.8 - 2023/12/05
 
-- 支持通过荣耀官方广告标识服务SDK获取OAID [Issues#73](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/73)；
+-
+支持通过荣耀官方广告标识服务SDK获取OAID [Issues#73](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/73)；
 
 ## 4.2.7 - 2023/11/12
 
-- 修复华为高版本手机可能的闪退或卡死问题： [Issues#63](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/63) [Issues#72](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/72)。
+-
+修复华为高版本手机可能的闪退或卡死问题： [Issues#63](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/63) [Issues#72](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/72)。
 - 增加一些文档注释及一些易用的方法。
 - 更新演示的安装包到v4.2.7。
 
@@ -52,7 +58,8 @@
 
 ## 4.2.5.1 - 2023/07/17
 
-- 华为手机OAID获取适配，参阅 [Issues#66](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/66) 。
+-
+华为手机OAID获取适配，参阅 [Issues#66](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/66) 。
 
 ## 4.2.4 - 2022/02/10
 
@@ -65,20 +72,25 @@
 
 ## 4.2.2 - 2021/08/26
 
-- 增加对酷派（CoolOS）、酷赛（Prize）、卓易（Freeme）的支持，参阅 [Issues#31](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/31) ；
-- 提取备份 [手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl) ；
+-
+增加对酷派（CoolOS）、酷赛（Prize）、卓易（Freeme）的支持，参阅 [Issues#31](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/31) ；
+-
+提取备份 [手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl) ；
 
 ## 4.2.1 - 2021/06/30
 
-- [issues#30](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/30) NoSuchMethodError: No  virtual method getMeid()；
+- [issues#30](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/30) NoSuchMethodError: No
+  virtual method getMeid()；
 
 ## 4.2.0 - 2021/06/29
 
-- 移除 AndroidX annotation 库的依赖以便兼容 Support v4/v7 项目，参阅 [note_5547665](https://gitee.com/li_yu_jiang/Android_CN_OAID#note_5547665)；
+- 移除 AndroidX annotation 库的依赖以便兼容 Support v4/v7
+  项目，参阅 [note_5547665](https://gitee.com/li_yu_jiang/Android_CN_OAID#note_5547665)；
 
 ## 4.1.4 - 2021/06/16
 
-- 去除 `WRITE_EXTERNAL_STORAGE` 等相关权限的最大 SDK 限制，参阅 [Issues#25](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25)；
+- 去除 `WRITE_EXTERNAL_STORAGE` 等相关权限的最大 SDK
+  限制，参阅 [Issues#25](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/25)；
 
 ## 4.1.3 - 2021/05/21
 
@@ -120,7 +132,8 @@
 ## 3.0.2 - 2021/04/08
 
 - 小米手机获取 OAID 问题（`PR#18`）。
-- 增加数字版权管理设备 ID （注：根据`semver.org`语义化版本规范，此处做了向下兼容的功能性新增，版本号其实应该定为`3.1.0`）。
+- 增加数字版权管理设备 ID （注：根据`semver.org`语义化版本规范，此处做了向下兼容的功能性新增，版本号其实应该定为
+  `3.1.0`）。
 - 增加各大手机厂商关于 OAID 的说明文档。
 - 允许判断设备是否支持 OAID（`PR#19`）。
 

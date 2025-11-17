@@ -61,6 +61,9 @@ public final class OAIDFactory {
             return new NubiaImpl(context);
         }
         if (OAIDRom.isXiaomi() || OAIDRom.isBlackShark() || OAIDRom.isMiui()) {
+            if (OAIDRom.isMiuiGlobal()) {
+                return new GmsImpl(context);
+            }
             return new XiaomiImpl(context);
         }
         if (OAIDRom.isSamsung()) {

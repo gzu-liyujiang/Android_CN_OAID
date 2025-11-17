@@ -113,6 +113,24 @@ public final class OAIDRom {
         return !TextUtils.isEmpty(sysProperty("ro.miui.ui.version.name", ""));
     }
 
+    public static boolean isMiuiGlobal() {
+        // MIUI国际版不支持OAID，只支持AAID
+        if (!TextUtils.isEmpty(sysProperty("ro.com.google.gmsversion", ""))) {
+            // 预装有 GMS 则视为国际版
+            return true;
+        }
+        if (sysProperty("ro.miui.region", "").equalsIgnoreCase("CN")) {
+            // 区域为 CN 则视为国内版
+            return false;
+        }
+        if (sysProperty("ro.product.mod_device", "").endsWith("_global")) {
+            // 含 global 标识则视为国际版
+            return true;
+        }
+        // 默认视为国内版
+        return false;
+    }
+
     public static boolean isOnePlus() {
         // 一加手机。HydrogenOS版本号可读取`ro.rom.version`，ColorOS版本号可读取`ro.build.version.oplusrom`
         return Build.MANUFACTURER.equalsIgnoreCase("ONEPLUS") ||

@@ -49,7 +49,7 @@ class GmsImpl implements IOAID {
             return false;
         }
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo("com.android.vending", 0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
             return pi != null;
         } catch (Exception e) {
             OAIDLog.print(e);
