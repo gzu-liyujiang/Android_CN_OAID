@@ -31,8 +31,8 @@ android {
     splits {
         //CPU架构分包
         abi {
-            //是否开启
-            enable true
+            //是否开启CPU架构分包
+            enable enableAbiSplit as boolean
             //清除默认架构列表
             reset()
             //支持的架构：armeabi、armeabi-v7a、arm64-v8a、x86、x86_64、mips、mips64
