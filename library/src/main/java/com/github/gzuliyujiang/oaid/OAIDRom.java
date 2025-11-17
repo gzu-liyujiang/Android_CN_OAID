@@ -141,11 +141,16 @@ public final class OAIDRom {
                 Build.BRAND.equalsIgnoreCase("ZTE");
     }
 
-    public static boolean isMotolora() {
+    public static boolean isMotorola() {
         // 摩托罗拉手机
-        return Build.MANUFACTURER.equalsIgnoreCase("MOTOLORA") ||
-                Build.BRAND.equalsIgnoreCase("MOTOLORA") ||
+        return Build.MANUFACTURER.toUpperCase().contains("MOTO") ||
+                Build.BRAND.toUpperCase().contains("MOTO") ||
                 Build.BRAND.equalsIgnoreCase("MOTOROLA");
+    }
+
+    @Deprecated(since = "4.2.14", forRemoval = true)
+    public static boolean isMotolora() {
+        return isMotorola();
     }
 
     public static boolean isFreeme() {
@@ -155,6 +160,11 @@ public final class OAIDRom {
 
     public static boolean isCoolpad(Context context) {
         // 酷派手机
+        if (Build.MANUFACTURER.toUpperCase().contains("COOL") ||
+                Build.BRAND.toUpperCase().contains("COOL") ||
+                Build.MODEL.toUpperCase().contains("COOL")) {
+            return true;
+        }
         try {
             context.getPackageManager().getPackageInfo("com.coolpad.deviceidsupport", 0);
             return true;

@@ -51,7 +51,7 @@ public final class OAIDFactory {
     }
 
     private static IOAID createManufacturerImpl(Context context) {
-        if (OAIDRom.isLenovo() || OAIDRom.isMotolora()) {
+        if (OAIDRom.isLenovo() || OAIDRom.isMotorola()) {
             return new LenovoImpl(context);
         }
         if (OAIDRom.isMeizu()) {
