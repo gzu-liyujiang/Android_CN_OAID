@@ -144,7 +144,8 @@ public final class OAIDRom {
     public static boolean isMotolora() {
         // 摩托罗拉手机
         return Build.MANUFACTURER.equalsIgnoreCase("MOTOLORA") ||
-                Build.BRAND.equalsIgnoreCase("MOTOLORA");
+                Build.BRAND.equalsIgnoreCase("MOTOLORA") ||
+                Build.BRAND.equalsIgnoreCase("MOTOROLA");
     }
 
     public static boolean isFreeme() {
