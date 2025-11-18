@@ -10,6 +10,8 @@
 本项目提供了国内各大手机厂商获取 OAID（开放匿名设备标识）及海外手机平台获取 AAID（安卓广告标识）的便携接口，
 另外也提供了 IMEI/MEID、AndroidID、PseudoID、GUID 等常见的设备标识的获取方法。
 
+[![](./oaid-logic.png)](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/110#issuecomment-3542804754)
+
 - 震惊：从没想过之前的参考资料之一 https://github.com/2tu/msa 会被 MSA 举报，作为行业技术标准还兴搞技术垄断，要传播使用 MSA 的 SDK 真是一言难尽啊，参见 https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md 。
 - 声明：本库虽然曾经逆向分析过 MSA 的 SDK ，但代码完全是原创的，是基于[北京数字联盟公开的代码](https://github.com/shuzilm-open-source/Get_Oaid_CNAdid)并结合第三方厂商公开或未公开的接口进行加工的，和 MSA 的 SDK 没有直接联系，不存在 `2tu/msa` 之类的侵权问题。根据北京数字联盟的声明，“……标准法的第二十二条规定：……禁止利用标准实施妨碍商品、服务自由流通等排除、限制市场竞争的行为。作为商用 ID 服务商，良性竞争能够让我们的产品变得更好……”，详见[请问该库商用有法律风险吗？](https://github.com/gzu-liyujiang/Android_CN_OAID/issues/50)
 
@@ -19,7 +21,7 @@
 
 ## 接入指引
 
-最新版本：[4.2.12](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
+最新版本：[![jitpack](https://jitpack.io/v/gzu-liyujiang/Android_CN_OAID.svg)](https://jitpack.io/#gzu-liyujiang/Android_CN_OAID)
 （[更新日志](/CHANGELOG.md) | [JavaDoc](https://gzu-liyujiang.github.io/Android_CN_OAID/)）
 
 ### 依赖配置
@@ -125,11 +127,11 @@ dependencies {
         DeviceIdentifier.getPseudoID()；
         // 获取GUID，随机生成，不会为空
         DeviceIdentifier.getGUID(this);
-        // 是否支持OAID/AAID
+        // 是否支持OAID或AAID
         DeviceID.supportedOAID(this);
-        // 获取OAID/AAID，同步调用
+        // 获取OAID或AAID，同步调用
         DeviceIdentifier.getOAID(this);
-        // 获取OAID/AAID，异步回调
+        // 获取OAID或AAID，异步回调
         DeviceID.getOAID(this, new IGetter() {
             @Override
             public void onOAIDGetComplete(String result) {
@@ -141,6 +143,12 @@ dependencies {
                 // 获取OAID/AAID失败
             }
         });
+        // 异步获取手机厂商专有的广告标识符，异步回调
+        DeviceID.getByManufacturer(this, new IGetter() { ... });
+        // 异步获取移动安全联盟通用的广告标识符，异步回调
+        DeviceID.getByMsa(this, new IGetter() { ... });
+        // 获取谷歌商店服务通用的广告标识符，异步回调
+        DeviceID.getByGms(this, new IGetter() { ... });
         // 获取画布指纹
         DeviceIdentifier.getCanvasFingerprint();
 ```
@@ -181,23 +189,23 @@ dependencies {
 
 ## 支持情况
 
-| 厂商或品牌                       | 系统或框架                                                 |
-|-----------------------------|-------------------------------------------------------|
-| 华为（Huawei）                  | HMS Core 2.6.2+、Google Play Service 4.0+              |
-| 荣耀（Honor）                   | Magic UI 4/5/6、MagicOS 7.0+、Google Play Service 4.0+  |
-| 小米（XiaoMi、Redmi、BlackShark） | MIUI 10.2+、Google Play Service 4.0+                   |
-| 维沃（VIVO、IQOO）               | Funtouch OS 9+、OriginOS 1.0+、Google Play Service 4.0+ |
-| 欧珀（OPPO、Realme）             | ColorOS 7.0+、Google Play Service 4.0+                 |
-| 三星（Samsung）                 | Android 10+、Google Play Service 4.0+                  |
-| 联想（Lenovo）                  | ZUI 11.4+、Google Play Service 4.0+                    |
-| 华硕（ASUS）                    | Android 10+、Google Play Service 4.0+                  |
-| 魅族（Meizu）                   | Android 10+、Google Play Service 4.0+                  |
-| 一加（OnePlus）                 | Android 10+、Google Play Service 4.0+                  |
-| 努比亚（Nubia）                  | Android 10+、Google Play Service 4.0+                  |
-| 酷派（Coolpad）                 | CoolOS、Google Play Service 4.0+                       |
-| 酷赛（Coosea ）                 | Android 10+、Google Play Service 4.0+                  |
-| 卓易（Droi ）                   | Freeme OS、Google Play Service 4.0+                    |
-| 其他（ZTE、HTC、Motorola、……）     | SSUI、Google Play Service 4.0+                         |
+| 厂商或品牌                        | 系统或框架                                              |
+| --------------------------------- | ------------------------------------------------------- |
+| 华为（Huawei）                    | HMS Core 2.6.2+、Google Play Service 4.0+               |
+| 荣耀（Honor）                     | Magic UI 4/5/6、MagicOS 7.0+、Google Play Service 4.0+  |
+| 小米（XiaoMi、Redmi、BlackShark） | MIUI 10.2+、Google Play Service 4.0+                    |
+| 维沃（VIVO、IQOO）                | Funtouch OS 9+、OriginOS 1.0+、Google Play Service 4.0+ |
+| 欧珀（OPPO、Realme）              | ColorOS 7.0+、Google Play Service 4.0+                  |
+| 三星（Samsung）                   | Android 10+、Google Play Service 4.0+                   |
+| 联想（Lenovo）                    | ZUI 11.4+、Google Play Service 4.0+                     |
+| 华硕（ASUS）                      | Android 10+、Google Play Service 4.0+                   |
+| 魅族（Meizu）                     | Android 10+、Google Play Service 4.0+                   |
+| 一加（OnePlus）                   | Android 10+、Google Play Service 4.0+                   |
+| 努比亚（Nubia）                   | Android 10+、Google Play Service 4.0+                   |
+| 酷派（Coolpad）                   | CoolOS、Google Play Service 4.0+                        |
+| 酷赛（Coosea ）                   | Android 10+、Google Play Service 4.0+                   |
+| 卓易（Droi ）                     | Freeme OS、Google Play Service 4.0+                     |
+| 其他（ZTE、HTC、Motorola、……）    | SSUI、Google Play Service 4.0+                          |
 
 > 注：本项目的 OAID 获取接口主要参考北京数字联盟公开的代码以及逆向分析参考移动安全联盟的 SDK、HUAWEI Ads SDK、小米 DeviceId.jar、Google Play Services SDK 等。
 

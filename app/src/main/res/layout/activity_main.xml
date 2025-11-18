@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:text="用法一：实时获取设备标识符"
             android:textAllCaps="false"
+            android:textColor="#ffff0000"
             tools:ignore="HardcodedText" />
 
         <Button
@@ -50,7 +51,43 @@
             android:layout_height="wrap_content"
             android:text="用法二：预先获取设备标识符"
             android:textAllCaps="false"
+            android:textColor="#ff0000ff"
             tools:ignore="HardcodedText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_get_by_manufacturer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取手机厂商专有的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_get_by_msa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取移动安全联盟通用的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_get_by_gms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取谷歌商店服务通用的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_device_id_result"

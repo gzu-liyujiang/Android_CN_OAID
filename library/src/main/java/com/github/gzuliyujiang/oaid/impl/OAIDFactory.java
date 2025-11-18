@@ -50,6 +50,22 @@ public final class OAIDFactory {
         return ioaid;
     }
 
+    public static IOAID ofManufacturer(Context context) {
+        IOAID impl = createManufacturerImpl(context);
+        if (impl == null) {
+            impl = new DefaultImpl();
+        }
+        return impl;
+    }
+
+    public static IOAID ofMsa(Context context) {
+        return new MsaImpl(context);
+    }
+
+    public static IOAID ofGms(Context context) {
+        return new GmsImpl(context);
+    }
+
     private static IOAID createManufacturerImpl(Context context) {
         if (OAIDRom.isLenovo() || OAIDRom.isMotorola()) {
             return new LenovoImpl(context);

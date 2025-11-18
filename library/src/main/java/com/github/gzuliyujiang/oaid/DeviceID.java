@@ -242,6 +242,42 @@ public final class DeviceID {
     }
 
     /**
+     * 异步获取手机厂商专有的广告标识符，不支持则回调`onOAIDGetError(Exception)`
+     *
+     * @param context 上下文
+     * @param getter  回调
+     */
+    public static void getByManufacturer(Context context, IGetter getter) {
+        IOAID ioaid = OAIDFactory.ofManufacturer(context);
+        OAIDLog.print("OAID implements class: " + ioaid.getClass().getName());
+        ioaid.doGet(getter);
+    }
+
+    /**
+     * 异步获取移动安全联盟通用的广告标识符，不支持则回调`onOAIDGetError(Exception)`
+     *
+     * @param context 上下文
+     * @param getter  回调
+     */
+    public static void getByMsa(Context context, IGetter getter) {
+        IOAID ioaid = OAIDFactory.ofMsa(context);
+        OAIDLog.print("OAID implements class: " + ioaid.getClass().getName());
+        ioaid.doGet(getter);
+    }
+
+    /**
+     * 异步获取谷歌商店服务通用的广告标识符，不支持则回调`onOAIDGetError(Exception)`
+     *
+     * @param context 上下文
+     * @param getter  回调
+     */
+    public static void getByGms(Context context, IGetter getter) {
+        IOAID ioaid = OAIDFactory.ofGms(context);
+        OAIDLog.print("OAID implements class: " + ioaid.getClass().getName());
+        ioaid.doGet(getter);
+    }
+
+    /**
      * 获取唯一设备标识。Android 6.0-9.0 需要申请电话权限才能获取 IMEI，Android 10+ 非系统应用则不再允许获取 IMEI。
      * <pre>
      *     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

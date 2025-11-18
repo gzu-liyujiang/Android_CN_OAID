@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         tvDeviceInfo.setText(obtainDeviceInfo());
         findViewById(R.id.btn_get_device_id_1).setOnClickListener(this);
         findViewById(R.id.btn_get_device_id_2).setOnClickListener(this);
+        findViewById(R.id.btn_get_by_manufacturer).setOnClickListener(this);
+        findViewById(R.id.btn_get_by_msa).setOnClickListener(this);
+        findViewById(R.id.btn_get_by_gms).setOnClickListener(this);
         tvDeviceIdResult = findViewById(R.id.tv_device_id_result);
     }
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             obtainDeviceId();
             return;
         }
-        Toast.makeText(this, "请授予电话状态权限以便获取IMEI！", Toast.LENGTH_LONG).show();
+        showToast("请授予电话状态权限以便获取IMEI！");
         obtainDeviceId();
     }
 
@@ -72,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
             resultLauncher.launch(Manifest.permission.READ_PHONE_STATE);
         } else if (id == R.id.btn_get_device_id_2) {
             tvDeviceIdResult.setText(String.format("ClientId: %s", DeviceIdentifier.getClientId()));
+        } else if (id == R.id.btn_get_by_manufacturer) {
+            DeviceID.getByManufacturer(this, new ToastGetter(this));
+        } else if (id == R.id.btn_get_by_msa) {
+            DeviceID.getByMsa(this, new ToastGetter(this));
+        } else if (id == R.id.btn_get_by_gms) {
+            DeviceID.getByGms(this, new ToastGetter(this));
         } else {
             OAIDLog.print("\"if ... else if\" constructs should end with \"else\" clauses.");
         }
@@ -151,6 +160,28 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         sb.append(Build.VERSION.SDK_INT);
         sb.append(")");
         return sb.toString();
+    }
+
+    private void showToast(String result) {
+        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+    }
+
+    private static class ToastGetter implements IGetter {
+        private final MainActivity activity;
+
+        private ToastGetter(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onOAIDGetComplete(String result) {
+            activity.showToast("OAID: " + result);
+        }
+
+        @Override
+        public void onOAIDGetError(Exception error) {
+            activity.showToast("OAID: " + error);
+        }
     }
 
 }
