@@ -57,7 +57,7 @@ class NubiaImpl implements IOAID {
             Uri uri = Uri.parse("content://cn.nubia.identity/identity");
             ContentProviderClient client = context.getContentResolver().acquireContentProviderClient(uri);
             if (client == null) {
-                return;
+                throw new OAIDException("OAID query failed: provider is null");
             }
             Bundle bundle = client.call("getOAID", null, null);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
