@@ -33,6 +33,10 @@ allprojects {
     repositories {
         // JitPack 远程仓库
         maven { url 'https://jitpack.io' }
+        // 华为官方广告标识服务SDK
+        maven { url 'https://developer.huawei.com/repo' }
+        // 荣耀官方广告标识服务SDK
+        maven { url 'https://developer.hihonor.com/repo' }
     }
 }
 ```
@@ -43,6 +47,10 @@ dependencyResolutionManagement {
     repositories {
         // JitPack 远程仓库
         maven { url 'https://jitpack.io' }
+        // 华为官方广告标识服务SDK
+        maven { url 'https://developer.huawei.com/repo' }
+        // 荣耀官方广告标识服务SDK
+        maven { url 'https://developer.hihonor.com/repo' }
     }
 }
 ```
@@ -52,6 +60,8 @@ dependencyResolutionManagement {
 ```groovy
 dependencies {
     implementation 'com.github.gzu-liyujiang:Android_CN_OAID:最新版本号'
+    runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
+    runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
 }
 ```
 
@@ -60,6 +70,8 @@ dependencies {
 ```groovy
 dependencies {
     implementation 'com.gitee.li_yu_jiang:Android_CN_OAID:最新版本号'
+    runtimeOnly "com.huawei.hms:ads-identifier:3.4.62.300"
+    runtimeOnly "com.hihonor.mcs:ads-identifier:1.0.2.301"
 }
 ```
 
