@@ -55,7 +55,8 @@ public final class OAIDRom {
 
     public static boolean isHonor() {
         // 荣耀手机
-        return Build.BRAND.equalsIgnoreCase("HONOR");
+        return Build.MANUFACTURER.equalsIgnoreCase("HONOR") ||
+                Build.BRAND.equalsIgnoreCase("HONOR");
     }
 
     public static boolean isHarmonyOS() {
