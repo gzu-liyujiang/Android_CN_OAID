@@ -91,10 +91,10 @@ public final class OAIDFactory {
         if (OAIDRom.isASUS()) {
             return new AsusImpl(context);
         }
-        if (OAIDRom.isHonor()) {
+        if (OAIDRom.isHonor() && !OAIDRom.isHuawei()) {
             HonorImpl honor = new HonorImpl(context);
             if (honor.supported()) {
-                // 部分荣耀机型仍然会暴露 EMUI 属性，这里以荣耀服务是否可用作为优先判断依据。
+                // 新荣耀机型可能同时暴露 EMUI/MagicUI 属性，这里先以华为厂商字段区分老荣耀，再尝试荣耀实现。
                 return honor;
             }
         }
