@@ -91,10 +91,10 @@ public final class OAIDFactory {
         if (OAIDRom.isASUS()) {
             return new AsusImpl(context);
         }
-        if (OAIDRom.isHonor() && !OAIDRom.isEmui()) {
+        if (OAIDRom.isHonor() && !OAIDRom.isHuawei()) {
             HonorImpl honor = new HonorImpl(context);
             if (honor.supported()) {
-                // 支持的话（Magic UI 4.0,5.0,6.0及MagicOS 7.0或以上）直接使用荣耀的实现，否则尝试华为的实现
+                // 新荣耀机型可能同时暴露 EMUI/MagicUI 属性，这里先以华为厂商字段区分老荣耀，再尝试荣耀实现。
                 return honor;
             }
         }

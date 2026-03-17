@@ -48,14 +48,15 @@ public final class OAIDRom {
     }
 
     public static boolean isHuawei() {
-        // 华为手机、荣耀手机
+        // 华为手机，以及仍使用华为厂商字段的老荣耀机型
         return Build.MANUFACTURER.equalsIgnoreCase("HUAWEI") ||
                 Build.BRAND.equalsIgnoreCase("HUAWEI");
     }
 
     public static boolean isHonor() {
         // 荣耀手机
-        return Build.BRAND.equalsIgnoreCase("HONOR");
+        return Build.MANUFACTURER.equalsIgnoreCase("HONOR") ||
+                Build.BRAND.equalsIgnoreCase("HONOR");
     }
 
     public static boolean isHarmonyOS() {
