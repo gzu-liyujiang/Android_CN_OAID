@@ -278,6 +278,8 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - [2tu/msa 提供的移动安全联盟统一 SDK 下载](https://github.com/2tu/msa) （download from `https://www.msa-alliance.cn/col.jsp?id=120` 这个存储库因版权问题被MSA举报了，参见 [DMCA 2023-09-21-msa](https://github.com/github/dmca/blob/master/2023/09/2023-09-21-msa.md) 。
 - 谷歌官方文档 [使用标识符的最佳做法](https://developer.android.google.cn/training/articles/user-data-ids) 。
 - [团体标准-移动智能终端补充设备标识规范-v20190516.pdf](https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20191109/uohz59/%E5%9B%A2%E4%BD%93%E6%A0%87%E5%87%86-%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83-v20190516.pdf) 。
+- [T/TAF 095-2021 安卓系统补充设备标识技术规范](https://swsdl.vivo.com.cn/appstore/developer/uploadFile/20241025/iz7l5s/TTAF%20095-2021%20%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83.pdf) 。
+- [T/TAF 095-2023 移动智能终端补充设备标识规范](https://swsdl.vivo.com.cn/appstore/developer/uploadFile/20241025/gmykwq/TTAF%20095%E2%80%942023%20%E7%A7%BB%E5%8A%A8%E6%99%BA%E8%83%BD%E7%BB%88%E7%AB%AF%E8%A1%A5%E5%85%85%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86%E8%A7%84%E8%8C%83.pdf) 。
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
 - 荣耀 [广告标识服务](https://developer.hihonor.com/cn/kitdoc?kitId=11030&navigation=guides&docId=update-instructions.md&token=) 。
 - 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
