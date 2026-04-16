@@ -316,7 +316,4 @@ IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT F
 PURPOSE.
 See the Mulan PSL v2 for more details.
 ```
-## IDE 推荐
-
-支持开源，除了 Intellij IDEA Community / PyCharm  Community 和 EAP 版本可免费使用，也可通过 [申请开源开发许可证](https://www.jetbrains.com/shop/eform/opensource) 来免费使用正版的 [JetBrains 全家桶开发工具](https://www.jetbrains.com.cn/products/)，尤其是 Intellij IDEA Ultimate 版本很强大。
 
