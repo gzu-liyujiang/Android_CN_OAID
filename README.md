@@ -281,6 +281,7 @@ OAID 是移动智能终端补充设备标识体系中的一员，官方定义为
 - 华为 [广告标识服务](https://developer.huawei.com/consumer/cn/doc/development/HMSCore-Guides/identifier-service-version-change-history-0000001050066927) 。
 - 荣耀 [广告标识服务](https://developer.hihonor.com/cn/kitdoc?kitId=11030&navigation=guides&docId=update-instructions.md&token=) 。
 - 小米 [设备标识体系说明](https://dev.mi.com/console/doc/detail?pId=1821) 。
+- 联想 [Lenovo和Motorola设备OAID获取解决方案](https://open.lenovomm.com/open-ltpc/docCenter/docDetail?preview=1&id=1939562309900623874) 。
 - 魅族 [移动智能终端补充设备标识](http://open-wiki.flyme.cn/doc-wiki/index#id?133) 。
 - 维沃 [移动智能终端补充设备标识服务](https://dev.vivo.com.cn/documentCenter/doc/253) 。
 - 欧珀 [移动智能终端补充设备标识体系](https://open.oppomobile.com/wiki/doc#id=10608) 。
